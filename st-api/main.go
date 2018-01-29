@@ -19,7 +19,7 @@ const (
 )
 
 // Debug toggles debug
-var Debug = flag.Bool("debug", false, "Toggle Debug on (true) or off (false)"
+var Debug = flag.Bool("debug", false, "Toggle Debug on (true) or off (false)")
 
 // Port sets the port number
 var Port = flag.String("port", "81", "Set API Port (default 81)")

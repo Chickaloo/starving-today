@@ -31,10 +31,10 @@ type Routes []Route
 var routes = Routes{
 
 	Route{
-		"Events",
-		"GET",
-		"/events",
-		Events,
+		"Test",
+		"POST",
+		"/api/test",
+		DebugPOST,
 	},
 }
 

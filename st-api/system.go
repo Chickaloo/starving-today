@@ -72,32 +72,13 @@ func Respond(w http.ResponseWriter, res interface{}, status int) {
 	json.NewEncoder(w).Encode(res)
 }
 
-// ExecuteCLI UNSAFE.
-// Used for testing proof of concept. Remove from API once plugin has been remapped.
-func ExecuteCLI(w http.ResponseWriter, r *http.Request) {
-	var req Request
-	var res Request
-
-	if err := Decode(w, r, &req); err != nil {
-		Respond(w, "CLI Failure", http.StatusBadRequest)
-	}
-
-	if strings.Contains(req.Name, "cio vdadd") || strings.Contains(req.Name, "cio vdrm") {
-		packet := Feed.Enqueue(req.Name)
-		res.Name = <-packet.Result
-	} else {
-		result, err := SendCommand(req.Name)
-		if err != nil {
-			Respond(w, "Execution Failure", http.StatusInternalServerError)
-		}
-		res.Name = result
-	}
-
-	Respond(w, res, http.StatusOK)
-}
-
 // DebugPOST returns the contents of the recieved packet.
 func DebugPOST(w http.ResponseWriter, r *http.Request) {
 	var req Request
+	var res Response
+	if err := Decode(w, r, &req); err != nil {
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+	}
 	Respond(w, req, http.StatusOK)
 }
