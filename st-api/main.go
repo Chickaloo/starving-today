@@ -7,10 +7,12 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"net/http"
 
+	db "./database"
 	"github.com/gorilla/handlers"
 )
 
@@ -24,12 +26,20 @@ var Debug = flag.Bool("debug", false, "Toggle Debug on (true) or off (false)")
 // Port sets the port number
 var Port = flag.String("port", "81", "Set API Port (default 81)")
 
-// Feed used by feeder.go
-// var Feed Feeder
-
 func main() {
 
 	flag.Parse()
+
+	db.Connection, _ = sql.Open("mysql", "dabda:superSecurePassword@(138.68.22.10:3306)/ckong")
+	err := db.Connection.Ping()
+	if err != nil {
+		panic(err.Error())
+	} else {
+		if *Debug {
+			fmt.Println("database connection established")
+		}
+		defer db.Connection.Close()
+	}
 
 	// Initialize feeder to ease load
 	// Feed := new(Feeder)

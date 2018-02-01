@@ -36,6 +36,24 @@ var routes = Routes{
 		"/api/test",
 		DebugPOST,
 	},
+	Route{
+		"RecipeCreate",
+		"POST",
+		"/api/recipes",
+		RecipeCreate,
+	},
+	Route{
+		"RecipeDump",
+		"GET",
+		"/api/recipes",
+		RecipeDump,
+	},
+	Route{
+		"RecipeGetByID",
+		"GET",
+		"/api/recipes/{recipeid}",
+		RecipeGetByID,
+	},
 }
 
 // Logger hook to implement logging of HTTP requests

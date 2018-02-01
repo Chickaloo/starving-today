@@ -16,5 +16,20 @@ type Request struct {
 
 // Response returned by every HTTP request.
 type Response struct {
-	Content string `json:"content,omitempty"`
+	Recipes map[string]Recipe `json:"recipes,omitempty"`
+	Recipe  Recipe            `json:"recipe,omitempty"`
+	Content string            `json:"content,omitempty"`
+}
+
+// Recipe structure
+type Recipe struct {
+	RecipeID     int    `json:"recipeid,omitempty"`
+	AuthorID     int    `json:"authorid,omitempty"`
+	Title        string `json:"title,omitempty"`
+	Instructions string `json:"instructions,omitempty"`
+}
+
+// List of recipes response
+type Recipes struct {
+	RecipeList map[int]Recipe `json:"recipes,omitempty"`
 }
