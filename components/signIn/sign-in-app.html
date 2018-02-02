@@ -4,15 +4,18 @@
 <meta charset="utf-8">
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
-<link rel="stylesheet" href="../css/signIn.css">
+<link rel="stylesheet" href="../signIn.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
 	<!--	SIGN IN/SIGN UP FORM ******USING BOOTSTRAP*******
-    		Uses tabs to navigate between the two forms and prompts the user to enter required information before they can access the site.
+    		Uses tabs to navigate between the two forms and prompts the user to enter required information before they can access the site. Connects to two controllers.
+    		
+    		NOTE: CONTROLLERS DO NOT YET VERIFY INFO AND BUTTON DOESN'T DO SHIT!!!!
      -->
     <div ng-app="sign-in-app">
+    
     	<ul class="nav nav-tabs" id="enterTabs" role="tablist">
     		<li class="nav-item">
     			<a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Sign In</a>
@@ -21,17 +24,20 @@
     			<a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Sign Up</a>
     		</li>
     	</ul>
+    	
 		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+		
+			<div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="signInControl">
 				<form>
     				<input class="entry-field" type="text" placeholder="username" required="required" ng-model="username">
     				<br />
     				<input class="entry-field" type="text" name="password" placeholder="password" required="required" ng-model="password">
    	 				<br />
-    				<button class="entry-field" type="submit">Feed Me!</button>
+    				<button class="submit-button" type="submit">Feed Me!</button>
     			</form>
  			</div>
-  			<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+ 			
+  			<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="signUpControl">
 				<form>
     				<input class="entry-field" type="email" placeholder="email" required="required" ng-model="email">
     				<br />
@@ -39,12 +45,16 @@
     				<br />
     				<input class="entry-field" type="text" placeholder="password" required="required" ng-model="password">
    	 				<br />
-   	 				
-    				<button type="submit">Feed Me!</button>
+    				<button class="submit-button" type="submit">Feed Me!</button>
     			</form>
 			</div>
 		</div>	
     </div>
+    
+    <!-- js -->
+	<script src="sign-in-app.js"></script>
+    <script src="signInControl.js"></script>
+    
     
     <!-- bootstrap -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

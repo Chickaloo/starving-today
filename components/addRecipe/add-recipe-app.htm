@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+
+	<div ng-app="add-recipe-app" ng-controller="addRecipeController">
+		<h4>Add a New Recipe:</h4>
+		<form>
+			<input class="entry-field" type="text" placeholder="authorID" required="required" ng-model="authorid">
+			<br />
+			<input class="entry-field" type="text" placeholder="title" required="required" ng-model="title">
+			<br />
+			<textarea rows="10" class="entry-field" type="text" placeholder="instructions" required="required" ng-model="instructions"></textarea>
+			<br />
+			<button class="submit-button" ng-click="SendData()">Post for Consumption</button>
+		</form>		
+		{{ PostDataResponse + $scope.data}}
+	</div>
+	
+	<!-- js -->
+	<script src="addRecipeControl.js"></script>
+	
+    <!-- bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
