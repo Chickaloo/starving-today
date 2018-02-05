@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+.header{
+	width: 100% !important;
+
+	justify-content: space-between;
+}
+
+.logo{
+	/*background: #000000;*/
+}
+
+.navbar{
+	width: 100% !important;
+	height: 100px;
+}
+
+.search-bar-input{
+	background-color: rgba(0,0,0,.5);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+	border: thin;
+}
+.search-dropdown-button{
+	background-color: rgba(0,0,0,.5);
+}
+
+.profile-navigation{
+	text-justify:right;
+}
+
+/*profile navs include name, account, sign out and profile picture and are right justified*/
+.header-profile-navs{
+	
+	justify-content: flex-end;
+	align-content: center;
+	float: right !important;
+}
+

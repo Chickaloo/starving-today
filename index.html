@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <title>Starving Today</title>
     
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="components/header/headerStyle.css">
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<!--ANGULAR JS-->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -12,18 +15,23 @@
 
 </head>
 <body>
-   <div ng-app="app">
-   		<div>
+  <div class="main-div" ng-app="app">
+  		<!--Header-->
+  		<section class="header"><ng-include src="'components/header/header.html'"></ng-include></section>
+  		
+   		<!--Content-->
+   		<section>
    			
    			<ul>
    				<li><a href="#/!">SigningInOrUpOrUnder</a></li>
    				
    				<li><a href="#!addRecipe">Too Lazy To Drive To TacoBell</a></li>
    			</ul>
-   			
-   			
-   				<center><div ng-view></div></center>
-   		</div>
+   			<center><div ng-view></div></center>
+   		</section>
+   		
+   		<!--Footer-->
+   		<section class="footer" style="color: #FFFFFF">TOS | All Rights Reserved | HungerHub 2018</section>
    	</div>
 	   
    
