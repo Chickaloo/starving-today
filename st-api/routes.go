@@ -33,25 +33,25 @@ var routes = Routes{
 	Route{
 		"Test",
 		"POST",
-		"/api/test",
+		"/test",
 		DebugPOST,
 	},
 	Route{
 		"RecipeCreate",
 		"POST",
-		"/api/recipes",
+		"/recipes",
 		RecipeCreate,
 	},
 	Route{
 		"RecipeDump",
 		"GET",
-		"/api/recipes",
+		"/recipes",
 		RecipeDump,
 	},
 	Route{
 		"RecipeGetByID",
 		"GET",
-		"/api/recipes/{recipeid}",
+		"/recipes/{recipeid}",
 		RecipeGetByID,
 	},
 	Route{

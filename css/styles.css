@@ -2,3 +2,13 @@ body {
   margin: 0;
   padding: 0;
 }
+
+#content-wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(25,125,225,.3);
+}
+
+.layout {
+  background-color: rgba(25, 25, 25, .3);
+}
