@@ -1,13 +1,36 @@
 <html>
 
   <head>
-    <link rel="stylesheet" href="css/styles.css">
-  </head>
 
+    <!-- Credits -->
+    <meta charset="utf-8">
+    <title>HungerHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="DABDA, LLC">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- JS -->
+    <script src="js/angular.js"></script>
+    <script src="js/angular-ui-router.js"></script>
+    <script src="router.js"></script>
+
+  </head>
 
   <body>
 
-  </body>
+    <div id="content-wrapper">
+      <div id="application" ng-app"viewcontroller">
 
+        <a ui-sref="hello" ui-sref-active="active">Hello</a>
+        <a ui-sref="about" ui-sref-active="active">About</a>
+
+
+      </div>
+    </div>
+
+  </body>
 
 </html>
