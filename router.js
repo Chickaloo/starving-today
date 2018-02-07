@@ -1,10 +1,18 @@
-var viewController = angular.module("viewcontroller",["ui.router"]);
+var app = angular.module('starvingToday',['ui.router']);
 
-viewController.config(function($stateProvider) {
+
+app.config(function($stateProvider) {
   var helloState = {
     name: 'hello',
     url: '/hello',
-    template: '<h3>hello world!</h3>'
+    templateUrl: 'index.html'
+  }
+
+  var landingState = {
+    name: 'login',
+    url: '/login',
+    templateUrl: 'components/landingPage/landingPage.html',
+    controller: 'landingController'
   }
 
   var aboutState = {
@@ -15,4 +23,5 @@ viewController.config(function($stateProvider) {
 
   $stateProvider.state(helloState);
   $stateProvider.state(aboutState);
+  $stateProvider.state(landingState);
 });

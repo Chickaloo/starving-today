@@ -13,22 +13,27 @@
     <link rel="stylesheet" href="css/styles.css">
 
     <!-- JS -->
-    <script src="js/angular.js"></script>
-    <script src="js/angular-ui-router.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+    <script src="http://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
     <script src="router.js"></script>
+    <script src="components/landingPage/landingPageController.js"></script>
 
   </head>
 
-  <body>
+  <body ng-app="starvingToday">
 
-    <div id="content-wrapper">
-      <div id="application" ng-app"viewcontroller">
+    <div id="content-wrapper" style='background-image: url("images/food-background-3.jpeg");'>
+      <div id="application" >
 
         <a ui-sref="hello" ui-sref-active="active">Hello</a>
+        <a ui-sref="login" ui-sref-active="active">Index</a>
         <a ui-sref="about" ui-sref-active="active">About</a>
 
 
       </div>
+      <ui-view>
+      </ui-view>
+
     </div>
 
   </body>
