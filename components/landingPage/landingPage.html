@@ -3,43 +3,61 @@
   <div id="content-wrapper">
 
     <!-- Header -->
-    <div id="landing-header">
+    <div class="layout" id="landing-header">
 
+      <div class="layout" id="logo">
 
+        <img src="images/hungerHubLogo.png" height="84" width="344" >
+
+      </div>
 
     </div>
 
 
     <!-- Content -->
-    <div id="content-wrapper">
+    <div id="frame">
+      <div class="loy" id="landing-wrapper">
+
+        <div class="loy" id="left-half">
+          <div class="loy" id="another-wrapper">
+            <div class="loy vctr" id="description-wrapper">
 
 
-      <div id="description-wrapper">
+              <div class="loy content" id="counter">
+                <h3> {{ recipeCount }} Recipes and Counting </h3>
+              </div>
+
+              <div class="loy content" id="call-to-action">
+                <h2> By Garbage, for Garbage. </h3>
+                <p> HungerHub is the leading resource on garbage. </p>
+                <p> Sign up today to be part of our waste of resources. </p>
+              </div>
 
 
-        <div id="counter">
-          <p> {{ recipeCount }} Recipes and Counting </p>
+            </div>
+          </div>
         </div>
+        <div class="loy" id="right-half">
 
-        <div id="call-to-action">
+            <div class="loy" id="another-wrapper">
+              <div class="loy vctr" id="description-wrapper">
+                <div id="form-wrapper" >
+
+                  <div id="form">
+
+                  </div>
+
+                  <input ng-model="name"></input>
+                  <p> {{ data }} </p>
+                </div>
+
+              </div>
+            </div>
 
         </div>
-
 
       </div>
-
-      <div id="form-wrapper" >
-
-        <div id="form">
-
-        </div>
-
-        <input ng-model="name"></input>
-        <p> {{ data }} </p>
-      </div>
-
 
     </div>
-
   </div>
 </div>
