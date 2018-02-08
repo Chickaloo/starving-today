@@ -1,6 +1,5 @@
 var app = angular.module('starvingToday',['ui.router']);
 
-
 app.config(function($stateProvider) {
   var helloState = {
     name: 'hello',
