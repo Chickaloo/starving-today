@@ -3,4 +3,5 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$log
   $log.log("bound and running");
   $scope.name = "John Doe";
   $scope.recipeCount = 2;
+  $scope.userCount = 0;
 }]);
