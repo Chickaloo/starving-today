@@ -18,6 +18,7 @@ type Request struct {
 type Response struct {
 	Recipes map[string]Recipe `json:"recipes,omitempty"`
 	Recipe  Recipe            `json:"recipe,omitempty"`
+	User User `json:"user,omitempty"`
 	Content string            `json:"content,omitempty"`
 }
 
@@ -29,7 +30,19 @@ type Recipe struct {
 	Instructions string `json:"instructions,omitempty"`
 }
 
-// List of recipes response
+// User structure
+type User struct {
+	UserID     int    `json:"userid,omitempty"`
+	Username       string `json:"username,omitempty"`
+	Firstname string `json:"firstname,omitempty"`
+	Lastname     string    `json:"lastname,omitempty"`
+	Email       string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
+	Bio string `json:"bio,omitempty"`
+	ProfileImage string `json:"profileimage,omitempty"`
+}
+
+// Recipes list of recipes response
 type Recipes struct {
 	RecipeList map[int]Recipe `json:"recipes,omitempty"`
 }

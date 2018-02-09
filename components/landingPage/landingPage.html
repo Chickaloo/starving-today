@@ -1,0 +1,78 @@
+<html>
+	<div>
+  		<div id="content-wrapper">
+			<!-- Header -->
+			<section class="header btn-toolbar container-fluid" background="red">
+				<nav class="navbar">
+					<!--Logo: 
+						links to the home page when clicked
+					-->
+					<div class="logo header-picture">
+						<img class="navbar-brand" src="images/hungerHubLogo.png" height="50"/>
+					</div>
+				</nav>
+			</section>
+			<!-- Content -->
+			<section id="frame">
+      			<div id="landing-wrapper">
+        			<div id="left-half">
+          				<div id="another-wrapper">
+            				<div class="vctr" id="description-wrapper">
+								<div id="counter">
+									<h1> {{ recipeCount }} Recipes and counting. </h1>
+								</div>
+								<div id="call-to-action">
+									<p> Join the world's most comprehensive resource today. All you need is a name and a password to join {{ userCount }} bajillion other users in creating a fine apocrypha.
+									</p>
+              					</div>
+            				</div>
+          				</div>
+					</div>
+					<div id="right-half">
+            			<div id="another-wrapper">
+              				<div class="vctr" id="description-wrapper">
+                				<div id="vctr form-wrapper description-wrapper" class="login-form-container justify-content-center">
+								  <div ng-app="sign-in-app">
+										<ul class="nav nav-pills nav-fill justify-content-center" id="enterTabs" role="tablist">
+											<li class="nav-item">
+												<a class="nav-link active btn-outline-success" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Sign In</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link btn-outline-success" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Sign Up</a>
+											</li>
+										</ul>
+										<div class="tab-content" id="myTabContent">
+											<div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="landingController">
+												<form>
+													<input class="entry-field form-control" type="text" placeholder="username" required="required" ng-model="username">
+													<br />
+													<input class="entry-field form-control" type="text" name="password" placeholder="password" required="required" ng-model="password">
+													<br />
+													<button class="submit-button btn btn-success" type="submit">Feed Me!</button>
+												</form>
+											</div>
+
+											<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
+												<form>
+													<input class="entry-field form-control" type="email" placeholder="email" required="required" ng-model="email">
+													<br />
+													<input class="entry-field form-control" type="text" placeholder="username" required="required" ng-model="username">
+													<br />
+													<input class="entry-field form-control" type="text" placeholder="password" required="required" ng-model="password">
+													<br />
+													<button class="submit-button btn btn-success" type="submit">Feed Me!</button>
+												</form>
+											</div>
+										</div>	
+									</div>
+                				</div>
+            		  		</div>
+            			</div>
+        			</div>
+      			</div>
+    		</section>
+  		</div>
+	</div>
+	<!--components/landingPage/-->
+	<script src="landingPageController.js"></script>
+</html>

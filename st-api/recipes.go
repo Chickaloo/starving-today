@@ -20,12 +20,16 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	var res Response
 
 	if err := Decode(w, r, &rdata); err != nil {
+		if *Debug {
+			fmt.Println("Erreeeer")
+		}
 		res.Content = "Invalid JSON format recieved!"
 		Respond(w, res, http.StatusBadRequest)
 		return
 	}
 
-	result, err := db.Connection.Exec(fmt.Sprintf("INSERT INTO Recipes (AuthorID, Title, Instructions)\nVALUES (\"%d\", \"%s\", \"%s\")", rdata.AuthorID, rdata.Title, rdata.Instructions))
+	query := fmt.Sprintf("INSERT INTO Recipes (AuthorID, Title, Instructions)\nVALUES (\"%d\", \"%s\", \"%s\")", rdata.AuthorID, rdata.Title, rdata.Instructions)
+	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
 			fmt.Println("Recipe Creation Failed: ", err.Error())
@@ -61,6 +65,7 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
+
 	defer rows.Close()
 	rdata.RecipeList = make(map[int]Recipe)
 	for rows.Next() {
@@ -81,6 +86,7 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	}
 
 	Respond(w, rdata, http.StatusOK)
+
 }
 
 // RecipeGetByID implements the GET /api/recipes/{recipeid} to retrieve info about a particular recipe
