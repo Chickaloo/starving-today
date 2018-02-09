@@ -28,7 +28,7 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("INSERT INTO Recipes (AuthorID, Title, Instructions)\nVALUES (\"%d\", \"%s\", \"%s\")", rdata.AuthorID, rdata.Title, rdata.Instructions)
+	query := fmt.Sprintf("INSERT INTO recipe (user_id, recipe_name, recipe_description, recipe_instructions, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made)\nVALUES (\"%d\", \"%s\", \"%s\", \"%s\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\")", rdata.UserID, rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, rdata.Upvotes, rdata.Downvotes, rdata.Made)
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
@@ -60,7 +60,7 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipes
 	var res Response
 
-	rows, err := db.Connection.Query("SELECT * FROM Recipes WHERE 1")
+	rows, err := db.Connection.Query("SELECT recipe_id, recipe_name, recipe_description FROM recipe")
 	if err != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
@@ -70,13 +70,13 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	rdata.RecipeList = make(map[int]Recipe)
 	for rows.Next() {
 		var re Recipe
-		if err := rows.Scan(&re.RecipeID, &re.AuthorID, &re.Title, &re.Instructions); err != nil {
+		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription); err != nil {
 			res.Content = "Recipe Population Failed!"
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
 		if *Debug {
-			fmt.Printf("%d %d: %s %s\n", re.RecipeID, re.AuthorID, re.Title, re.Instructions)
+			fmt.Printf("%d: %s %s\n", re.RecipeID, re.RecipeName, re.RecipeDescription)
 		}
 		rdata.RecipeList[re.RecipeID] = re
 	}
@@ -95,20 +95,20 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	params := mux.Vars(r)
 
-	rows, err := db.Connection.Query(fmt.Sprintf("SELECT * FROM Recipes WHERE RecipeID=%s", params["recipeid"]))
+	rows, err := db.Connection.Query(fmt.Sprintf("SELECT * FROM recipe WHERE recipe_id=%s", params["recipeid"]))
 	if err != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
 	defer rows.Close()
 	for rows.Next() {
-		if err := rows.Scan(&rdata.RecipeID, &rdata.AuthorID, &rdata.Title, &rdata.Instructions); err != nil {
+		if err := rows.Scan(&rdata.RecipeID, &rdata.UserID, &rdata.RecipeName, &rdata.RecipeDescription, &rdata.RecipeInstructions, &rdata.Calories, &rdata.PrepTime, &rdata.CookTime, &rdata.TotalTime, &rdata.Servings, &rdata.Upvotes, &rdata.Downvotes, &rdata.Made); err != nil {
 			res.Content = "Recipe Population Failed!"
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
 		if *Debug {
-			fmt.Printf("%d %d: %s %s\n", rdata.RecipeID, rdata.AuthorID, rdata.Title, rdata.Instructions)
+			fmt.Printf("%d %d: %s %s %s %d %d %d %d %d %d %d %d\n", rdata.RecipeID, rdata.UserID, rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, rdata.Upvotes, rdata.Downvotes, rdata.Made)
 		}
 	}
 

@@ -11,7 +11,6 @@ import (
 	"net/http"
 
 	db "./database"
-	"github.com/gorilla/mux"
 )
 
 func UserCreate(w http.ResponseWriter, r *http.Request) {
@@ -27,8 +26,28 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	query := fmt.Sprintf("INSERT INTO user (user_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\")", rdata.Username, rdata.Password, rdata.Email)
+	result, err := db.Connection.Exec(query)
+	if err != nil {
+		if *Debug {
+			fmt.Println("Recipe Creation Failed: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("Recipe Creation Failed: %s", err.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
 
+	rid, iderr := result.LastInsertId()
+	if iderr != nil {
+		if *Debug {
+			fmt.Println("Problem retrieving ID: ", iderr.Error())
+		}
+		res.Content = fmt.Sprintf("Problem retrieving ID: %s", iderr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
 
+	rdata.UserID = int(rid)
 
 	Respond(w, rdata, http.StatusOK)
 	return

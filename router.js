@@ -14,6 +14,14 @@ app.config(function($stateProvider) {
     url: '/hello',
     templateUrl: 'index.html'
   }
+
+  var landingState = {
+    name: 'login',
+    url: '/login',
+    templateUrl: 'components/landingPage/landingPage.html',
+    controller: 'landingController'
+  }
+
   var aboutState = {
     name: 'about',
     url: '/about',
@@ -23,4 +31,5 @@ app.config(function($stateProvider) {
   $stateProvider.state(helloState);
   $stateProvider.state(aboutState);
   
+
 });

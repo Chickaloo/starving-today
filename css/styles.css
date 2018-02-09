@@ -54,10 +54,10 @@ body {
 
 #left-half, #right-half {
 	padding: 5px;
-  display: inline-block;
-  vertical-align: middle;
-  width: 40%;
-  height: 100%;
+  	display: inline-block;
+  	vertical-align: middle;
+  	width: 40%;
+  	height: 100%;
 	max-width: 350px;
 }
 
