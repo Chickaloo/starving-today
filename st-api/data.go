@@ -24,10 +24,19 @@ type Response struct {
 
 // Recipe structure
 type Recipe struct {
-	RecipeID     int    `json:"recipeid,omitempty"`
-	AuthorID     int    `json:"authorid,omitempty"`
-	Title        string `json:"title,omitempty"`
-	Instructions string `json:"instructions,omitempty"`
+	RecipeID	int	`json:"recipeid,omitempty"`
+	UserID		int	`json:"userid,omitempty"`
+	RecipeName	string	`json:"recipename,omitempty"`
+	RecipeDescription string `json:"recipedescription,omitempty"`
+	RecipeInstructions string `json:"recipeinstructions,omitempty"`
+	Calories	uint16	`json:"calories,omitempty"`
+	PrepTime	uint16	`json:"preptime,omitempty"`
+	CookTime	uint16	`json:"cooktime,omitempty"`
+	TotalTime	uint	`json:"totaltime,omitempty"`
+	Servings	uint8	`json:"servings,omitempty"`
+	Upvotes		int	`json:"upvotes,omitempty"`
+	Downvotes	int	`json:"downvotes,omitempty"`
+	Made		int	`json:"made,omitempty"`
 }
 
 // User structure

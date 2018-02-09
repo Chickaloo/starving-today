@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"net/http"
 
-	db "./database"
-	"github.com/gorilla/mux"
+	//db "./database"
+	//"github.com/gorilla/mux"
 )
 
 func UserCreate(w http.ResponseWriter, r *http.Request) {
