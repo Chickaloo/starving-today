@@ -36,6 +36,13 @@ body {
 	background-blend-mode: screen;
 }
 
+.signin-tab{
+	border-width: 0px !important;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+
 .nav-item{
 	padding-bottom: 25px;
 }
@@ -53,12 +60,12 @@ body {
 }
 
 #left-half, #right-half {
-	padding: 5px;
+	padding: 20px;
   	display: inline-block;
   	vertical-align: middle;
   	width: 40%;
   	height: 100%;
-	max-width: 350px;
+	max-width: 450px;
 }
 
 #description-wrapper {

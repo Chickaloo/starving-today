@@ -1,8 +1,8 @@
 var app = angular.module('starvingToday',['ui.router']);
 
 app.config(function($stateProvider) {
-	
-	
+
+
 	var landingState = {
     name: 'login',
     url: '',
@@ -15,21 +15,23 @@ app.config(function($stateProvider) {
     templateUrl: 'index.html'
   }
 
-  var landingState = {
-    name: 'login',
-    url: '/login',
-    templateUrl: 'components/landingPage/landingPage.html',
-    controller: 'landingController'
-  }
-
   var aboutState = {
     name: 'about',
     url: '/about',
     template: '<h3>Its the UI-Router hello world app!</h3>'
   }
+
+  var homeState = {
+	  name: 'home',
+	  url: '/home',
+    templateUrl: 'components/homePage/home.html',
+    controller: 'landingController'
+  }
+
+
   $stateProvider.state(landingState);
   $stateProvider.state(helloState);
   $stateProvider.state(aboutState);
-  
+  $stateProvider.state(homeState);
 
 });
