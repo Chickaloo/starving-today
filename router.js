@@ -27,9 +27,19 @@ app.config(function($stateProvider) {
     url: '/about',
     template: '<h3>Its the UI-Router hello world app!</h3>'
   }
+  
+  var recipeState = {
+    name: 'recipes',
+    url: '/recipes',
+    templateUrl: 'components/recipesPage/recipesPage.html',
+    controller: 'recipesController'
+  }
+  
   $stateProvider.state(landingState);
   $stateProvider.state(helloState);
   $stateProvider.state(aboutState);
+  $stateProvider.state(recipeState);
+
   
 
 });
