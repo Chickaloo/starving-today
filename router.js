@@ -21,17 +21,19 @@ app.config(function($stateProvider) {
     template: '<h3>Its the UI-Router hello world app!</h3>'
   }
 
-  var homeState = {
-	  name: 'home',
-	  url: '/home',
-    templateUrl: 'components/homePage/home.html',
-    controller: 'landingController'
+  var recipeState = {
+    name: 'recipes',
+    url: '/recipes',
+    templateUrl: 'components/recipesPage/recipesPage.html',
+    controller: 'recipesController'
   }
 
-
-  $stateProvider.state(landingState);
+	$stateProvider.state(landingState);
   $stateProvider.state(helloState);
   $stateProvider.state(aboutState);
   $stateProvider.state(homeState);
+	$stateProvider.state(recipeState);
+
+
 
 });
