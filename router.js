@@ -2,7 +2,6 @@ var app = angular.module('starvingToday',['ui.router']);
 
 app.config(function($stateProvider) {
 
-
 	var landingState = {
     name: 'login',
     url: '',
@@ -20,7 +19,7 @@ app.config(function($stateProvider) {
     url: '/about',
     template: '<h3>Its the UI-Router hello world app!</h3>'
   }
-
+  
   var recipeState = {
     name: 'recipes',
     url: '/recipes',
@@ -28,12 +27,17 @@ app.config(function($stateProvider) {
     controller: 'recipesController'
   }
 
-	$stateProvider.state(landingState);
+  var homeState = {
+    name: 'home',
+    url: '/home',
+    templateUrl: 'components/homePage/home.html',
+    controller: 'landingController'
+  }
+  
+  $stateProvider.state(landingState);
   $stateProvider.state(helloState);
   $stateProvider.state(aboutState);
   $stateProvider.state(homeState);
-	$stateProvider.state(recipeState);
-
-
+  $stateProvider.state(recipeState);
 
 });
