@@ -7,51 +7,14 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os/exec"
-	"strings"
-	"time"
+
+	db "./database"
 )
 
 const contentType = "application/json"
-
-// SendCommand start another command and collect stdout. Kills off that command if it fails
-// to finish is a reasonable time (currently fixed a 600s, i.e. 10 minutes).
-func SendCommand(a string) (string, error) {
-
-	args := strings.Split(a, " ")
-	var err error
-
-	for i := 1; i <= 3; i++ {
-		cmd := exec.Command(args[0])
-		cmd.Args = args
-		var out bytes.Buffer
-		cmd.Stdout = &out
-		err = cmd.Start()
-
-		if err != nil {
-			fmt.Printf("Error: %s\n", err.Error())
-		}
-		var timer *time.Timer
-		timer = time.AfterFunc(600*time.Second, func() {
-			// fmt.Printf("Command %s timed out.\n", cmd.Args)
-			cmd.Process.Kill()
-		})
-
-		err = cmd.Wait()
-		timer.Stop()
-		if strings.Contains(out.String(), "cli_client ERROR") || strings.Contains(out.String(), "cio daemon") {
-			// fmt.Printf("Fail: %s\nRetry: %s\n", cmd.Args, i)
-		} else {
-			return strings.TrimSpace(out.String()), err
-		}
-
-	}
-	return "Fail", err
-}
 
 // Decode decodes JSON formatted request and error exits on errors in fetching or decoding.
 func Decode(w http.ResponseWriter, r *http.Request, req interface{}) (err error) {
@@ -81,4 +44,29 @@ func DebugPOST(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusBadRequest)
 	}
 	Respond(w, req, http.StatusOK)
+}
+
+// Stats returns the count of both users and recipes.
+func Stats(w http.ResponseWriter, r *http.Request) {
+	var res Response
+
+	result, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
+	if serr != nil {
+		if *Debug {
+			fmt.Println("Count Retrieval Failed: ", serr.Error())
+		}
+		res.Content = fmt.Sprintf("Count Retrieval Failed: %s", serr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	defer result.Close()
+	for result.Next() {
+		if rerr := result.Scan(&res.RecipeCount, &res.UserCount); rerr != nil {
+			res.Content = "Count Reading Failed"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+	}
+	Respond(w, res, http.StatusOK)
 }

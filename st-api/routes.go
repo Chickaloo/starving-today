@@ -29,13 +29,21 @@ type Route struct {
 type Routes []Route
 
 var routes = Routes{
-
+	// General
 	Route{
 		"Test",
 		"POST",
 		"/test",
 		DebugPOST,
 	},
+	Route{
+		"Stats",
+		"GET",
+		"/stats",
+		Stats,
+	},
+
+	// Recipes
 	Route{
 		"RecipeCreate",
 		"POST",
@@ -51,9 +59,18 @@ var routes = Routes{
 	Route{
 		"RecipeGetByID",
 		"GET",
-		"/recipes/{recipeid}",
+		"/recipes/id/{recipeid}",
 		RecipeGetByID,
 	},
+	//
+	// Route{
+	// 	"RecipeGetTop",
+	// 	"GET",
+	// 	"/recipes/top",
+	// 	RecipeGetTop,
+	// },
+
+	// Users
 	Route{
 		"UserCreate",
 		"POST",

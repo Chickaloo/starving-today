@@ -51,6 +51,36 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 
 	rdata.RecipeID = int(rid)
 
+	//RecipeCount update block
+	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
+	if serr != nil {
+		if *Debug {
+			fmt.Println("Count Retrieval Failed: ", serr.Error())
+		}
+		res.Content = fmt.Sprintf("Count Retrieval Failed: %s", serr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		if rerr := rows.Scan(&res.RecipeCount, &res.UserCount); rerr != nil {
+			res.Content = "Count Reading Failed"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	uresult, uerr := db.Connection.Exec(fmt.Sprintf("UPDATE stat SET recipe_count = \"%d\", user_count = \"%d\" WHERE 1", res.RecipeCount+1, res.UserCount))
+	if uerr != nil {
+		if *Debug {
+			fmt.Println("Count Update Failed: ", uerr.Error())
+		}
+		res.Content = fmt.Sprintf("Count Update Failed: %s", uerr.Error())
+		Respond(w, uresult, http.StatusInternalServerError)
+		return
+	}
+
 	Respond(w, rdata, http.StatusOK)
 
 }
