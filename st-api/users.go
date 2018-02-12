@@ -30,9 +30,9 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
-			fmt.Println("Recipe Creation Failed: ", err.Error())
+			fmt.Println("User Registration Failed!: ", err.Error())
 		}
-		res.Content = fmt.Sprintf("Recipe Creation Failed: %s", err.Error())
+		res.Content = fmt.Sprintf("User Registration Failed: %s", err.Error())
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
