@@ -6,10 +6,10 @@ app.controller("addRecipeController", function ($scope, $http) {
 			authorid: parseInt($scope.authorid),
 			title: $scope.title,
 			instructions: $scope.instructions
-		};	
-		
+		};
+
 		var parameter = JSON.stringify(data);
-		
+
 		var config = {
 			headers : {
 				'Content-Type': 'application/json;charset=utf-8'

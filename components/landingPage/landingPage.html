@@ -60,7 +60,11 @@
 													<br />
 													<input class="entry-field form-control" type="text" placeholder="password" required="required" ng-model="password"></input>
 													<br />
-													<a ui-sref="home" ><button class="submit-button btn btn-success" type="submit" >Feed Me!</button></a>
+													<!-- ui-sref="home"-->
+													<a  ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Feed Me!</button></a>
+													<p class="dark-text"> username: {{username}}</p>
+													<p class="dark-text"> PostData: {{postDataResponse}}</p>
+													<p class="dark-text"> Response: {{responseDetails}}</p>
 												</form>
 											</div>
 										</div>
@@ -74,5 +78,5 @@
   		</div>
 	</div>
 	<!--components/landingPage/-->
-	<script src="landingPageController.js"></script>
+	<script src="components/landingPage/landingPageController.js"></script>
 </html>
