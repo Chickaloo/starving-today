@@ -19,11 +19,10 @@
           				<div id="another-wrapper">
             				<div class="vctr" id="description-wrapper">
 								<div id="counter" ng-controller="statsController">
-									<h1> {{ recipeCount }} Recipes and counting. </h1>
+									<h1> {{recipeCount}} Recipes and counting. </h1>
 								</div>
-								<div id="call-to-action">
-									<p> Join the world's most comprehensive resource today. All you need is a name and a password to join {{ userCount }} bajillion other users in creating a fine apocrypha.
-									</p>
+								<div id="call-to-action" ng-controller="statsController">
+									<p>Join the world's most comprehensive resource today. All you need is a name and a password to join {{userCount}} bajillion other users in creating a fine apocrypha.</p>
               					</div>
             				</div>
           				</div>

@@ -6,7 +6,7 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 			email: $scope.email
 		};
 
-		var parameter = JSON.stringify(user_data);
+		var data = JSON.stringify(user_data);
 
 		var config = {
 			headers : {
@@ -14,17 +14,12 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 			}
 		}
 
-		$http.post('http://138.68.22.10:84/users', parameter, config)
+		$http.post('http://138.68.22.10:84/users', data, config)
 		.success(function (data, status, headers, config) {
-			$scope.postDataResponse = status;
+			$scope.postDataResponse = "Successful Sign Up";
 		})
 		.error(function (data, status, header, config) {
 			$scope.responseDetails = status;
-				/*
-				"Data: " + data +
-				"<hr />status: " + status +
-				"<hr />headers: " + header +
-				"<hr />config: " + config;*/
 		});
 	}
 }]);
