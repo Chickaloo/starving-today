@@ -59,3 +59,10 @@ app.controller("addRecipeController", function ($scope, $http) {
 		});
 	};
 });
+
+angular.module('starvingToday').controller('statsController', ['$scope', '$http', function($scope, $http) 
+{
+    $http.get('http://138.68.22.10:84/stats')
+    .then(function (response) {
+        $scope.recipeCount = response.data.recipecount;});
+}]);
