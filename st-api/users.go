@@ -54,6 +54,7 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// UserLogin is the authentication function for the API.
 func UserLogin(w http.ResponseWriter, r *http.Request) {
 
 	var rdata User
@@ -70,6 +71,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := db.Connection.Query(fmt.Sprintf("SELECT (user_id, first_name, last_name) FROM user WHERE user_name=%s AND password=%s", rdata.Username, rdata.Password))
 	if err != nil {
+		res.Content = fmt.Sprintf("Login failed. Error: %s", err.Error())
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
