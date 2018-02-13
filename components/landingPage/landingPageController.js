@@ -6,64 +6,29 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 			email: $scope.email
 		};
 
-		var parameter = JSON.stringify(user_data);
+		var data = JSON.stringify(user_data);
 
 		var config = {
 			headers : {
 				'Content-Type': 'application/json;charset=utf-8'
 			}
 		}
-		/*Checking if the user's in the db..?*/
 
-		/*Adding a new user..?*/
-		$http.put('http://138.68.22.10:81/api/users', parameter, config)
+		$http.post('http://138.68.22.10:84/users', data, config)
 		.success(function (data, status, headers, config) {
-			$scope.PostDataResponse = data;
+			$scope.postDataResponse = "Successful Sign Up";
 		})
 		.error(function (data, status, header, config) {
-			$scope.ResponseDetails = "Data: " + data +
-				"<hr />status: " + status +
-				"<hr />headers: " + header +
-				"<hr />config: " + config;
+			$scope.responseDetails = status;
 		});
 	}
 }]);
-
-var app = angular.module("add-recipe-app", []);
-app.controller("addRecipeController", function ($scope, $http) {
-	$scope.SendData = function () {
-	// use $.param jQuery function to serialize data from JSON
-		var data = {
-			authorid: parseInt($scope.authorid),
-			title: $scope.title,
-			instructions: $scope.instructions
-		};
-
-		var parameter = JSON.stringify(data);
-
-		var config = {
-			headers : {
-				'Content-Type': 'application/json;charset=utf-8'
-			}
-		}
-
-		$http.post('http://138.68.22.10:81/api/recipes', parameter, config)
-		.success(function (data, status, headers, config) {
-			$scope.PostDataResponse = data;
-		})
-		.error(function (data, status, header, config) {
-			$scope.ResponseDetails = "Data: " + data +
-				"<hr />status: " + status +
-				"<hr />headers: " + header +
-				"<hr />config: " + config;
-		});
-	};
-});
 
 angular.module('starvingToday').controller('statsController', ['$scope', '$http', function($scope, $http)
 {
     $http.get('http://138.68.22.10:84/stats')
     .then(function (response) {
         $scope.recipeCount = response.data.recipecount;
-			$scope.userCount = response.data.usercount;});
+				$scope.userCount = response.data.usercount;
+		});
 }]);

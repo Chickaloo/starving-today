@@ -17,13 +17,18 @@
       			<div id="landing-wrapper">
         			<div id="left-half">
           				<div id="another-wrapper">
+<<<<<<< HEAD
             				<div class="vctr" id="description-wrapper" ng-controller="statsController">
 								<div id="counter" >
 									<h1> {{ recipeCount }} Recipes and counting. </h1>
+=======
+            				<div class="vctr" id="description-wrapper">
+								<div id="counter" ng-controller="statsController">
+									<h1> {{recipeCount}} Recipes and counting. </h1>
+>>>>>>> 2c0b9bd92340ceea63f346c28e6228dd92965d96
 								</div>
-								<div id="call-to-action">
-									<p> Join the world's most comprehensive resource today. All you need is a name and a password to join {{ userCount }} bajillion other users in creating a fine apocrypha.
-									</p>
+								<div id="call-to-action" ng-controller="statsController">
+									<p>Join the world's most comprehensive resource today. All you need is a name and a password to join {{userCount}} bajillion other users in creating a fine apocrypha.</p>
               					</div>
             				</div>
           				</div>
@@ -60,7 +65,11 @@
 													<br />
 													<input class="entry-field form-control" type="text" placeholder="password" required="required" ng-model="password"></input>
 													<br />
-													<a ui-sref="home" ><button class="submit-button btn btn-success" type="submit" >Feed Me!</button></a>
+													<!-- ui-sref="home"-->
+													<a  ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Feed Me!</button></a>
+													<p class="dark-text"> username: {{username}}</p>
+													<p class="dark-text"> PostData: {{postDataResponse}}</p>
+													<p class="dark-text"> Response: {{responseDetails}}</p>
 												</form>
 											</div>
 										</div>
@@ -74,5 +83,5 @@
   		</div>
 	</div>
 	<!--components/landingPage/-->
-	<script src="landingPageController.js"></script>
+	<script src="components/landingPage/landingPageController.js"></script>
 </html>
