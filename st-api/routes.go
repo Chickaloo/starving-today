@@ -77,6 +77,12 @@ var routes = Routes{
 		"/users",
 		UserCreate,
 	},
+	Route{
+		"UserLogin",
+		"POST",
+		"/users/login",
+		UserLogin,
+	},
 }
 
 // Logger hook to implement logging of HTTP requests
