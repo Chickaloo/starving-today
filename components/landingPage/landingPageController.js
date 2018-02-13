@@ -15,11 +15,18 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 		}
 
 		$http.post('http://138.68.22.10:84/users', data, config)
-		.success(function (data, status, headers, config) {
-			$scope.postDataResponse = "Successful Sign Up";
-		})
-		.error(function (data, status, header, config) {
-			$scope.responseDetails = status;
+		.then(
+			function (response) {
+				$scope.postDataResponse = "Successful Sign Up!";
+			},
+			function (response) {
+				if (response.status === 500) {
+						$scope.responseDetails = "internal server error: " + response.status;
+				} else if(response.status === 400){
+						$scope.responseDetails = "bad request: " + response.status;
+				}else {
+						$scope.responseDetails = "error: " + response.status;
+				}
 		});
 	}
 }]);

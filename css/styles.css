@@ -5,7 +5,8 @@ body {
 }
 
 .dark-text{
-  font-size: 20pt;
+  font-size: 10pt;
+  text-align: left;
   color: rgba(0, 0, 0, 1);
 }
 
