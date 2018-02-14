@@ -1,47 +1,43 @@
-<!doctype html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>Starving Today</title>
+  <head>
 
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="components/header/headerStyle.css">
+    <!-- Credits -->
+    <meta charset="utf-8">
+    <title>HungerHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="DABDA, LLC">
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<!--ANGULAR JS-->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-	<!--ANGULAR JS: ROUTING SCRIPT-->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
 
-</head>
-<body>
-  <div class="main-div" ng-app="app">
-  		<!--Header-->
-  		<section class="header"><ng-include src="'components/header/header.html'"></ng-include></section>
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+    <script src="http://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+    <script src="router.js"></script>
+    <script src="components/landingPage/landingPageController.js"></script>
+    <script src="components/recipesPage/recipesPageController.js"></script>
 
-   		<!--Content-->
-   		<section>
+  </head>
+  <body ng-app="starvingToday" >
 
-   			<ul>
-   				<li><a href="#/!">SigningInOrUpOrUnder</a></li>
+    <div id="content-wrapper" class="content-wrapper" style="background-color: #000;">
+      <!--div id="application" >
+        <a ui-sref="hello" ui-sref-active="active">Hello</a>
+        <a ui-sref="login" ui-sref-active="active">Index</a>
+        <a ui-sref="about" ui-sref-active="active">About</a>
+      </div-->
 
-   				<li><a href="#!addRecipe">Too Lazy To Drive To TacoBell</a></li>
-   			</ul>
-   			<center><div ng-view></div></center>
-   		</section>
+      <ui-view><ng-include src="'components/landingPage/landingPage.html'"></ng-include></ui-view>
+    </div>
 
-   		<!--Footer-->
-   		<section class="footer" style="color: #FFFFFF">TOS | All Rights Reserved | HungerHub 2018</section>
-   	</div>
+    <section class="footer" style="color: #FFFFFF">TOS | All Rights Reserved | HungerHub 2018</section>
 
-
-    <!-- SCRIPTS -->
-	<script src="app.js"></script>
-	<!--script src="js/ctrl.js"></script-->
-
-	<!-- bootstrap -->
+    <!-- bootstrap -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  </body>
 </html>

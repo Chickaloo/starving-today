@@ -1,25 +1,27 @@
 var app = angular.module('starvingToday',['ui.router']);
-
 app.config(function($stateProvider) {
 
 	var landingState = {
     name: 'login',
     url: '',
     templateUrl: 'components/landingPage/landingPage.html',
-    controller: 'landingController'
+	  controller: 'landingController'
   }
+
+	/*We don't need this, but I'm not entirely deleting it in case that breaks something
   var helloState = {
     name: 'hello',
     url: '/hello',
     templateUrl: 'index.html'
   }
+	*/
 
   var aboutState = {
     name: 'about',
     url: '/about',
     template: '<h3>Its the UI-Router hello world app!</h3>'
   }
-  
+
   var recipeState = {
     name: 'recipes',
     url: '/recipes',
@@ -33,9 +35,9 @@ app.config(function($stateProvider) {
     templateUrl: 'components/homePage/home.html',
     controller: 'landingController'
   }
-  
+
   $stateProvider.state(landingState);
-  $stateProvider.state(helloState);
+  //$stateProvider.state(helloState);
   $stateProvider.state(aboutState);
   $stateProvider.state(homeState);
   $stateProvider.state(recipeState);

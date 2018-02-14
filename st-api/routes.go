@@ -78,10 +78,17 @@ var routes = Routes{
 		UserCreate,
 	},
 	Route{
+<<<<<<< HEAD
 		"UserGetByID",
 		"GET",
 		"/users/id/{userid}",
 		UserGetByID,
+=======
+		"UserLogin",
+		"POST",
+		"/users/login",
+		UserLogin,
+>>>>>>> 0dae4523f680674920539e6bedef45f5af869fa8
 	},
 }
 
