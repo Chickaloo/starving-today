@@ -11,8 +11,10 @@ import (
 	"net/http"
 
 	db "./database"
+	"github.com/gorilla/mux"
 )
 
+// UserCreate implements the POST /api/users endpoint to create a user.
 func UserCreate(w http.ResponseWriter, r *http.Request) {
 	var rdata User
 	var res Response
@@ -30,9 +32,9 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
-			fmt.Println("Recipe Creation Failed: ", err.Error())
+			fmt.Println("User Creation Failed: ", err.Error())
 		}
-		res.Content = fmt.Sprintf("Recipe Creation Failed: %s", err.Error())
+		res.Content = fmt.Sprintf("User Creation Failed: %s", err.Error())
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
@@ -47,8 +49,64 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//UserCount update block
+	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
+	if serr != nil {
+		if *Debug {
+			fmt.Println("Count Retrieval Failed: ", serr.Error())
+		}
+		res.Content = fmt.Sprintf("Count Retrieval Failed: %s", serr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		if rerr := rows.Scan(&res.RecipeCount, &res.UserCount); rerr != nil {
+			res.Content = "Count Reading Failed"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	uresult, uerr := db.Connection.Exec(fmt.Sprintf("UPDATE stat SET recipe_count = \"%d\", user_count = \"%d\" WHERE 1", res.RecipeCount, res.UserCount+1))
+	if uerr != nil {
+		if *Debug {
+			fmt.Println("Count Update Failed: ", uerr.Error())
+		}
+		res.Content = fmt.Sprintf("Count Update Failed: %s", uerr.Error())
+		Respond(w, uresult, http.StatusInternalServerError)
+		return
+	}
+
 	rdata.UserID = int(rid)
 
 	Respond(w, rdata, http.StatusOK)
 	return
+}
+
+// UserGetByID implements the GET /api/users/{userid} to retrieve info about a particular user
+func UserGetByID(w http.ResponseWriter, r *http.Request) {
+	var udata User
+	var res Response
+	params := mux.Vars(r)
+
+	rows, serr := db.Connection.Query(fmt.Sprintf("SELECT * FROM user WHERE user_id=%s", params["userid"]))
+	if serr != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		if serr := rows.Scan(&udata.UserID, &udata.Firstname, &udata.Lastname, &udata.Email, &udata.Password, &udata.Bio, &udata.ProfileImage); serr != nil {
+			res.Content = "User Population Failed!"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		if *Debug {
+			fmt.Printf("%d: %s %s %s %s %s %s\n", udata.UserID, udata.Firstname, udata.Lastname, udata.Email, udata.Password, udata.Bio, udata.ProfileImage)
+		}
+	}
+
+	Respond(w, udata, http.StatusOK)
 }
