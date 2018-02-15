@@ -49,10 +49,10 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 			}
 		}
 
-		$http.post('http://138.68.22.10:84/users', data, config)
+		$http.post('http://138.68.22.10:84/users/login', data, config)
 		.then(
 			function (response) {
-				$scope.responseDetails = "Successful Sign Up!" + response.status;
+				$scope.responseDetails = "Successful Sign In!" + response.status;
 			},
 			function (response) {
 				if (response.status === 500) {

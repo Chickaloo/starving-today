@@ -1,9 +1,7 @@
-
-angular.module('starvingToday').controller("addRecipeController", function ($scope, $http) {
-	$scope.SendData = function () {
-	// use $.param jQuery function to serialize data from JSON
-
-		var data = {
+angular.module('add-recipe-app').controller('addRecipeController', ['$scope', '$http', function($scope, $http)
+{
+	$scope.SendData = function() {
+		var recipe_data = {
 			//authorid: parseInt($scope.authorid),
 			recipename: $scope.recipename,
 			recipedescription: $scope.recipedescription,
@@ -14,7 +12,7 @@ angular.module('starvingToday').controller("addRecipeController", function ($sco
 			servings: parseInt($scope.servings)
 		};
 
-		var parameter = JSON.stringify(data);
+		var data = JSON.stringify(recipe_data);
 
 		var config = {
 			headers : {
@@ -22,7 +20,7 @@ angular.module('starvingToday').controller("addRecipeController", function ($sco
 			}
 		}
 
-		$http.post('http://138.68.22.10:84/api/recipes', parameter, config)
+		$http.post('http://138.68.22.10:84/recipes', data, config)
 		.then(
 			function (response) {
 				$scope.responseDetails = "You entered a recipe! Eww!";
@@ -30,5 +28,5 @@ angular.module('starvingToday').controller("addRecipeController", function ($sco
 			function (response) {
 				$scope.responseDetails = "You couldn't even enter a recipe correctly.. for SHAME!" + response.status;
 		});
-	};
-});
+	}
+}]);
