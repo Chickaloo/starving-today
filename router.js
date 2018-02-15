@@ -3,7 +3,7 @@ app.config(function($stateProvider) {
 
 	var landingState = {
     name: 'login',
-    url: '',
+    url: '/login',
     templateUrl: 'components/landingPage/landingPage.html',
 	  controller: 'landingController'
   }
@@ -30,7 +30,7 @@ app.config(function($stateProvider) {
 
   var homeState = {
     name: 'home',
-    url: '/home',
+    url: '',
     templateUrl: 'components/homePage/home.html',
     controller: 'landingController'
   }
