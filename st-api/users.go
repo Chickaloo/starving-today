@@ -17,6 +17,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// UserCreate implements the POST /api/users endpoint to create a user.
 func UserCreate(w http.ResponseWriter, r *http.Request) {
 	var rdata User
 	var res Response
@@ -52,8 +53,6 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rdata.UserID = int(rid)
-
 	//UserCount update block
 	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
 	if serr != nil {
@@ -83,6 +82,8 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		Respond(w, uresult, http.StatusInternalServerError)
 		return
 	}
+
+	rdata.UserID = int(rid)
 
 	Respond(w, rdata, http.StatusOK)
 	return
@@ -212,4 +213,31 @@ func UserAuth(w http.ResponseWriter, r *http.Request) {
 
 	res.Content = "Login OK"
 	Respond(w, res, http.StatusOK)
+}
+
+// UserGetByID implements the GET /api/users/{userid} to retrieve info about a particular user
+func UserGetByID(w http.ResponseWriter, r *http.Request) {
+	var udata User
+	var res Response
+	params := mux.Vars(r)
+
+	rows, serr := db.Connection.Query(fmt.Sprintf("SELECT * FROM user WHERE user_id=%s", params["userid"]))
+	if serr != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		if serr := rows.Scan(&udata.UserID, &udata.Firstname, &udata.Lastname, &udata.Email, &udata.Password, &udata.Bio, &udata.ProfileImage); serr != nil {
+			res.Content = "User Population Failed!"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		if *Debug {
+			fmt.Printf("%d: %s %s %s %s %s %s\n", udata.UserID, udata.Firstname, udata.Lastname, udata.Email, udata.Password, udata.Bio, udata.ProfileImage)
+		}
+	}
+
+	Respond(w, udata, http.StatusOK)
+
 }

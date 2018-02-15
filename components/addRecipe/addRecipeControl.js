@@ -1,11 +1,17 @@
-var app = angular.module("add-recipe-app", []);
-app.controller("addRecipeController", function ($scope, $http) {
+
+angular.module('starvingToday').controller("addRecipeController", function ($scope, $http) {
 	$scope.SendData = function () {
 	// use $.param jQuery function to serialize data from JSON
+
 		var data = {
-			authorid: parseInt($scope.authorid),
-			title: $scope.title,
-			instructions: $scope.instructions
+			//authorid: parseInt($scope.authorid),
+			recipename: $scope.recipename,
+			recipedescription: $scope.recipedescription,
+			recipeinstructions: $scope.recipeinstructions,
+			calories: parseInt($scope.calories),
+			preptime: parseInt($scope.preptime),
+			cooktime: parseInt($scope.cooktime),
+			servings: parseInt($scope.servings)
 		};
 
 		var parameter = JSON.stringify(data);
@@ -16,15 +22,13 @@ app.controller("addRecipeController", function ($scope, $http) {
 			}
 		}
 
-		$http.post('http://138.68.22.10:81/api/recipes', parameter, config)
-		.success(function (data, status, headers, config) {
-			$scope.PostDataResponse = data;
-		})
-		.error(function (data, status, header, config) {
-			$scope.ResponseDetails = "Data: " + data +
-				"<hr />status: " + status +
-				"<hr />headers: " + header +
-				"<hr />config: " + config;
+		$http.post('http://138.68.22.10:84/api/recipes', parameter, config)
+		.then(
+			function (response) {
+				$scope.responseDetails = "You entered a recipe! Eww!";
+			},
+			function (response) {
+				$scope.responseDetails = "You couldn't even enter a recipe correctly.. for SHAME!" + response.status;
 		});
 	};
 });

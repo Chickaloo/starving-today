@@ -4,29 +4,32 @@
 	<meta charset="utf-8">
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
-
-	<div ng-app="add-recipe-app" ng-controller="addRecipeController">
+	<center><div ng-app="add-recipe-app" ng-controller="addRecipeController">
 		<h4>Add a New Recipe:</h4>
 		<form>
-			<input class="entry-field" type="text" placeholder="authorID" required="required" ng-model="authorid">
+			<input class="entry-field" type="text" placeholder="Recipe Title" required="required" ng-model="recipename">
 			<br />
-			<input class="entry-field" type="text" placeholder="title" required="required" ng-model="title">
+			<textarea rows="5" class="entry-field" type="text" placeholder="Description..." required="required" ng-model="recipedescription"></textarea>
+			<textarea rows="5" class="entry-field" type="text" placeholder="Instructions..." required="required" ng-model="recipeinstructions"></textarea>
 			<br />
-			<textarea rows="10" class="entry-field" type="text" placeholder="instructions" required="required" ng-model="instructions"></textarea>
+			<input class="entry-field" type="text" placeholder="Calories" required="required" ng-model="calories">
+			<input class="entry-field" type="text" placeholder="Servings" required="required" ng-model="servings">
 			<br />
-			<button class="submit-button" ng-click="SendData()">Post for Consumption</button>
-		</form>		
-		{{ PostDataResponse + $scope.data}}
-	</div>
-	
+			<input class="entry-field" type="text" placeholder="Prep Time" required="required" ng-model="preptime">
+			<input class="entry-field" type="text" placeholder="Cook Time" required="required" ng-model="cooktime">
+			<br /></form>
+			<a  ><button class="submit-button btn btn-success" ng-click="SendData()" type="submit">Add Recipe!</button></a>
+			totaltime: {{preptime + cooktime}}
+	</div></center>
+
 	<!-- js -->
-	<script src="addRecipeControl.js"></script>
-	
+	<script src="components/addRecipe/addRecipeControl.js"></script>
+
     <!-- bootstrap -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

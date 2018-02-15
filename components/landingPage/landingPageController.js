@@ -1,4 +1,5 @@
-angular.module('starvingToday').controller('landingController', ['$scope', '$http', function($scope, $http){
+angular.module('starvingToday').controller('landingController', ['$scope', '$http', function($scope, $http)
+{
 	$scope.SendData = function() {
 		var user_data = {
 			username: $scope.username,
@@ -17,7 +18,7 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 		$http.post('http://138.68.22.10:84/users', data, config)
 		.then(
 			function (response) {
-				$scope.postDataResponse = "Successful Sign Up!";
+				$scope.responseDetails = "Successful Sign Up!" + response.status;
 			},
 			function (response) {
 				if (response.status === 500) {
@@ -25,8 +26,45 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 				} else if(response.status === 400){
 						$scope.responseDetails = "bad request: " + response.status;
 				}else {
-						$scope.responseDetails = "error: " + response.status;
+						$scope.responseDetails = "internal server error: " + response.status;
 				}
+
+		});
+	}
+}]);
+
+angular.module('starvingToday').controller('loginController', ['$scope', '$http', function($scope, $http)
+{
+	$scope.SendData = function() {
+		var user_data = {
+			username: $scope.username,
+			password: $scope.password
+		};
+
+		var data = JSON.stringify(user_data);
+
+		var config = {
+			headers : {
+				'Content-Type': 'application/json;charset=utf-8'
+			}
+		}
+
+		$http.post('http://138.68.22.10:84/users', data, config)
+		.then(
+			function (response) {
+				$scope.responseDetails = "Successful Sign Up!" + response.status;
+			},
+			function (response) {
+				if (response.status === 500) {
+						$scope.responseDetails = "internal server error: " + response.status;
+				} else if(response.status === 400){
+						$scope.responseDetails = "bad request: " + response.status;
+				} else if(response.status === 404){
+						$scope.responseDetails = "not found: " + response.status;
+				} else {
+						$scope.responseDetails = "internal server error: " + response.status;
+				}
+
 		});
 	}
 }]);

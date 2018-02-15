@@ -101,6 +101,12 @@ var routes = Routes{
 		"/users/auth",
 		UserAuth,
 	},
+	Route{
+		"UserGetByID",
+		"GET",
+		"/users/id/{userid}",
+		UserGetByID,
+	},
 }
 
 // Logger hook to implement logging of HTTP requests
