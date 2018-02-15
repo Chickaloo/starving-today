@@ -1,42 +1,22 @@
-<style>
-    
-#inner {
-  width: 50%;
-  margin: 0 auto;
-}    
-    
-.row {
-  margin-bottom: 1rem;
-}
-.row .row {
-  margin-top: 1rem;
-  margin-bottom: 0;
-}
-[class*="col-"] {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  background-color: rgba(240,240,240,.8);
-  border: 1px solid rgba(240,240,240,.8);
-}
-
-hr {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-</style>
 <div id="content-wrapper" style="background-image:url(images/bgd.jpg); background-size: 100% 100%;">
-
-<div id="outer">
-    <div id="inner">
-      <div class="row"  ng-repeat="(key, value) in recipes">
-        <div class="col-md-8">
-          {{ value.recipename }}
-          <div class="row">
-            <div class="col-md-6">{{ value.recipedescription }}</div>
-            <div class="col-md-6">{{ value.upvotes }} Upvotes / {{value.downvotes}} Downvotes</div>
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row" >
+            <div class="col-md-4" ng-repeat="(key, value) in recipes | limitTo:Math.ceil(recipes.length/3)">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top" img src="images/food/{{ value.recipename }}.jpg" alt="{{ value.recipename }} Image">
+                <div class="card-body">
+                  <p class="card-title">{{ value.recipename }}</p>
+                  <p class="card-text">{{ value.recipedescription }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                    </div>
+                    <small class="text-muted">Total Time: 9 mins</small>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-md-4">{{value.image}} Image Here</div>
-      </div>
     </div>
-</div>
