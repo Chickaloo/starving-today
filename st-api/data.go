@@ -26,19 +26,28 @@ type Response struct {
 
 // Recipe structure
 type Recipe struct {
-	RecipeID           int    `json:"recipeid,omitempty"`
-	UserID             int    `json:"userid,omitempty"`
-	RecipeName         string `json:"recipename,omitempty"`
-	RecipeDescription  string `json:"recipedescription,omitempty"`
-	RecipeInstructions string `json:"recipeinstructions,omitempty"`
-	Calories           uint16 `json:"calories,omitempty"`
-	PrepTime           uint16 `json:"preptime,omitempty"`
-	CookTime           uint16 `json:"cooktime,omitempty"`
-	TotalTime          uint   `json:"totaltime,omitempty"`
-	Servings           uint8  `json:"servings,omitempty"`
-	Upvotes            int    `json:"upvotes,omitempty"`
-	Downvotes          int    `json:"downvotes,omitempty"`
-	Made               int    `json:"made,omitempty"`
+	RecipeID           int          `json:"recipeid"`
+	UserID             int          `json:"userid,omitempty"`
+	RecipeName         string       `json:"recipename,omitempty"`
+	RecipeDescription  string       `json:"recipedescription,omitempty"`
+	RecipeInstructions string       `json:"recipeinstructions,omitempty"`
+	Ingredients        []Ingredient `json:"ingredients,omitempty"`
+	Tags               []string     `json:"tags,omitempty"`
+	Calories           uint16       `json:"calories,omitempty"`
+	PrepTime           uint16       `json:"preptime,omitempty"`
+	CookTime           uint16       `json:"cooktime,omitempty"`
+	TotalTime          uint         `json:"totaltime,omitempty"`
+	Servings           uint8        `json:"servings,omitempty"`
+	Upvotes            int          `json:"upvotes"`
+	Downvotes          int          `json:"downvotes"`
+	Made               int          `json:"made"`
+}
+
+// Ingredient structure
+type Ingredient struct {
+	Amount     string `json:"amount,omitempty"`
+	Unit       string `json:"unit,omitempty"`
+	Ingredient string `json:"ingredient,omitempty"`
 }
 
 // User structure

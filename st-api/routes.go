@@ -51,6 +51,12 @@ var routes = Routes{
 		RecipeCreate,
 	},
 	Route{
+		"RecipeDelete",
+		"DELETE",
+		"/recipes/{recipeid}",
+		RecipeDelete,
+	},
+	Route{
 		"RecipeDump",
 		"GET",
 		"/recipes",
@@ -78,10 +84,22 @@ var routes = Routes{
 		UserCreate,
 	},
 	Route{
+		"UserDelete",
+		"DELETE",
+		"/users/{userid}",
+		UserDelete,
+	},
+	Route{
 		"UserLogin",
 		"POST",
 		"/users/login",
 		UserLogin,
+	},
+	Route{
+		"UserAuth",
+		"GET",
+		"/users/auth",
+		UserAuth,
 	},
 }
 

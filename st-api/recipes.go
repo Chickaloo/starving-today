@@ -14,7 +14,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// RecipeCreate implements the POST /api/recipes endpoint to create a recipe.
+// RecipeCreate implements the POST /recipes/ endpoint to create a recipe.
 func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
 	var res Response
@@ -81,8 +81,69 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	Respond(w, rdata, http.StatusOK)
+	res.RecipeCount -= 1
 
+	Respond(w, rdata, http.StatusOK)
+}
+
+// RecipeDelete implements the DELETE /recipes/{recipeid} endpoint to delete a recipe.
+func RecipeDelete(w http.ResponseWriter, r *http.Request) {
+	var res Response
+
+	params := mux.Vars(r)
+
+	query := fmt.Sprintf("DELETE FROM recipe WHERE recipe_id=%s", params["recipeid"])
+	result, err := db.Connection.Exec(query)
+	if err != nil {
+		if *Debug {
+			fmt.Println("Recipe Not Found: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("Recipe Not Found: %s", err.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	}
+
+	_, cerr := result.RowsAffected()
+	if cerr != nil {
+		if *Debug {
+			fmt.Println("Recipe Deletion failed: ", cerr.Error())
+		}
+		res.Content = fmt.Sprintf("Recipe Deletion failed: %s", cerr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	//RecipeCount update block
+	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
+	if serr != nil {
+		if *Debug {
+			fmt.Println("Count Retrieval Failed: ", serr.Error())
+		}
+		res.Content = fmt.Sprintf("Count Retrieval Failed: %s", serr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		if rerr := rows.Scan(&res.RecipeCount, &res.UserCount); rerr != nil {
+			res.Content = "Count Reading Failed"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	uresult, uerr := db.Connection.Exec(fmt.Sprintf("UPDATE stat SET recipe_count = \"%d\", user_count = \"%d\" WHERE 1", res.RecipeCount-1, res.UserCount))
+	if uerr != nil {
+		if *Debug {
+			fmt.Println("Count Update Failed: ", uerr.Error())
+		}
+		res.Content = fmt.Sprintf("Count Update Failed: %s", uerr.Error())
+		Respond(w, uresult, http.StatusInternalServerError)
+		return
+	}
+
+	Respond(w, res, http.StatusOK)
 }
 
 // RecipeDump implements the GET /api/recipes endpoint to dump a list of all recipes.
@@ -116,7 +177,6 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	}
 
 	Respond(w, rdata, http.StatusOK)
-
 }
 
 // RecipeGetByID implements the GET /api/recipes/{recipeid} to retrieve info about a particular recipe
