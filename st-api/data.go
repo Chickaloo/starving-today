@@ -31,6 +31,7 @@ type Recipe struct {
 	RecipeName         string       `json:"recipename,omitempty"`
 	RecipeDescription  string       `json:"recipedescription,omitempty"`
 	RecipeInstructions string       `json:"recipeinstructions,omitempty"`
+	ImageURL		   string		`json:"imageurl,omitempty"`
 	Ingredients        []Ingredient `json:"ingredients,omitempty"`
 	Tags               []string     `json:"tags,omitempty"`
 	Calories           uint16       `json:"calories,omitempty"`

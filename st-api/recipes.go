@@ -28,7 +28,7 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("INSERT INTO recipe (user_id, recipe_name, recipe_description, recipe_instructions, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made)\nVALUES (\"%d\", \"%s\", \"%s\", \"%s\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\")", rdata.UserID, rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, rdata.Upvotes, rdata.Downvotes, rdata.Made)
+	query := fmt.Sprintf("INSERT INTO recipe (user_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made)\nVALUES (\"%d\", \"%s\", \"%s\", \"%s\", \"%s\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\", \"%d\")", rdata.UserID, rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.ImageURL, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, rdata.Upvotes, rdata.Downvotes, rdata.Made)
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
@@ -50,6 +50,42 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rdata.RecipeID = int(rid)
+
+	//Adds the tags to the tag table
+	tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
+	for i := 0; i < len(rdata.Tags); i++ {
+		tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, rdata.Tags[i])
+		if i != len(rdata.Tags) - 1 {
+			tquery += ","
+		}
+	}
+	tresult, terr := db.Connection.Exec(tquery)
+	if terr != nil {
+		if *Debug {
+			fmt.Println("Tags Insertion Failed: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("Tags Insertion Failed: %s", err.Error())
+		Respond(w, tresult, http.StatusInternalServerError)
+		return
+	}
+
+	//Adds the ingredients to the ingredient table
+	iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, count, unit, ingredient)\nVALUES ")
+	for i := 0; i < len(rdata.Ingredients); i++ {
+		iquery += fmt.Sprintf("(\"%d\", \"%s\", \"%s\", \"%s\")", rdata.RecipeID, rdata.Ingredients[i].Amount, rdata.Ingredients[i].Unit, rdata.Ingredients[i].Ingredient)
+		if i != len(rdata.Ingredients) - 1 {
+			iquery += ","
+		}
+	}
+	iresult, ierr := db.Connection.Exec(iquery)
+	if ierr != nil {
+		if *Debug {
+			fmt.Println("Ingredients Insertion Failed: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("Ingredients Insertion Failed: %s", err.Error())
+		Respond(w, iresult, http.StatusInternalServerError)
+		return
+	}
 
 	//RecipeCount update block
 	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
@@ -151,7 +187,7 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipes
 	var res Response
 
-	rows, err := db.Connection.Query("SELECT recipe_id, recipe_name, recipe_description FROM recipe")
+	rows, err := db.Connection.Query("SELECT recipe_id, recipe_name, recipe_description, image_url, upvotes, downvotes, made FROM recipe")
 	if err != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
@@ -161,13 +197,13 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	rdata.RecipeList = make(map[int]Recipe)
 	for rows.Next() {
 		var re Recipe
-		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription); err != nil {
+		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription, &re.ImageURL, &re.Upvotes, &re.Downvotes, &re.Made); err != nil {
 			res.Content = "Recipe Population Failed!"
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
 		if *Debug {
-			fmt.Printf("%d: %s %s\n", re.RecipeID, re.RecipeName, re.RecipeDescription)
+			fmt.Printf("%d: %s %s %s %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.ImageURL, re.Upvotes, re.Downvotes, re.Made)
 		}
 		rdata.RecipeList[re.RecipeID] = re
 	}
