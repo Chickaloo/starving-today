@@ -1,4 +1,4 @@
-angular.module('add-recipe-app').controller('addRecipeController', ['$scope', '$http', function($scope, $http)
+angular.module('starvingToday').controller('addRecipeController', ['$scope', '$http', function($scope, $http)
 {
 	$scope.SendData = function() {
 		var recipe_data = {

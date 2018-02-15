@@ -11,7 +11,8 @@ app.config(function($stateProvider) {
   var addRecipeState = {
     name: 'addRecipe',
     url: '/addRecipe',
-    templateUrl: 'components/addRecipe/add-recipe-app.htm'
+    templateUrl: 'components/addRecipe/addRecipe.html',
+	 controller: 'addRecipeController'
   }
 
   var aboutState = {

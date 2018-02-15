@@ -190,7 +190,8 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, &cookie)
 
-	Respond(w, rdata, http.StatusOK)
+	res.User = &rdata
+	Respond(w, res, http.StatusOK)
 	return
 }
 
