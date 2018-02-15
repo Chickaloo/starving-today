@@ -8,13 +8,11 @@ app.config(function($stateProvider) {
 	  controller: 'landingController'
   }
 
-	/*We don't need this, but I'm not entirely deleting it in case that breaks something
-  var helloState = {
-    name: 'hello',
-    url: '/hello',
-    templateUrl: 'index.html'
+  var addRecipeState = {
+    name: 'addRecipe',
+    url: '/addRecipe',
+    templateUrl: 'components/addRecipe/add-recipe-app.htm'
   }
-	*/
 
   var aboutState = {
     name: 'about',
@@ -37,7 +35,7 @@ app.config(function($stateProvider) {
   }
 
   $stateProvider.state(landingState);
-  //$stateProvider.state(helloState);
+  $stateProvider.state(addRecipeState);
   $stateProvider.state(aboutState);
   $stateProvider.state(homeState);
   $stateProvider.state(recipeState);

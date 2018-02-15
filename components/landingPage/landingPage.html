@@ -34,24 +34,27 @@
 								  <div ng-app="sign-in-app">
 										<ul class="nav nav-pills nav-fill justify-content-center" id="enterTabs" role="tablist">
 											<li class="nav-item">
-												<a class="signin-tab nav-link active btn-outline-success" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Sign In</a>
+												<a class="signin-tab nav-link btn-outline-success" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Sign In</a>
 											</li>
 											<li class="nav-item signin-tab">
-												<a class="nav-link btn-outline-success" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Sign Up</a>
+												<a class="nav-link active btn-outline-success" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Sign Up</a>
 											</li>
 										</ul>
+
 										<div class="tab-content" id="myTabContent">
-											<div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="landingController">
+											<div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="loginController">
 												<form>
 													<input class="entry-field form-control" type="text" placeholder="username" required="required" ng-model="username"></input>
 													<br />
 													<input class="entry-field form-control" type="text" name="password" placeholder="password" required="required" ng-model="password"></input>
 													<br />
-													<a ui-sref="home" ui-sref-active="active"><button class="submit-button btn btn-success" type="submit">Feed Me!</button></a>
+													<!--ui-sref="home" ui-sref-active="active" -->
+													<a  ><button class="submit-button btn btn-success" ng-click="SendData()" type="submit">Feed Me!</button></a>
+													<p class="dark-text"> Response: {{responseDetails}}</p>
 												</form>
 											</div>
 
-											<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
+											<div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
 												<form>
 													<input class="entry-field form-control" type="email" placeholder="email" required="required" ng-model="email"></input>
 													<br />
@@ -60,8 +63,7 @@
 													<input class="entry-field form-control" type="text" placeholder="password" required="required" ng-model="password"></input>
 													<br />
 													<!-- ui-sref="home"-->
-													<a  ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Feed Me!</button></a>
-													<p class="dark-text"> PostData: {{postDataResponse}}</p>
+													<a ui-sref="addRecipe" ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Feed Me!</button></a>
 													<p class="dark-text"> Response: {{responseDetails}}</p>
 												</form>
 											</div>
