@@ -187,7 +187,7 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipes
 	var res Response
 
-	rows, err := db.Connection.Query("SELECT recipe_id, recipe_name, recipe_description, image_url, upvotes, downvotes, made FROM recipe")
+	rows, err := db.Connection.Query("SELECT recipe_id, recipe_name, recipe_description, image_url, prep_time, cook_time, upvotes, downvotes, made FROM recipe")
 	if err != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
@@ -197,13 +197,13 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	rdata.RecipeList = make(map[int]Recipe)
 	for rows.Next() {
 		var re Recipe
-		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription, &re.ImageURL, &re.Upvotes, &re.Downvotes, &re.Made); err != nil {
+		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription, &re.ImageURL, &re.PrepTime, &re.CookTime, &re.Upvotes, &re.Downvotes, &re.Made); err != nil {
 			res.Content = "Recipe Population Failed!"
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
 		if *Debug {
-			fmt.Printf("%d: %s %s %s %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.ImageURL, re.Upvotes, re.Downvotes, re.Made)
+			fmt.Printf("%d: %s %s %s %d %d %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.ImageURL, re.PrepTime, re.CookTime, re.Upvotes, re.Downvotes, re.Made)
 		}
 		rdata.RecipeList[re.RecipeID] = re
 	}
