@@ -35,10 +35,17 @@ app.config(function($stateProvider) {
     controller: 'landingController'
   }
 
+    var viewRecipesState = {
+    name: 'viewRecipesState',
+    url: 'recipe',
+    templateUrl: 'components/viewRecipePage/viewRecipePage.html',
+    controller: 'viewRecipeController'
+  }
+    
   $stateProvider.state(landingState);
   $stateProvider.state(addRecipeState);
   $stateProvider.state(aboutState);
   $stateProvider.state(homeState);
   $stateProvider.state(recipeState);
-
+  $stateProvider.state(viewRecipesState);
 });
