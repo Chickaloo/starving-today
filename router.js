@@ -1,4 +1,12 @@
 var app = angular.module('starvingToday',['ui.router']);
+
+app.controller('mainController' , function($scope){
+	$scope.auth = false;
+	$scope.changeAuth = function(newAuthVal){
+		$scope.auth = newAuthVal;
+	};
+});
+
 app.config(function($stateProvider) {
 
 	var landingState = {

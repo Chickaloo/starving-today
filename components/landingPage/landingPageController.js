@@ -1,3 +1,5 @@
+
+
 angular.module('starvingToday').controller('landingController', ['$scope', '$http', function($scope, $http)
 {
 	$scope.SendData = function() {
@@ -18,15 +20,15 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 		$http.post('http://138.68.22.10:84/users', data, config)
 		.then(
 			function (response) {
-				$scope.responseDetails = "Successful Sign Up!" + response.status;
+				$scope.successInstructions = "Congratulations! Your sign up was successful. Please sign in now.";
 			},
 			function (response) {
 				if (response.status === 500) {
-						$scope.responseDetails = "internal server error: " + response.status;
+						$scope.responseDetails = "It seems this user already exists! Please sign in or try a different username.";
 				} else if(response.status === 400){
-						$scope.responseDetails = "bad request: " + response.status;
+						$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
 				}else {
-						$scope.responseDetails = "internal server error: " + response.status;
+						$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
 				}
 
 		});
@@ -41,6 +43,8 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 			password: $scope.password
 		};
 
+		var auth = false;
+
 		var data = JSON.stringify(user_data);
 
 		var config = {
@@ -52,17 +56,21 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 		$http.post('http://138.68.22.10:84/users/login', data, config)
 		.then(
 			function (response) {
-				$scope.responseDetails = "Successful Sign In!" + response.status;
+				if(response.data.user.userid > 0){
+					$scope.changeAuth(true);
+				}
+				$scope.userid = response.data.user.userid;
+				$scope.username = response.data.user.username;
 			},
 			function (response) {
 				if (response.status === 500) {
-						$scope.responseDetails = "internal server error: " + response.status;
+						$scope.responseDetails = "Please double check your username and passord!";
 				} else if(response.status === 400){
-						$scope.responseDetails = "bad request: " + response.status;
+						$scope.responseDetails = "Please double check your username and passord!";
 				} else if(response.status === 404){
-						$scope.responseDetails = "not found: " + response.status;
+						$scope.responseDetails = "Please double check your username and passord!";
 				} else {
-						$scope.responseDetails = "internal server error: " + response.status;
+						$scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
 				}
 
 		});

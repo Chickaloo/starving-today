@@ -11,15 +11,15 @@
 <body>
 	<div class="header btn-toolbar container-fluid" background="red">
 		<nav class="navbar">
-		
-			<!--Logo: 
+
+			<!--Logo:
 				links to the home page when clicked
 			-->
 			<div class="logo header-picture">
-				<a href="#!home" class="navbar-brand"><img src="images/hungerHubLogo.png" height="50"/></a>
+				<a ui-sref="home" class="navbar-brand"><img src="images/hungerHubLogo.png" height="50"/></a>
 			</div>
 
-			<!--Search bar: 
+			<!--Search bar:
 				search within/by categories as well as keywords
 			-->
 			<center><div class="search-bar input-group">
@@ -29,34 +29,35 @@
 					<div class="dropdown-menu">
 					  <a class="dropdown-item" ui-sref="recipes" ui-sref-active="active">All</a>
 					  <div role="separator" class="dropdown-divider"></div>
-					  <a class="dropdown-item" href="#">Breakfast</a>
-					  <a class="dropdown-item" href="#">...</a>
-					  <a class="dropdown-item" href="#">Mexican</a>
+					  <a class="dropdown-item" >Breakfast</a>
+					  <a class="dropdown-item" >...</a>
+					  <a class="dropdown-item" >Mexican</a>
 					</div>
 				</div>
 			</div></center>
 
 
-			<!--Profile Navigation: 
-				Clicking on: 	-name and profile picture redirects to profile page. 
-								-Sign out to login page. 
-								-?Account to account page. 
+			<!--Profile Navigation:
+				Clicking on: 	-name and profile picture redirects to profile page.
+								-Sign out to login page.
+								-?Account to account page.
 			-->
-			<div class="header-profile-navs btn-group" ng-controller="userController" align="right">
+			<div class="header-profile-navs btn-group" ng-controller="loginController" align="right">
 				<div class="profile-navigation">
-					<a href="#!profile" style="color: #FFFFFF">{{firstName}} {{LastName}} </a>
+					<a ui-sref="home" style="color: #FFFFFF">{{username}}</a>
 					<br>
-					<a href="#!account" style="color: #FFFFFF">Account</a> | <a href="#!/" style="color: #FFFFFF">Sign Out</a>
+					<a ui-sref="home" style="color: #FFFFFF">Account</a> | <a ui-sref="home" style="color: #FFFFFF">Sign Out</a>
 				</div>
 				<div class="header-picture profile-picture">
-					<a href="#!profile"><img src="images/emptyProfileImage.png" height="50" /></a>
+					<a ui-sref="home"><img src="images/emptyProfileImage.png" height="50" /></a>
 				</div>
-			</div>	
-		
+			</div>
+
 		</nav>
 	</div>
-	
+
 	<!-- SCRIPTS -->
+	<script src="components/landingPage/landingPageController.js"></script>
 	<!-- bootstrap -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

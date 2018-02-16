@@ -23,8 +23,7 @@
   </head>
   <body ng-app="starvingToday" >
 
-    <div id="content-wrapper" class="content-wrapper" style="background-color: #000;" ng-model="auth" ng-init="auth=false">
-
+    <div id="content-wrapper" class="content-wrapper" style="background-color: #000;" ng-controller="mainController">
       <div id="landing-page" ng-if="!auth" >
         <ng-include src="'components/landingPage/landingPage.html'"></ng-include>
       </div>
