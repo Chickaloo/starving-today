@@ -49,6 +49,7 @@ body {
 	background-size: cover !important;
 	background-repeat: no-repeat;
 	background-blend-mode: screen;
+    overflow-y: scroll;
 }
 
 .signin-tab{

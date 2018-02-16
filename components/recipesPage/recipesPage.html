@@ -1,9 +1,9 @@
-    <div class="album py-5">
+<div class="album py-5" >
         <div class="container">
           <div class="row" >
             <div class="col-md-4" ng-repeat="(key, value) in recipes | limitTo:Math.ceil(recipes.length/3)">
               <div class="card mb-4 box-shadow">
-                <img class="card-img-top" img src="images/food/{{ value.recipename }}.jpg" alt="{{ value.recipename }} Image">
+                <img class="card-img-top" img src="images/food/{{ value.recipename }}.jpg" alt="{{ value.recipename }} Image" style="max-height: 350px; max-width: 350px;">
                 <div class="card-body">
                   <p class="card-title">{{ value.recipename }}</p>
                   <p class="card-text">{{ value.recipedescription }}</p>
@@ -11,7 +11,9 @@
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                     </div>
-                    <small class="text-muted">Total Time: 9 mins</small>
+                    <small class="text-success">+{{value.upvotes}}</small>
+                    <small class="text-danger">-{{value.downvotes}}</small>
+                    <small class="text-muted">Total Time: {{value.preptime + value.cooktime}} mins</small>
                   </div>
                 </div>
               </div>
