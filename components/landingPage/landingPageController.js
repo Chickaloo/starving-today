@@ -4,6 +4,8 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 {
 	$scope.SendData = function() {
 		var user_data = {
+			firstname: $scope.firstname,
+			lastname: $scope.lastname,
 			username: $scope.username,
 			password: $scope.password,
 			password2: $scope.password2,
@@ -18,25 +20,31 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 			}
 		}
 		if($scope.password === $scope.password2){
-		$http.post('http://138.68.22.10:84/users', data, config)
-		.then(
-			function (response) {
-				$scope.successInstructions = "Congratulations! Your sign up was successful. Please sign in now.";
+			$http.post('http://138.68.22.10:84/users', data, config)
+			.then(
+				function (response) {
+					//if(response.data.user.userid > 0){
+						$scope.changeAuth(true);
+					//}
+					$scope.setUserID(response.data.user.userid);
+					$scope.setUsername($scope.username);
+					$scope.setUserFirstName($scope.firstname);
+					$scope.setUserLastName($scope.lastname);
+					$scope.setUserEmail($scope.email);
+				},
+				function (response) {
+					if (response.status === 500) {
+							$scope.responseDetails = "It seems this user already exists! Please sign in or try a different username.";
+					} else if(response.status === 400){
+							$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
+					}else {
+							$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
+					}
 
-			},
-			function (response) {
-				if (response.status === 500) {
-						$scope.responseDetails = "It seems this user already exists! Please sign in or try a different username.";
-				} else if(response.status === 400){
-						$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
-				}else {
-						$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
-				}
-
-		});
-	}else{
-		$scope.responseDetails = "Your passwords don't match! Please try again!"
-	}
+			});
+		}else{
+			$scope.responseDetails = "Your passwords don't match! Please try again!";
+		}
 
 	}
 }]);
@@ -65,8 +73,11 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 				if(response.data.user.userid > 0){
 					$scope.changeAuth(true);
 				}
-				$scope.userid = response.data.user.userid;
-				$scope.username = response.data.user.username;
+				$scope.setUserID(response.data.user.userid);
+				$scope.setUsername($scope.username);
+				$scope.setUserFirstName(response.data.user.firstname);
+				$scope.setUserLastName(response.data.user.lastname);
+				$scope.setUserEmail(response.data.user.email);
 			},
 			function (response) {
 				if (response.status === 500) {

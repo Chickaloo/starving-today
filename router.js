@@ -1,14 +1,10 @@
 var app = angular.module('starvingToday',['ui.router']);
 
 app.controller('mainController' , ['$scope', '$http', function($scope, $http){
-			$http.get('http://138.68.22.10:84/recipes')
+			$http.get('http://138.68.22.10:84/users')
 			.then(
 				function(response){
-					if(response.status === 200){
 						$scope.auth = true;
-					}else{
-						$scope.auth = false;
-					}
 				},
 				function(response){
 					$scope.auth = false;
