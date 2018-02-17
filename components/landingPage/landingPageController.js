@@ -6,6 +6,7 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 		var user_data = {
 			username: $scope.username,
 			password: $scope.password,
+			password2: $scope.password2,
 			email: $scope.email
 		};
 
@@ -16,11 +17,12 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 				'Content-Type': 'application/json;charset=utf-8'
 			}
 		}
-
+		if($scope.password === $scope.password2){
 		$http.post('http://138.68.22.10:84/users', data, config)
 		.then(
 			function (response) {
 				$scope.successInstructions = "Congratulations! Your sign up was successful. Please sign in now.";
+
 			},
 			function (response) {
 				if (response.status === 500) {
@@ -32,6 +34,10 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 				}
 
 		});
+	}else{
+		$scope.responseDetails = "Your passwords don't match! Please try again!"
+	}
+
 	}
 }]);
 

@@ -30,7 +30,8 @@
 
       <div id="home" ng-if="auth">
         <ng-include src="'components/header/header.html'"></ng-include>
-        <ui-view></ui-view>
+        <!-- background-color:rgba(240,240,240,.8)-->
+        <div style="overflow-y: scroll;padding-right: 17px; height: 85%" class="content-view" ui-view></div>
       </div>
     </div>
 

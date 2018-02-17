@@ -15,7 +15,7 @@
 			<input class="entry-field" type="text" placeholder="Cook Time" required="required" ng-model="cooktime"></input>
 			<br /></form>
 			<a  ><button class="submit-button btn btn-success" ng-click="SendData()" type="submit">Add Recipe!</button></a>
-			totaltime: {{preptime}}
+			totaltime: {{preptime + cooktime}}
 	</div></center>
 </body>
 </html>

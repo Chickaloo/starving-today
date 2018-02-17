@@ -1,11 +1,25 @@
 var app = angular.module('starvingToday',['ui.router']);
 
-app.controller('mainController' , function($scope){
-	$scope.auth = false;
+app.controller('mainController' , ['$scope', '$http', function($scope, $http){
+			$http.get('http://138.68.22.10:84/recipes')
+			.then(
+				function(response){
+					if(response.status === 200){
+						$scope.auth = true;
+					}else{
+						$scope.auth = false;
+					}
+				},
+				function(response){
+					$scope.auth = false;
+				}
+			);
+
+
 	$scope.changeAuth = function(newAuthVal){
 		$scope.auth = newAuthVal;
 	};
-});
+}]);
 
 app.config(function($stateProvider) {
 
@@ -49,7 +63,7 @@ app.config(function($stateProvider) {
     templateUrl: 'components/viewRecipePage/viewRecipePage.html',
     controller: 'viewRecipeController'
   }
-    
+
   $stateProvider.state(landingState);
   $stateProvider.state(addRecipeState);
   $stateProvider.state(aboutState);
