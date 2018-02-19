@@ -1,10 +1,7 @@
-
-
 angular.module('starvingToday').controller('landingController', ['$scope', '$http', function($scope, $http)
 {
 	$scope.SendData = function() {
 		var user_data = {
-			firstname: $scope.firstname,
 			lastname: $scope.lastname,
 			username: $scope.username,
 			password: $scope.password,
@@ -81,15 +78,14 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 			},
 			function (response) {
 				if (response.status === 500) {
-						$scope.responseDetails = "Please double check your username and passord!";
+						$scope.responseDetails = "Please double check your username and password!";
 				} else if(response.status === 400){
-						$scope.responseDetails = "Please double check your username and passord!";
+						$scope.responseDetails = "Please double check your username and password!";
 				} else if(response.status === 404){
-						$scope.responseDetails = "Please double check your username and passord!";
+						$scope.responseDetails = "Please double check your username and password!";
 				} else {
 						$scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
 				}
-
 		});
 	}
 }]);
