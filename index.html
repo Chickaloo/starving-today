@@ -16,6 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
     <script src="http://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
     <script src="router.js"></script>
+    <script src="js/userController.js"></script>
     <script src="components/landingPage/landingPageController.js"></script>
     <script src="components/recipesPage/recipesPageController.js"></script>
     <script src="components/addRecipe/addRecipeController.js"></script>
@@ -23,15 +24,20 @@
   </head>
   <body ng-app="starvingToday" >
 
-    <div id="content-wrapper" class="content-wrapper" style="background-color: #000;" ng-model="auth" ng-init="auth=false">
-
+    <div id="content-wrapper" class="content-wrapper" style="background-color: #000;" ng-controller="mainController">
       <div id="landing-page" ng-if="!auth" >
         <ng-include src="'components/landingPage/landingPage.html'"></ng-include>
       </div>
 
-      <div id="home" ng-if="auth">
+      <div id="home" ng-if="auth" ng-controller="userController">
+        email: {{useremail}}
+        first: {{firstname}}
+        last: {{lastname}}
+        username: {{username}}
+        id: {{userid}}
         <ng-include src="'components/header/header.html'"></ng-include>
-        <ui-view></ui-view>
+        <!-- background-color:rgba(240,240,240,.8)-->
+        <div style="overflow-y: scroll;padding-right: 17px; height: 85%" class="content-view" ui-view></div>
       </div>
     </div>
 

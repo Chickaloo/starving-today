@@ -32,7 +32,7 @@
               				<div class="vctr" id="description-wrapper">
                 				<div id="vctr form-wrapper description-wrapper" class="login-form-container justify-content-center">
 								  <div ng-app="sign-in-app">
-										<ul class="nav nav-pills nav-fill justify-content-center" id="enterTabs" role="tablist">
+										<ul class="nav nav-tabs nav-fill justify-content-center" id="enterTabs" role="tablist">
 											<li class="nav-item">
 												<a class="signin-tab nav-link btn-outline-success" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Sign In</a>
 											</li>
@@ -46,25 +46,31 @@
 												<form>
 													<input class="entry-field form-control" type="text" placeholder="username" required="required" ng-model="username"></input>
 													<br />
-													<input class="entry-field form-control" type="text" name="password" placeholder="password" required="required" ng-model="password"></input>
+													<input class="entry-field form-control" type="password" name="password" placeholder="password" required="required" ng-model="password"></input>
 													<br />
-													<!--ui-sref="home" ui-sref-active="active" -->
-													<a  ><button class="submit-button btn btn-success" ng-click="SendData()" type="submit">Feed Me!</button></a>
-													<p class="dark-text"> Response: {{responseDetails}}</p>
+													<p class="text-danger dark-text">{{responseDetails}}</p>
+													<a  ui-sref="home"><button class="submit-button btn btn-success" ng-click="SendData()" type="submit">Feed Me!</button></a>
+
+
 												</form>
 											</div>
 
 											<div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
 												<form>
-													<input class="entry-field form-control" type="email" placeholder="email" required="required" ng-model="email"></input>
+													<input class="entry-field form-control form-group-sm" type="text" placeholder="first name" required="required" ng-model="firstname"></input>
 													<br />
-													<input class="entry-field form-control" type="text" placeholder="username" required="required" ng-model="username"></input>
+													<input class="entry-field form-control form-group-sm" type="text" placeholder="last name" required="required" ng-model="lastname"></input>
 													<br />
-													<input class="entry-field form-control" type="text" placeholder="password" required="required" ng-model="password"></input>
+													<input class="entry-field form-control form-group-sm" type="email" placeholder="email" required="required" ng-model="email"></input>
 													<br />
-													<!-- ui-sref="home"-->
-													<a ui-sref="addRecipe" ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Feed Me!</button></a>
-													<p class="dark-text"> Response: {{responseDetails}}</p>
+													<input class="entry-field form-control form-group-sm" type="text" placeholder="username" required="required" ng-model="username"></input>
+													<br />
+													<input class="entry-field form-control form-group-sm" type="password" placeholder="password" required="required" ng-model="password"></input>
+													<br />
+													<input class="entry-field form-control form-group-sm" type="password" placeholder="confirm password" required="required" ng-model="password2"></input>
+													<br />
+													<p class="dark-text text-danger">{{responseDetails}}</p>
+													<a ui-sref="home" ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Sign Me Up!</button></a>
 												</form>
 											</div>
 										</div>

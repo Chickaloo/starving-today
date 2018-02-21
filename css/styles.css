@@ -2,12 +2,21 @@ body {
   	margin: 0;
   	padding: 0;
   	font-family: 'Source Sans Pro', sans-serif;
+    overflow-y: hidden;
 }
 
 .dark-text{
   font-size: 10pt;
   text-align: left;
-  color: rgba(0, 0, 0, 1);
+}
+
+.content-view{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: -17px; /* Increase/Decrease this value for cross-browser compatibility */
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .footer {
@@ -15,8 +24,25 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 1rem;
+
   text-align: center;
+}
+
+.header{
+	/*width: 100% !important;*/
+  position: absolute;
+  right: 0;
+  top: 0;
+  left: 0;
+	justify-content: space-between;
+}
+
+.header-other{
+	/*width: 100% !important;*/
+  right: 0;
+  top: 0;
+  left: 0;
+	justify-content: space-between;
 }
 
 .lo {
@@ -105,4 +131,37 @@ body {
 #enter-tabs {
 	text-align: center;
 	align-content: center;
+}
+
+
+
+.logo{
+	/*background: #000000;*/
+}
+
+.navbar{
+	width: 100% !important;
+	height: 100px;
+}
+
+.search-bar-input{
+	background-color: rgba(0,0,0,.5);
+	border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+	border: thin;
+}
+.search-dropdown-button{
+	background-color: rgba(0,0,0,.5);
+}
+
+.profile-navigation{
+	text-justify:right;
+}
+
+/*profile navs include name, account, sign out and profile picture and are right justified*/
+.header-profile-navs{
+
+	justify-content: flex-end;
+	align-content: center;
+	float: right !important;
 }

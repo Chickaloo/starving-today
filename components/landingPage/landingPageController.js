@@ -2,8 +2,10 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 {
 	$scope.SendData = function() {
 		var user_data = {
+			lastname: $scope.lastname,
 			username: $scope.username,
 			password: $scope.password,
+			password2: $scope.password2,
 			email: $scope.email
 		};
 
@@ -14,22 +16,33 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 				'Content-Type': 'application/json;charset=utf-8'
 			}
 		}
+		if($scope.password === $scope.password2){
+			$http.post('http://138.68.22.10:84/users', data, config)
+			.then(
+				function (response) {
+					//if(response.data.user.userid > 0){
+						$scope.changeAuth(true);
+					//}
+					$scope.setUserID(response.data.user.userid);
+					$scope.setUsername($scope.username);
+					$scope.setUserFirstName($scope.firstname);
+					$scope.setUserLastName($scope.lastname);
+					$scope.setUserEmail($scope.email);
+				},
+				function (response) {
+					if (response.status === 500) {
+							$scope.responseDetails = "It seems this user already exists! Please sign in or try a different username.";
+					} else if(response.status === 400){
+							$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
+					}else {
+							$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
+					}
 
-		$http.post('http://138.68.22.10:84/users', data, config)
-		.then(
-			function (response) {
-				$scope.responseDetails = "Successful Sign Up!" + response.status;
-			},
-			function (response) {
-				if (response.status === 500) {
-						$scope.responseDetails = "internal server error: " + response.status;
-				} else if(response.status === 400){
-						$scope.responseDetails = "bad request: " + response.status;
-				}else {
-						$scope.responseDetails = "internal server error: " + response.status;
-				}
+			});
+		}else{
+			$scope.responseDetails = "Your passwords don't match! Please try again!";
+		}
 
-		});
 	}
 }]);
 
@@ -40,6 +53,8 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 			username: $scope.username,
 			password: $scope.password
 		};
+
+		var auth = false;
 
 		var data = JSON.stringify(user_data);
 
@@ -52,19 +67,25 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 		$http.post('http://138.68.22.10:84/users/login', data, config)
 		.then(
 			function (response) {
-				$scope.responseDetails = "Successful Sign In!" + response.status;
+				if(response.data.user.userid > 0){
+					$scope.changeAuth(true);
+				}
+				$scope.setUserID(response.data.user.userid);
+				$scope.setUsername($scope.username);
+				$scope.setUserFirstName(response.data.user.firstname);
+				$scope.setUserLastName(response.data.user.lastname);
+				$scope.setUserEmail(response.data.user.email);
 			},
 			function (response) {
 				if (response.status === 500) {
-						$scope.responseDetails = "internal server error: " + response.status;
+						$scope.responseDetails = "Please double check your username and password!";
 				} else if(response.status === 400){
-						$scope.responseDetails = "bad request: " + response.status;
+						$scope.responseDetails = "Please double check your username and password!";
 				} else if(response.status === 404){
-						$scope.responseDetails = "not found: " + response.status;
+						$scope.responseDetails = "Please double check your username and password!";
 				} else {
-						$scope.responseDetails = "internal server error: " + response.status;
+						$scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
 				}
-
 		});
 	}
 }]);
