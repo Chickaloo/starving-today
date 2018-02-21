@@ -1,7 +1,7 @@
 var app = angular.module('starvingToday',['ui.router']);
 
 app.controller('mainController' , ['$scope', '$http', function($scope, $http){
-			$http.get('http://138.68.22.10:84/users')
+			$http.get('http://138.68.22.10:84/users/auth')
 			.then(
 				function(response){
 						$scope.auth = true;
