@@ -9,6 +9,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	db "./database"
 	"github.com/gorilla/mux"
@@ -55,7 +56,7 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
 	for i := 0; i < len(rdata.Tags); i++ {
 		tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, rdata.Tags[i])
-		if i != len(rdata.Tags) - 1 {
+		if i != len(rdata.Tags)-1 {
 			tquery += ","
 		}
 	}
@@ -73,7 +74,7 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, count, unit, ingredient)\nVALUES ")
 	for i := 0; i < len(rdata.Ingredients); i++ {
 		iquery += fmt.Sprintf("(\"%d\", \"%s\", \"%s\", \"%s\")", rdata.RecipeID, rdata.Ingredients[i].Amount, rdata.Ingredients[i].Unit, rdata.Ingredients[i].Ingredient)
-		if i != len(rdata.Ingredients) - 1 {
+		if i != len(rdata.Ingredients)-1 {
 			iquery += ","
 		}
 	}
@@ -238,5 +239,48 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	Respond(w, rdata, http.StatusOK)
+}
+
+// RecipeSearchByIngredients implements the GET /api/recipes/ingredients/{ingredients} to retrieve all recipes that contain all listed ingredients
+func RecipeSearchByIngredients(w http.ResponseWriter, r *http.Request) {
+	var rdata []int
+	var search []int
+	var temp int
+	var res Response
+	params := mux.Vars(r)
+	keywords := params["ingredients"]
+
+	ingredients := strings.Split(keywords, ",")
+	for i := 0; i < len(ingredients); i += 1 {
+		//ingredients[i] = strings.TrimSpace(ingredients[i])
+		search = nil
+
+		//Populate search with all recipes that include the current ingredient.
+		rows, qerr := db.Connection.Query(fmt.Sprintf("SELECT recipe_id FROM ingredient WHERE ingredient = %s", ingredients[i]))
+		if qerr != nil {
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+		for rows.Next() {
+			if qerr := rows.Scan(&temp); qerr != nil {
+				res.Content = "Recipe Search Failed!"
+				Respond(w, res, http.StatusInternalServerError)
+				return
+			}
+			if *Debug {
+				fmt.Printf("%d\n", temp)
+			}
+			search = append(search, temp)
+		}
+
+		//Each pass we set rdata to the AND of itself and the new ingredients recipe list so that the end result is all recipes that contain all searched ingredients
+		if i == 0 {
+			rdata = search
+		} else {
+			rdata = Intersection(rdata, search)
+		}
+	}
 	Respond(w, rdata, http.StatusOK)
 }
