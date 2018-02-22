@@ -9,6 +9,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"time"
@@ -157,6 +158,11 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	var rdata User
 	var res Response
 
+	if r.Method == "OPTIONS" {
+		Respond(w, res, http.StatusOK)
+		return
+	}
+
 	if err := Decode(w, r, &rdata); err != nil {
 		if *Debug {
 			fmt.Println("Erreeeer")
@@ -184,14 +190,19 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	var cookie = http.Cookie{
 		Name:    "HungerHub-Auth",
 		Value:   strconv.Itoa(rdata.UserID) + "-" + rdata.Username,
-		Expires: time.Now().AddDate(0, 0, 1),
+		HttpOnly: true,
 		Path:    "/",
 		MaxAge:  86400,
 	}
-	http.SetCookie(w, &cookie)
 
 	res.User = &rdata
-	Respond(w, res, http.StatusOK)
+
+	http.SetCookie(w, &cookie)
+	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+	w.WriteHeader(200)
+
+	json.NewEncoder(w).Encode(res)
+
 	return
 }
 

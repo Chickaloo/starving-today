@@ -46,11 +46,13 @@ func main() {
 	// Feed.Init()
 
 	// CORS
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type"})
-	originsOk := handlers.AllowedOrigins([]string{"*"})
-	methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type","Access-Control-Allow-Credentials", "Set-Cookie"})
+	originsOk := handlers.AllowedOrigins([]string{"http://138.68.22.10"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})
+	authentOK := handlers.AllowCredentials()
 	router := NewRouter()
+	handler := handlers.CORS(headersOk, originsOk, methodsOk, authentOK)(router)
 
-	fmt.Println(http.ListenAndServe(":"+*Port, handlers.CORS(headersOk, originsOk, methodsOk)(router)))
+	fmt.Println(http.ListenAndServe(":"+*Port, handler))
 
 }

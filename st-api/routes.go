@@ -120,6 +120,12 @@ var routes = Routes{
 		UserLogin,
 	},
 	Route{
+		"UserLoginOptions",
+		"OPTIONS",
+		"/users/login",
+		UserLogin,
+	},
+	Route{
 		"UserAuth",
 		"GET",
 		"/users/auth",
