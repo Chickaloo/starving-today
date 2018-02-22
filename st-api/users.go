@@ -210,6 +210,11 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 func UserAuth(w http.ResponseWriter, r *http.Request) {
 	var res Response
 
+	if r.Method == "OPTIONS" {
+		Respond(w, res, http.StatusOK)
+		return
+	}
+
 	cookie, err := r.Cookie("HungerHub-Auth")
 	if err != nil {
 		res.Content = "Cookie Reading Failed"

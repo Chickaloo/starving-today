@@ -132,6 +132,12 @@ var routes = Routes{
 		UserAuth,
 	},
 	Route{
+		"UserAuthOptions",
+		"OPTIONS",
+		"/users/auth",
+		UserAuth,
+	},
+	Route{
 		"UserGetByID",
 		"GET",
 		"/users/id/{userid}",
