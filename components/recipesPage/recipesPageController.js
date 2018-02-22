@@ -10,8 +10,8 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
     };
     
     dataRecipe.searchRecipe = function () {
-        return $http.get('http://138.68.22.10:84/recipe/id' + )
-    }
+        return $http.get('http://138.68.22.10:84/recipe/id/')
+    };
     
     return dataRecipe;
 }]);
