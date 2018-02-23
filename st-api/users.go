@@ -218,7 +218,7 @@ func UserAuth(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("HungerHub-Auth")
 	if err != nil {
 		res.Content = "Cookie Reading Failed"
-		Respond(w, res, http.StatusNotFound)
+		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
 

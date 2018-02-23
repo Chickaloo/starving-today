@@ -1,10 +1,26 @@
 angular.module('starvingToday').controller('landingController', ['$scope', '$http', function($scope, $http)
 {
-	$scope.SendData = function() {
+	$http.get('http://138.68.22.10:84/stats')
+	.then(function (response) {
+			$scope.recipeCount = response.data.recipecount;
+			$scope.userCount = response.data.usercount;
+	},function (response) {
+		if (response.status === 500) {
+				$scope.responseDetails = "Please double check your username and password!";
+		} else if(response.status === 400){
+				$scope.responseDetails = "Please double check your username and password!";
+		} else if(response.status === 404){
+				$scope.responseDetails = "Please double check your username and password!";
+		} else {
+				$scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
+		}
+	});
+
+	$scope.Register = function() {
 		var user_data = {
 			lastname: $scope.lastname,
-			username: $scope.username,
-			password: $scope.password,
+			username: $scope.rusername,
+			password: $scope.rpassword,
 			password2: $scope.password2,
 			email: $scope.email
 		};
@@ -12,16 +28,17 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 		var data = JSON.stringify(user_data);
 
 		var config = {
-			headers : {
-				'Content-Type': 'application/json;charset=utf-8'
-			}
-		}
-		if($scope.password === $scope.password2){
+  			headers : {
+  				'Content-Type': 'application/json;charset=UTF-8'
+  			}
+  		}
+
+		if($scope.rpassword === $scope.password2){
 			$http.post('http://138.68.22.10:84/users', data, config)
 			.then(
 				function (response) {
 					//if(response.data.user.userid > 0){
-						$scope.changeAuth(true);
+					$scope.changeAuth(true);
 					//}
 					$scope.setUserID(response.data.user.userid);
 					$scope.setUsername($scope.username);
@@ -33,9 +50,9 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 					if (response.status === 500) {
 							$scope.responseDetails = "It seems this user already exists! Please sign in or try a different username.";
 					} else if(response.status === 400){
-							$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
+							$scope.responseDetails = "Invalid input. Please retry.";
 					}else {
-							$scope.responseDetails = "Oops! Something went wrong! Please try signing up again.";
+							$scope.responseDetails = "Something went wrong; Please try signing up again.";
 					}
 
 			});
@@ -44,11 +61,8 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 		}
 
 	}
-}]);
 
-angular.module('starvingToday').controller('loginController', ['$scope', '$http', function($scope, $http)
-{
-	$scope.SendData = function() {
+	$scope.Login = function() {
 		var user_data = {
 			username: $scope.username,
 			password: $scope.password
@@ -59,10 +73,11 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 		var data = JSON.stringify(user_data);
 
 		var config = {
-			headers : {
-				'Content-Type': 'application/json;charset=utf-8'
-			}
-		}
+        withCredentials: 'true',
+  			headers : {
+  				'Content-Type': 'application/json;charset=UTF-8'
+  			}
+  		}
 
 		$http.post('http://138.68.22.10:84/users/login', data, config)
 		.then(
@@ -78,33 +93,14 @@ angular.module('starvingToday').controller('loginController', ['$scope', '$http'
 			},
 			function (response) {
 				if (response.status === 500) {
-						$scope.responseDetails = "Please double check your username and password!";
+						$scope.responseDetails = "Something went wrong with our servers!";
 				} else if(response.status === 400){
-						$scope.responseDetails = "Please double check your username and password!";
+						$scope.responseDetails = "The input was invalid. Please try again.";
 				} else if(response.status === 404){
-						$scope.responseDetails = "Please double check your username and password!";
+						$scope.responseDetails = "The entered username and password combination was not found.";
 				} else {
 						$scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
 				}
 		});
 	}
-}]);
-
-angular.module('starvingToday').controller('statsController', ['$scope', '$http', function($scope, $http)
-{
-    $http.get('http://138.68.22.10:84/stats')
-    .then(function (response) {
-        $scope.recipeCount = response.data.recipecount;
-				$scope.userCount = response.data.usercount;
-		},function (response) {
-			if (response.status === 500) {
-					$scope.responseDetails = "Please double check your username and password!";
-			} else if(response.status === 400){
-					$scope.responseDetails = "Please double check your username and password!";
-			} else if(response.status === 404){
-					$scope.responseDetails = "Please double check your username and password!";
-			} else {
-					$scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
-			}
-	});
 }]);

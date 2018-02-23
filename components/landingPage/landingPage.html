@@ -1,10 +1,10 @@
-<div class="container" style="height:100%;">
+<div class="container" style="height:100%;" ng-controller="landingController">
 
 		<!-- header -->
 		<section class="container" style="position:absolute;">
-				<div class="logo header-picture">
-					<img class="navbar-brand" src="images/hungerHubLogo.png" height="100"/>
-				</div>
+			<div class="logo header-picture">
+				<img class="navbar-brand" src="images/hungerHubLogo.png" height="100"/>
+			</div>
 		</section>
 
 		<div class="container-fluid d-flex h-100">
@@ -24,68 +24,75 @@
 						</ul>
 						</div>
 						<div class="tab-content" style="padding:20px;">
-							<div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="loginController">
+							<div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
 
 								<!-- Material form login -->
 								<form>
-								    <p class="h4 text-center mb-4">Sign in</p>
-
 								    <!-- Material input email -->
 								    <div class="md-form">
-								        <i class="fa fa-envelope prefix grey-text"></i>
-								        <input type="email" id="materialFormLoginEmailEx" class="form-control">
-								        <label for="materialFormLoginEmailEx">Your email</label>
+									      <i class="fa fa-user prefix grey-text"></i>
+								        <input type="text" id="materialFormLoginEmailEx" class="form-control" required="required" ng-model="username"></input>
+								        <label for="materialFormLoginEmailEx">Username</label>
 								    </div>
 
 								    <!-- Material input password -->
 								    <div class="md-form">
 								        <i class="fa fa-lock prefix grey-text"></i>
-								        <input type="password" id="materialFormLoginPasswordEx" class="form-control">
-								        <label for="materialFormLoginPasswordEx">Your password</label>
+								        <input type="password" id="materialFormLoginPasswordEx" class="form-control" required="required" ng-model="password"></input>
+								        <label for="materialFormLoginPasswordEx">Password</label>
 								    </div>
-
+										<span class="red-text">{{ responseDetails }}</span>
 								    <div class="text-center mt-4">
-								        <button class="btn hh" type="submit">Login</button>
+								        <button class="btn hh" type="submit" ng-click="Login()">Login</button>
 								    </div>
 								</form>
 								<!-- Material form login -->
 
 							</div>
 
-							<div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
+							<div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab">
 
 							<!-- Material form register -->
 							<form>
 							  <!-- Material input text -->
 							  <div class="md-form">
 							      <i class="fa fa-user prefix grey-text"></i>
-							      <input type="text" id="materialFormRegisterNameEx" class="form-control">
-							      <label for="materialFormRegisterNameEx">Your name</label>
+							      <input type="text" id="materialFormRegisterNameEx" class="form-control" required="required" ng-model="fullname"></input>
+							      <label for="materialFormRegisterNameEx">Full Name</label>
 							  </div>
+
+								<!-- Material input text -->
+								<div class="md-form">
+										<i class="fa fa-user-circle prefix grey-text"></i>
+										<input type="text" id="materialFormRegisterNameEx" class="form-control" required="required" ng-model="rusername"></input>
+										<label for="materialFormRegisterNameEx">Desired Username</label>
+								</div>
 
 							  <!-- Material input email -->
 							  <div class="md-form">
 							      <i class="fa fa-envelope prefix grey-text"></i>
-							      <input type="email" id="materialFormRegisterEmailEx" class="form-control">
-							      <label for="materialFormRegisterEmailEx">Your email</label>
+							      <input type="email" id="materialFormRegisterEmailEx" class="form-control" required="required" ng-model="email"></input>
+							      <label for="materialFormRegisterEmailEx">Email</label>
 							  </div>
 
 							  <!-- Material input password -->
 							  <div class="md-form">
 							      <i class="fa fa-lock prefix grey-text"></i>
-							      <input type="password" id="materialFormRegisterPasswordEx" class="form-control">
-							      <label for="materialFormRegisterPasswordEx">Your password</label>
+							      <input type="password" id="materialFormRegisterPasswordEx" class="form-control" required="required" ng-model="rpassword">
+							      <label for="materialFormRegisterPasswordEx">New Password</label></input>
 							  </div>
 
 							  <!-- Material input email -->
 							  <div class="md-form">
 							      <i class="fa fa-exclamation-triangle prefix grey-text"></i>
-							      <input type="password" id="materialFormRegisterPasswordEx" class="form-control">
-							      <label for="materialFormRegisterConfirmEx">Confirm password</label>
+							      <input type="password" id="materialFormRegisterPasswordEx" class="form-control" required="required" ng-model="password2"></input>
+							      <label for="materialFormRegisterConfirmEx">Confirm Password</label>
 							  </div>
 
+								<span class="red-text">{{ responseDetails }}</span>
+
 							  <div class="text-center mt-4">
-							      <button class="btn hh" type="submit">Register</button>
+							      <button class="btn hh" type="submit" ng-click="Register()">Register</button>
 							  </div>
 							</form>
 							<!-- Material form register -->
@@ -96,11 +103,11 @@
 				</div>
 
 				<div class="col-lg-6 content-ctr">
-					<div class="white-text" ng-controller="statsController">
-						<div>
+					<div class="white-text">
+						<strong>
 							<h2>{{ recipeCount }} recipes and counting.</h2>
-							<p>Join the world's most comprehensive resource today. All you need is a name and a password to join {{userCount}} bajillion other users in creating a fine apocrypha.</p>
-						</div>
+							<p>Join the world's most comprehensive resource today. All you need is a name and a password to join {{ userCount }} bajillion other users in creating a fine apocrypha.</p>
+						</strong>
 					</div>
 				</div>
 			</div>
