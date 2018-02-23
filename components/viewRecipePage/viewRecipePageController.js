@@ -1,6 +1,12 @@
-angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$http', function($scope, $http) 
+angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$http', 'dataRecipe', function($scope, $http, dataRecipe) 
 {
-    $http.get('http://138.68.22.10:84/recipes')
-    .then(function (response) {
-        $scope.recipes = response.data.recipes;});
+    $scope.recipe;
+    
+    getRecipe();
+    function getRecipe() {
+        dataRecipe.getRecipe()
+            .then(function (response) {
+                console.log(response.data);
+                $scope.recipe = response.data;});
+    }
 }]);

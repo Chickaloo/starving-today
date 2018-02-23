@@ -6,18 +6,20 @@
         <div id="top-half" style="height: 15%;">
           <div class="center" id="center" style="width: 840px; height: 100%; padding: 0 20px;">
             <div style="position: relative; top: 50%;transform: translateY(50%); ">
-              <img src="chicken.jpg" style="height: 100%; width: 100%; max-height: 150px; max-width: 150px; background-color: #fff; padding: 5px; box-shadow: -2px 2px 2px #888; float: left;"/>
-              <div style="height: 50%; width: 100%; max-height: 150px; max-width: 50%; float: left; padding: 10px 10px; color: #fff;">
+              <img src="images/food/{{ recipe.recipename }}.jpg" style="height: 100%; width: 100%; max-height: 150px; max-width: 150px; background-color: #fff; padding: 5px; box-shadow: -2px 2px 2px #888; float: left;"/>
+              <div style="color: #fff;">
                 <h2>
-                  {{ recipe.title }}
+                  {{ recipe.recipename }}
                 </h2>
               </div>
               <div style="height: 50%; width: 100%; max-height: 150px; max-width: 50%; float: left; padding: 10px 10px; color: #fff;">
                 <p style="color: #111;">
-                  {{ recipe.description }}
+                  Description: <br/>
+                  {{ recipe.recipedescription }}
                 </p>
                 <p style="color: #111;">
-                    {{ recipe.tags }}
+                  Instructions: <br/>
+                    {{ recipe.recipeinstructions }}
                 </p>
               </div>
             </div>
@@ -34,9 +36,9 @@
                     Quick Facts
                   </h4>
                   <p>
-                    Servings: {{ recipe.servings }}
-                    Calories: {{ recipe.calories }}
-                    Time: {{ recipe.time }}
+                    Servings: {{ recipe.servings }}<br /> 
+                    Calories: {{ recipe.calories }}<br /> 
+                    Time: {{ recipe.preptime + recipe.cooktime}} mins<br /> 
                   </p>
 
                 </div>
