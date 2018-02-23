@@ -18,7 +18,7 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 
 	$scope.Register = function() {
 		var user_data = {
-			lastname: $scope.lastname,
+			firstname: $scope.fullname,
 			username: $scope.rusername,
 			password: $scope.rpassword,
 			password2: $scope.password2,
@@ -37,9 +37,28 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 			$http.post('http://138.68.22.10:84/users', data, config)
 			.then(
 				function (response) {
-					//if(response.data.user.userid > 0){
-					$scope.changeAuth(true);
-					//}
+
+					$http.post('http://138.68.22.10:84/users/login', data, config)
+					.then(
+						function (response) {
+							if(response.data.user.userid > 0){
+								$scope.changeAuth(true);
+							}
+
+							dataUser.setUser(response.data.user)
+
+						},
+						function (response) {
+							if (response.status === 500) {
+									$scope.responseDetails = "Something went wrong with our servers!";
+							} else if(response.status === 400){
+									$scope.responseDetails = "Login after signup failed.";
+							} else if(response.status === 404){
+									$scope.responseDetails = "Account not properly created.";
+							} else {
+									$scope.responseDetails = "Everything is broken. Please abandon ship.";
+							}
+					});
 				},
 				function (response) {
 					if (response.status === 500) {

@@ -32,7 +32,13 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("INSERT INTO user (user_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\")", rdata.Username, rdata.Password, rdata.Email)
+	ndata := strings.Split(rdata.Firstname, " ")
+	fname := ndata[0]
+	lname := strings.Join(ndata[1:], " ")
+	rdata.Firstname = fname
+	rdata.Lastname = lname
+
+	query := fmt.Sprintf("INSERT INTO user (user_name, first_name, last_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", rdata.Username, rdata.Firstname, rdata.Lastname, rdata.Password, rdata.Email)
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
