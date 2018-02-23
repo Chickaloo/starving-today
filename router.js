@@ -43,6 +43,12 @@ app.config(function($stateProvider, $httpProvider) {
 	 controller: 'addRecipeController'
   }
 
+  var myHubState = {
+    name: 'myHub',
+    url: '/myHub',
+    templateUrl: 'components/myHub/myHub.html'
+  }
+
   var aboutState = {
     name: 'about',
     url: '/about',
@@ -77,6 +83,7 @@ app.config(function($stateProvider, $httpProvider) {
     controller: 'viewRecipeController'
   }
 
+  $stateProvider.state(myHubState);
   $stateProvider.state(landingState);
   $stateProvider.state(addRecipeState);
   $stateProvider.state(aboutState);
