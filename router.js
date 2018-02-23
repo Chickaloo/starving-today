@@ -56,9 +56,16 @@ app.config(function($stateProvider, $httpProvider) {
     controller: 'recipesController'
   }
 
+  var defaultState = {
+    name: 'default',
+    url: '',
+    templateUrl: 'components/homePage/home.html',
+    controller: 'landingController'
+  }
+
   var homeState = {
     name: 'home',
-    url: '',
+    url: '/home',
     templateUrl: 'components/homePage/home.html',
     controller: 'landingController'
   }
@@ -73,6 +80,7 @@ app.config(function($stateProvider, $httpProvider) {
   $stateProvider.state(landingState);
   $stateProvider.state(addRecipeState);
   $stateProvider.state(aboutState);
+  $stateProvider.state(defaultState);
   $stateProvider.state(homeState);
   $stateProvider.state(recipeState);
   $stateProvider.state(viewRecipesState);
