@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	db "./database"
@@ -219,19 +220,20 @@ func UserLogout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var dcookie = http.Cookie{
-		Name:    "HungerHub-Auth",
-		Value:   "",
-		Expires: time.Unix(0, 0),
+		Name:   "HungerHub-Auth",
+		Value:  "-1",
+		Path:   "/",
+		MaxAge: -1,
 	}
 
 	http.SetCookie(w, &dcookie)
 	Respond(w, res, http.StatusOK)
-
 }
 
 // UserAuth implements GET /users/auth
 func UserAuth(w http.ResponseWriter, r *http.Request) {
 	var res Response
+	var rdata User
 
 	if r.Method == "OPTIONS" {
 		Respond(w, res, http.StatusOK)
@@ -250,6 +252,25 @@ func UserAuth(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusTeapot)
 		return
 	}
+
+	id := strings.Split(cookie.Value, "-")[0]
+
+	uerr := db.Connection.QueryRow(fmt.Sprintf("SELECT user_id, user_name, first_name, last_name, email, bio, profile_image FROM user WHERE user_id=\"%s\"", id)).Scan(&rdata.UserID, &rdata.Username, &rdata.Firstname, &rdata.Lastname, &rdata.Email, &rdata.Bio, &rdata.ProfileImage)
+	switch {
+	case uerr == sql.ErrNoRows:
+		res.Content = fmt.Sprintf("Login Combination not found. Error: %s", err.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+
+	case uerr != nil:
+		res.Content = fmt.Sprintf("Login DB Failed: %s", err.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	default:
+		res.Content = "Login successful!"
+	}
+
+	res.User = &rdata
 
 	res.Content = "Login OK"
 	Respond(w, res, http.StatusOK)

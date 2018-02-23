@@ -22,3 +22,30 @@ angular.module('starvingToday').controller('userController' , ['$scope' , '$http
   };
 
 }]);
+angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
+    var dataUser = {};
+    var user;
+
+    dataUser.getUser = function (userid) {
+        return $http.get('http://138.68.22.10:84/users/id/' + userid);
+    };
+
+    dataUser.searchUser = function () {
+        return $http.get('http://138.68.22.10:84/recipe/user/' + userid)
+    };
+
+    dataUser.pushUser = function(value) {
+        dataUser.push(value);
+    };
+
+    dataUser.popUser = function() {
+        dataUser.pop();
+    };
+
+    return {
+      setUser: function(user){
+          this.user = user;
+      }
+    }
+
+}]);

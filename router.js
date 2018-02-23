@@ -1,6 +1,6 @@
 var app = angular.module('starvingToday',['ui.router']);
 
-app.controller('mainController' , ['$scope', '$http', function($scope, $http){
+app.controller('mainController' , ['$scope', '$http', 'dataUser', function($scope, $http, dataUser){
 		var config = {
       withCredentials: 'true',
 			headers : {
@@ -12,6 +12,8 @@ app.controller('mainController' , ['$scope', '$http', function($scope, $http){
 		.then(
 			function(response){
 				$scope.auth = true;
+
+				dataUser.setUser(response.data.user)
 			},
 			function(response){
 				$scope.auth = false;

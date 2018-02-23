@@ -1,4 +1,4 @@
-angular.module('starvingToday').controller('landingController', ['$scope', '$http', function($scope, $http)
+angular.module('starvingToday').controller('landingController', ['$scope', '$http', 'dataUser', function($scope, $http, dataUser)
 {
 	$http.get('http://138.68.22.10:84/stats')
 	.then(function (response) {
@@ -40,11 +40,6 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 					//if(response.data.user.userid > 0){
 					$scope.changeAuth(true);
 					//}
-					$scope.setUserID(response.data.user.userid);
-					$scope.setUsername($scope.username);
-					$scope.setUserFirstName($scope.firstname);
-					$scope.setUserLastName($scope.lastname);
-					$scope.setUserEmail($scope.email);
 				},
 				function (response) {
 					if (response.status === 500) {
@@ -63,12 +58,11 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 	}
 
 	$scope.Login = function() {
+
 		var user_data = {
 			username: $scope.username,
 			password: $scope.password
 		};
-
-		var auth = false;
 
 		var data = JSON.stringify(user_data);
 
@@ -85,11 +79,9 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 				if(response.data.user.userid > 0){
 					$scope.changeAuth(true);
 				}
-				$scope.setUserID(response.data.user.userid);
-				$scope.setUsername($scope.username);
-				$scope.setUserFirstName(response.data.user.firstname);
-				$scope.setUserLastName(response.data.user.lastname);
-				$scope.setUserEmail(response.data.user.email);
+
+				dataUser.setUser(response.data.user)
+
 			},
 			function (response) {
 				if (response.status === 500) {
