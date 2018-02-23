@@ -182,6 +182,50 @@ func RecipeDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Delete tags according to recipe id
+	tquery := fmt.Sprintf("DELETE FROM tag WHERE recipe_id=%s", params["recipeid"])
+	tresult, terr := db.Connection.Exec(tquery)
+	if terr != nil {
+		if *Debug {
+			fmt.Println("Tags Not Found: ", terr.Error())
+		}
+		res.Content = fmt.Sprintf("Tags Not Found: %s", terr.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	}
+
+	_, tcerr := tresult.RowsAffected()
+	if tcerr != nil {
+		if *Debug {
+			fmt.Println("Tags Deletion failed: ", tcerr.Error())
+		}
+		res.Content = fmt.Sprintf("Tags Deletion failed: %s", tcerr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	//Delete ingredients according to recipe id
+	iquery := fmt.Sprintf("DELETE FROM ingredient WHERE recipe_id=%s", params["recipeid"])
+	iresult, ierr := db.Connection.Exec(iquery)
+	if ierr != nil {
+		if *Debug {
+			fmt.Println("Ingredients Not Found: ", ierr.Error())
+		}
+		res.Content = fmt.Sprintf("Ingredients Not Found: %s", ierr.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	}
+
+	_, icerr := iresult.RowsAffected()
+	if icerr != nil {
+		if *Debug {
+			fmt.Println("Ingredients Deletion failed: ", icerr.Error())
+		}
+		res.Content = fmt.Sprintf("Ingredients Deletion failed: %s", icerr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
 	Respond(w, res, http.StatusOK)
 }
 
@@ -238,22 +282,43 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 		res.Content = "Recipe retrieval successful!"
 	}
 
-	// rows, err := db.Connection.Query(fmt.Sprintf("SELECT * FROM recipe WHERE recipe_id=%s", params["recipeid"]))
-	// if err != nil {
-	// 	Respond(w, res, http.StatusInternalServerError)
-	// 	return
-	// }
-	// defer rows.Close()
-	// for rows.Next() {
-	// 	if err := rows.Scan(&rdata.RecipeID, &rdata.UserID, &rdata.RecipeName, &rdata.RecipeDescription, &rdata.RecipeInstructions, &rdata.Calories, &rdata.PrepTime, &rdata.CookTime, &rdata.TotalTime, &rdata.Servings, &rdata.Upvotes, &rdata.Downvotes, &rdata.Made); err != nil {
-	// 		res.Content = "Recipe Population Failed!"
-	// 		Respond(w, res, http.StatusInternalServerError)
-	// 		return
-	// 	}
-	// 	if *Debug {
-	// 		fmt.Printf("%d %d: %s %s %s %d %d %d %d %d %d %d %d\n", rdata.RecipeID, rdata.UserID, rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, rdata.Upvotes, rdata.Downvotes, rdata.Made)
-	// 	}
-	// }
+	rows, err := db.Connection.Query(fmt.Sprintf("SELECT tag FROM tag WHERE recipe_id=%s", params["recipeid"]))
+	if err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var tag string
+		if err := rows.Scan(&tag); err != nil {
+			res.Content = "Tag population failed!"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		rdata.Tags = append(rdata.Tags, tag)
+		if *Debug {
+			fmt.Printf("%s\n", rdata.Tags)
+		}
+	}
+
+	irows, err := db.Connection.Query(fmt.Sprintf("SELECT count, unit, ingredient FROM ingredient WHERE recipe_id=%s", params["recipeid"]))
+	if err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+	defer irows.Close()
+	for irows.Next() {
+		var ingredient Ingredient
+		if err := irows.Scan(&ingredient.Amount, &ingredient.Unit, &ingredient.Ingredient); err != nil {
+			res.Content = "Ingredient population failed!"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		rdata.Ingredients = append(rdata.Ingredients, ingredient)
+		if *Debug {
+			fmt.Printf("%s\n", rdata.Ingredients)
+		}
+	}
 
 	Respond(w, rdata, http.StatusOK)
 }

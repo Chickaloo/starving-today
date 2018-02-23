@@ -1,22 +1,59 @@
 body {
   	margin: 0;
   	padding: 0;
-  	font-family: 'Source Sans Pro', sans-serif;
-    overflow-y: hidden;
+    height: 100% !important;
+}
+html, body {
+    overflow: auto;
 }
 
-.dark-text{
-  font-size: 10pt;
-  text-align: left;
+.hh {
+  background-color: #4eb71a;
+}
+
+.tea {
+  background-color: #D0F0C0;
 }
 
 .content-view{
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: -17px; /* Increase/Decrease this value for cross-browser compatibility */
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.nav-justified {
+  margin: 0px, 5px;
+}
+
+.nav-link {
+  color:#fff;
+  border: 1px solid transparent;
+  background-color: rgba(26,26,26,.1);
+  border-color: white;
+}
+
+.nav-left {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.nav-right {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.nav-link:hover {
+  color:#fff;
+  background-color: rgba(240,240,240,.4);
+}
+
+.active {
+  color:#444;
+  background-color: rgba(255,255,255,1);
+}
+
+.top-rounded {
+   border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .footer {
@@ -58,13 +95,18 @@ body {
 }
 
 .login-form-container {
-	padding: 5% 5% 0 5%;
-	background-color: rgba(240,240,240,.8);
-	border-color: rgba(240,240,240,.1);
-	border-style: solid;
-	border-width: thick;
-	border-radius: 5px;
-	max-width: 350px;
+	background-color: rgba(255,255,255,1);
+  border-radius: 10px;
+}
+
+.content-ctr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fade {
+	background-color: rgba(0,0,0,0);
 }
 
 .content-wrapper{
@@ -75,18 +117,12 @@ body {
 	background-size: cover !important;
 	background-repeat: no-repeat;
 	background-blend-mode: screen;
-    overflow-y: scroll;
 }
 
 .signin-tab{
 	border-width: 0px !important;
 	padding-left: 4px;
 	padding-right: 4px;
-}
-
-
-.nav-item{
-	padding-bottom: 25px;
 }
 
 #frame {
@@ -99,15 +135,6 @@ body {
   position: relative;
   vertical-align: middle;
   height: 100%;
-}
-
-#left-half, #right-half {
-	padding: 20px;
-  	display: inline-block;
-  	vertical-align: middle;
-  	width: 40%;
-  	height: 100%;
-	max-width: 450px;
 }
 
 #description-wrapper {
@@ -133,15 +160,8 @@ body {
 	align-content: center;
 }
 
-
-
 .logo{
 	/*background: #000000;*/
-}
-
-.navbar{
-	width: 100% !important;
-	height: 100px;
 }
 
 .search-bar-input{

@@ -1,15 +1,22 @@
 var app = angular.module('starvingToday',['ui.router']);
 
 app.controller('mainController' , ['$scope', '$http', function($scope, $http){
-			$http.get('http://138.68.22.10:84/users/auth')
-			.then(
-				function(response){
-						$scope.auth = true;
-				},
-				function(response){
-					$scope.auth = false;
-				}
-			);
+		var config = {
+      withCredentials: 'true',
+			headers : {
+				'Content-Type': 'application/json;charset=UTF-8'
+			}
+		}
+
+		$http.get('http://138.68.22.10:84/users/auth', config)
+		.then(
+			function(response){
+				$scope.auth = true;
+			},
+			function(response){
+				$scope.auth = false;
+			}
+		);
 
 
 	$scope.changeAuth = function(newAuthVal){
@@ -17,8 +24,9 @@ app.controller('mainController' , ['$scope', '$http', function($scope, $http){
 	};
 }]);
 
-app.config(function($stateProvider) {
+app.config(function($stateProvider, $httpProvider) {
 
+  $httpProvider.defaults.withCredentials = true;
 	var landingState = {
     name: 'login',
     url: '/login',

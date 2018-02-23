@@ -8,6 +8,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -157,6 +158,11 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	var rdata User
 	var res Response
 
+	if r.Method == "OPTIONS" {
+		Respond(w, res, http.StatusOK)
+		return
+	}
+
 	if err := Decode(w, r, &rdata); err != nil {
 		if *Debug {
 			fmt.Println("Erreeeer")
@@ -166,7 +172,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := db.Connection.QueryRow(fmt.Sprintf("SELECT user_id, first_name, last_name FROM user WHERE user_name=\"%s\" AND password=\"%s\"", rdata.Username, rdata.Password)).Scan(&rdata.UserID, &rdata.Firstname, &rdata.Lastname)
+	err := db.Connection.QueryRow(fmt.Sprintf("SELECT user_id, user_name, first_name, last_name, email, bio, profile_image FROM user WHERE user_name=\"%s\" AND password=\"%s\"", rdata.Username, rdata.Password)).Scan(&rdata.UserID, &rdata.Username, &rdata.Firstname, &rdata.Lastname, &rdata.Email, &rdata.Bio, &rdata.ProfileImage)
 	switch {
 	case err == sql.ErrNoRows:
 		res.Content = fmt.Sprintf("Login Combination not found. Error: %s", err.Error())
@@ -182,16 +188,21 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var cookie = http.Cookie{
-		Name:    "HungerHub-Auth",
-		Value:   strconv.Itoa(rdata.UserID) + "-" + rdata.Username,
-		Expires: time.Now().AddDate(0, 0, 1),
-		Path:    "/",
-		MaxAge:  86400,
+		Name:     "HungerHub-Auth",
+		Value:    strconv.Itoa(rdata.UserID) + "-" + rdata.Username,
+		HttpOnly: true,
+		Path:     "/",
+		MaxAge:   86400,
 	}
-	http.SetCookie(w, &cookie)
 
 	res.User = &rdata
-	Respond(w, res, http.StatusOK)
+
+	http.SetCookie(w, &cookie)
+	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+	w.WriteHeader(200)
+
+	json.NewEncoder(w).Encode(res)
+
 	return
 }
 
@@ -199,10 +210,15 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 func UserAuth(w http.ResponseWriter, r *http.Request) {
 	var res Response
 
+	if r.Method == "OPTIONS" {
+		Respond(w, res, http.StatusOK)
+		return
+	}
+
 	cookie, err := r.Cookie("HungerHub-Auth")
 	if err != nil {
 		res.Content = "Cookie Reading Failed"
-		Respond(w, res, http.StatusNotFound)
+		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
 
@@ -222,23 +238,25 @@ func UserGetByID(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	params := mux.Vars(r)
 
-	rows, serr := db.Connection.Query(fmt.Sprintf("SELECT * FROM user WHERE user_id=%s", params["userid"]))
-	if serr != nil {
+	err := db.Connection.QueryRow(fmt.Sprintf("SELECT user_id, user_name, first_name, last_name, email, bio, profile_image FROM user WHERE user_id=%s", params["userid"])).Scan(&udata.UserID, &udata.Username, &udata.Firstname, &udata.Lastname, &udata.Email, &udata.Bio, &udata.ProfileImage)
+	switch {
+	case err == sql.ErrNoRows:
+		res.Content = fmt.Sprintf("User not found. Error: %s", err.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+
+	case err != nil:
+		res.Content = fmt.Sprintf("Database error. Error: %s", err.Error())
 		Respond(w, res, http.StatusInternalServerError)
 		return
-	}
-	defer rows.Close()
-	for rows.Next() {
-		if serr := rows.Scan(&udata.UserID, &udata.Firstname, &udata.Lastname, &udata.Email, &udata.Password, &udata.Bio, &udata.ProfileImage); serr != nil {
-			res.Content = "User Population Failed!"
-			Respond(w, res, http.StatusInternalServerError)
-			return
-		}
-		if *Debug {
-			fmt.Printf("%d: %s %s %s %s %s %s\n", udata.UserID, udata.Firstname, udata.Lastname, udata.Email, udata.Password, udata.Bio, udata.ProfileImage)
-		}
+	default:
+		res.Content = "User Found!"
 	}
 
-	Respond(w, udata, http.StatusOK)
+	if *Debug {
+		fmt.Printf("%d: %s %s %s %s %s %s\n", udata.UserID, udata.Firstname, udata.Lastname, udata.Email, udata.Password, udata.Bio, udata.ProfileImage)
+	}
+	res.User = &udata
+	Respond(w, res, http.StatusOK)
 
 }
