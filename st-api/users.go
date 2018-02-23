@@ -8,7 +8,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -198,12 +197,36 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	res.User = &rdata
 
 	http.SetCookie(w, &cookie)
-	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
-	w.WriteHeader(200)
-
-	json.NewEncoder(w).Encode(res)
+	Respond(w, res, http.StatusOK)
 
 	return
+}
+
+// UserLogout logs a user out.
+func UserLogout(w http.ResponseWriter, r *http.Request) {
+	var res Response
+
+	if r.Method == "OPTIONS" {
+		Respond(w, res, http.StatusOK)
+		return
+	}
+
+	_, err := r.Cookie("HungerHub-Auth")
+	if err != nil {
+		res.Content = "Cookie Reading Failed"
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	var dcookie = http.Cookie{
+		Name:    "HungerHub-Auth",
+		Value:   "",
+		Expires: time.Unix(0, 0),
+	}
+
+	http.SetCookie(w, &dcookie)
+	Respond(w, res, http.StatusOK)
+
 }
 
 // UserAuth implements GET /users/auth

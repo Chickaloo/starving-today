@@ -126,6 +126,18 @@ var routes = Routes{
 		UserLogin,
 	},
 	Route{
+		"UserLogout",
+		"POST",
+		"/users/logout",
+		UserLogout,
+	},
+	Route{
+		"UserLogoutOptions",
+		"OPTIONS",
+		"/users/logout",
+		UserLogout,
+	},
+	Route{
 		"UserAuth",
 		"GET",
 		"/users/auth",
