@@ -11,12 +11,19 @@
 			<div class="row justify-content-center align-self-center">
 				<div class="col-lg-6">
 					<div class="login-form-container z-depth-2" ng-app="sign-in-app"> <!-- Change this to use controller/service - CK 22 Feb 2018 -->
-						<nav class="navbar navbar-dark default-color justify-content-center">
-						    <a class="navbar-brand mx-auto" href="#login">Login</a>
-						    <a class="navbar-brand mx-auto" href="#register">Register</a>
-						</nav>
 
-						<div class="tab-content" id="myTabContent">
+						<!-- Nav Tabs -->
+						<div class="hh top-rounded" style="padding: 10px;">
+						<ul class="nav nav-justified" role="tablist">
+							 <li class="nav-item">
+									<a class="nav-link nav-left active" data-toggle="tab" href="#register" role="tab"><i class="fa fa-star"></i> Register</a>
+							 </li>
+						    <li class="nav-item nav-right">
+						        <a class="nav-link nav-right" data-toggle="tab" href="#login" role="tab"><i class="fa fa-sign-in"></i> Log in</a>
+						    </li>
+						</ul>
+						</div>
+						<div class="tab-content" style="padding:20px;">
 							<div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="loginController">
 
 								<!-- Material form login -->
@@ -38,7 +45,7 @@
 								    </div>
 
 								    <div class="text-center mt-4">
-								        <button class="btn btn-default" type="submit">Login</button>
+								        <button class="btn hh" type="submit">Login</button>
 								    </div>
 								</form>
 								<!-- Material form login -->
@@ -46,22 +53,43 @@
 							</div>
 
 							<div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
-								<form>
-									<input class="entry-field form-control form-group-sm" type="text" placeholder="first name" required="required" ng-model="firstname"></input>
-									<br />
-									<input class="entry-field form-control form-group-sm" type="text" placeholder="last name" required="required" ng-model="lastname"></input>
-									<br />
-									<input class="entry-field form-control form-group-sm" type="email" placeholder="email" required="required" ng-model="email"></input>
-									<br />
-									<input class="entry-field form-control form-group-sm" type="text" placeholder="username" required="required" ng-model="username"></input>
-									<br />
-									<input class="entry-field form-control form-group-sm" type="password" placeholder="password" required="required" ng-model="password"></input>
-									<br />
-									<input class="entry-field form-control form-group-sm" type="password" placeholder="confirm password" required="required" ng-model="password2"></input>
-									<br />
-									<p class="dark-text text-danger">{{responseDetails}}</p>
-									<a ui-sref="home" ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Sign Me Up!</button></a>
-								</form>
+
+							<!-- Material form register -->
+							<form>
+							  <!-- Material input text -->
+							  <div class="md-form">
+							      <i class="fa fa-user prefix grey-text"></i>
+							      <input type="text" id="materialFormRegisterNameEx" class="form-control">
+							      <label for="materialFormRegisterNameEx">Your name</label>
+							  </div>
+
+							  <!-- Material input email -->
+							  <div class="md-form">
+							      <i class="fa fa-envelope prefix grey-text"></i>
+							      <input type="email" id="materialFormRegisterEmailEx" class="form-control">
+							      <label for="materialFormRegisterEmailEx">Your email</label>
+							  </div>
+
+							  <!-- Material input password -->
+							  <div class="md-form">
+							      <i class="fa fa-lock prefix grey-text"></i>
+							      <input type="password" id="materialFormRegisterPasswordEx" class="form-control">
+							      <label for="materialFormRegisterPasswordEx">Your password</label>
+							  </div>
+
+							  <!-- Material input email -->
+							  <div class="md-form">
+							      <i class="fa fa-exclamation-triangle prefix grey-text"></i>
+							      <input type="password" id="materialFormRegisterPasswordEx" class="form-control">
+							      <label for="materialFormRegisterConfirmEx">Confirm password</label>
+							  </div>
+
+							  <div class="text-center mt-4">
+							      <button class="btn hh" type="submit">Register</button>
+							  </div>
+							</form>
+							<!-- Material form register -->
+
 							</div>
 						</div>
 					</div>
