@@ -26,16 +26,8 @@
             <ng-include src="'components/landingPage/landingPage.html'"></ng-include>
         </div>
 
-        <div id="home" ng-if="auth" ng-controller="userController">
-            <!--
-            email: {{useremail}}
-            first: {{firstname}}
-            last: {{lastname}}
-            username: {{username}}
-            id: {{userid}}
-            -->
+        <div id="home" ng-if="auth">
             <ng-include src="'components/header/header.html'"></ng-include>
-            <!-- background-color:rgba(240,240,240,.8)-->
             <div class="content-view" ui-view></div>
         </div>
     </div>
@@ -55,7 +47,6 @@
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <!-- HHJS -->
-    <script src="js/userController.js"></script>
     <script src="router.js"></script>
     <script src="components/landingPage/landingPageController.js"></script>
     <script src="components/recipesPage/recipesPageController.js"></script>
