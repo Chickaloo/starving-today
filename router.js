@@ -29,13 +29,6 @@ app.controller('mainController' , ['$scope', '$http', 'dataUser', function($scop
 app.config(function($stateProvider, $httpProvider) {
 
   $httpProvider.defaults.withCredentials = true;
-	var landingState = {
-    name: 'login',
-    url: '/login',
-    templateUrl: 'components/landingPage/landingPage.html',
-	  controller: 'landingController'
-  }
-
   var addRecipeState = {
     name: 'addRecipe',
     url: '/addRecipe',
@@ -46,13 +39,8 @@ app.config(function($stateProvider, $httpProvider) {
   var myHubState = {
     name: 'myHub',
     url: '/myHub',
-    templateUrl: 'components/myHub/myHub.html'
-  }
-
-  var aboutState = {
-    name: 'about',
-    url: '/about',
-    template: '<h3>Its the UI-Router hello world app!</h3>'
+    templateUrl: 'components/myHub/myHub.html',
+    controller: 'myHubController'
   }
 
   var recipeState = {
@@ -84,9 +72,7 @@ app.config(function($stateProvider, $httpProvider) {
   }
 
   $stateProvider.state(myHubState);
-  $stateProvider.state(landingState);
   $stateProvider.state(addRecipeState);
-  $stateProvider.state(aboutState);
   $stateProvider.state(defaultState);
   $stateProvider.state(homeState);
   $stateProvider.state(recipeState);

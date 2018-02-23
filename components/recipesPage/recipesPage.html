@@ -3,10 +3,12 @@
           <div class="row" >
             <div class="col-md-4" ng-repeat="(key, value) in recipes | limitTo:Math.ceil(recipes.length/3)">
               <div class="card mb-4 box-shadow">
-                <img class="card-img-top" img src="images/food/{{ value.recipename }}.jpg" alt="{{ value.recipename }} Image" style="max-height: 200px; max-width: 200px;">
+                <div style="padding-bottom:100%; overflow:hidden; position:relative; height:200px;" >
+                  <img class="card-img-top" src="images/food/{{ value.recipename }}.jpg" alt="{{ value.recipename }} Image" style="overflow-y: hidden; background-color: #f0f0f0;">
+                </div>
                 <div class="card-body">
                   <p class="card-title">{{ value.recipename }}</p>
-                  <p class="card-text">{{ value.recipedescription }}</p>
+                  <p class="card-text" style="height:120px; overflow-y: auto;">{{ value.recipedescription }}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary" ui-sref="viewRecipesState" ui-sref-active="active"  ng-click="selectRecipe(key)">View</button>

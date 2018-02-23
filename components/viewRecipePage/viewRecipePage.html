@@ -1,58 +1,47 @@
-  <body ng-app="recipePage">
+  <body ng-app="recipePage" style="height:100%;">
 
       <!-- Content -->
-      <div class="full" id="recipe-wrapper">
+      <div class="container white" style="border-radius: 10px; height: 100%; padding: 10px;">
 
-        <div id="top-half" style="height: 15%;">
-          <div class="center" id="center" style="width: 840px; height: 100%; padding: 0 20px;">
-            <div style="position: relative; top: 50%;transform: translateY(50%); ">
-              <img src="images/food/{{ recipe.recipename }}.jpg" style="height: 100%; width: 100%; max-height: 150px; max-width: 150px; background-color: #fff; padding: 5px; box-shadow: -2px 2px 2px #888; float: left;"/>
-              <div style="color: #fff;">
-                <h2>
-                  {{ recipe.recipename }}
-                </h2>
-              </div>
-              <div style="height: 50%; width: 100%; max-height: 150px; max-width: 50%; float: left; padding: 10px 10px; color: #fff;">
-                <p style="color: #111;">
-                  Description: <br/>
-                  {{ recipe.recipedescription }}
-                </p>
-                <p style="color: #111;">
-                  Instructions: <br/>
-                    {{ recipe.recipeinstructions }}
-                </p>
-              </div>
-            </div>
+        <div class="row">
+          <div class="col-lg-12 white-text" style="transform: translateY(-53px);">
+
+            <img src="images/food/{{ recipe.recipename }}.jpg" class="img-thumbnail" style="overflow-y:hidden; height: 100%; width: 100%; max-height: 150px; max-width: 150px; margin: 10px; box-shadow: -2px 2px 2px #888; float: left;"/>
+
+            <h2>
+              {{ recipe.recipename }}
+            </h2>
+
+            <p style="color: #111;">
+              {{ recipe.recipedescription }}
+            </p>
           </div>
         </div>
 
-        <div id="bottom-half" style="height: 85%; background-color: #f1f1f1;">
-          <div class="center" id="center" style="width: 840px; height: 100%;">
-            <div id="top-content-wrapper" style="padding-top: 80px;">
+        <div class="row">
+          <div class="col-lg-4" style="background-color: #fff7dd; border-style: solid; border-color: #fde79c; border-width: 1px; padding: 20px;">
+            <h4>
+              Quick Facts
+            </h4>
+            <p>
+              Servings: {{ recipe.servings }}<br />
+              Calories: {{ recipe.calories }}<br />
+              Time: {{ recipe.preptime + recipe.cooktime}} mins<br />
+            </p>
 
-              <div id="quick-facts-wrapper" style="width: 20%; float: left;">
-                <div id="quick-facts" style="background-color: #fff7dd; border-style: solid; border-color: #fde79c; border-width: 1px; padding-left: 20px;">
-                  <h4>
-                    Quick Facts
-                  </h4>
-                  <p>
-                    Servings: {{ recipe.servings }}<br /> 
-                    Calories: {{ recipe.calories }}<br /> 
-                    Time: {{ recipe.preptime + recipe.cooktime}} mins<br /> 
-                  </p>
+          </div>
+          <div class="col-lg-8">
 
-                </div>
-              </div>
+            <p style="color: #111;">
+              Instructions: <br/>
+                {{ recipe.recipeinstructions }}
+            </p>
+          </div>
 
-              <div id="ingredients-wrapper" style="width: 80%; float: left;">
-                {{ recipe.ingredients }}
-              </div>
-
-
-            </div>
-
-
+          <div id="ingredients-wrapper" style="width: 80%; float: left;">
+            {{ recipe.ingredients }}
           </div>
         </div>
 
       </div>
+    </body>

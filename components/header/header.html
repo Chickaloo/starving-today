@@ -15,7 +15,7 @@
     <div class="col-lg-4 d-flex" style="height:100px; width: 100%; max-width: 500px; float: right;">
 			<div class="justify-content-center align-self-center white-text" style="padding: 20px; float: left; text-align:right;">
 				<h4 class="white-text">Welcome, {{ user.firstname }}</h4>
-				<a>Edit Profile </a> | <a class="red-text" ng-click="Logout()">Sign Out <i class="fa fa-sign-out prefix red-text"></i> </a>
+				<a class="white-text" ui-sref="myHub">Edit Profile </a> | <a class="red-text" ng-click="Logout()">Sign Out <i class="fa fa-sign-out prefix red-text"></i> </a>
 			</div>
 			<div style="text-align:right; float: right;">
 				<img class="img-thumbnail" style="height: 100px; width: 100px;" src="{{ user.profileimage }}"/>

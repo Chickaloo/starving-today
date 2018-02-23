@@ -26,9 +26,9 @@
             <ng-include src="'components/landingPage/landingPage.html'"></ng-include>
         </div>
 
-        <div id="home" ng-if="auth">
+        <div id="home" style="height: 80%;" ng-if="auth">
             <ng-include src="'components/header/header.html'"></ng-include>
-            <div class="content-view" ui-view></div>
+            <div class="content-view" style="height: 100%; overflow-y: auto; padding-right: -17px;" ui-view></div>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
     <!-- SCRIPTS -->
     <!-- AngularJS + UI-Router -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
-    <script src="http://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+    <script src="js/angular-ui-router.min.js"></script>
     <!-- JQuery -->
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -53,6 +53,7 @@
     <script src="components/addRecipe/addRecipeController.js"></script>
     <script src="components/viewRecipePage/viewRecipePageController.js"></script>
     <script src="components/header/headerController.js"></script>
+    <script src="components/myHub/myHubController.js"></script>
 
 </body>
 
