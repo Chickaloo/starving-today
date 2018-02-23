@@ -96,5 +96,15 @@ angular.module('starvingToday').controller('statsController', ['$scope', '$http'
     .then(function (response) {
         $scope.recipeCount = response.data.recipecount;
 				$scope.userCount = response.data.usercount;
-		});
+		},function (response) {
+			if (response.status === 500) {
+					$scope.responseDetails = "Please double check your username and password!";
+			} else if(response.status === 400){
+					$scope.responseDetails = "Please double check your username and password!";
+			} else if(response.status === 404){
+					$scope.responseDetails = "Please double check your username and password!";
+			} else {
+					$scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
+			}
+	});
 }]);

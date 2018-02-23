@@ -1,88 +1,80 @@
-<html>
-	<div>
-  		<div id="content-wrapper">
-			<!-- Header -->
-			<section class="header btn-toolbar container-fluid" background="red">
-				<nav class="navbar">
-					<!--Logo:
-						links to the home page when clicked
-					-->
-					<div class="logo header-picture">
-						<img class="navbar-brand" src="images/hungerHubLogo.png" height="50"/>
+<div class="container" style="height:100%;">
+
+		<!-- header -->
+		<section class="container" style="position:absolute;">
+				<div class="logo header-picture">
+					<img class="navbar-brand" src="images/hungerHubLogo.png" height="100"/>
+				</div>
+		</section>
+
+		<div class="container-fluid d-flex h-100">
+			<div class="row justify-content-center align-self-center">
+				<div class="col-lg-6">
+					<div class="login-form-container z-depth-2" ng-app="sign-in-app"> <!-- Change this to use controller/service - CK 22 Feb 2018 -->
+						<nav class="navbar navbar-dark default-color justify-content-center">
+						    <a class="navbar-brand mx-auto" href="#login">Login</a>
+						    <a class="navbar-brand mx-auto" href="#register">Register</a>
+						</nav>
+
+						<div class="tab-content" id="myTabContent">
+							<div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="loginController">
+
+								<!-- Material form login -->
+								<form>
+								    <p class="h4 text-center mb-4">Sign in</p>
+
+								    <!-- Material input email -->
+								    <div class="md-form">
+								        <i class="fa fa-envelope prefix grey-text"></i>
+								        <input type="email" id="materialFormLoginEmailEx" class="form-control">
+								        <label for="materialFormLoginEmailEx">Your email</label>
+								    </div>
+
+								    <!-- Material input password -->
+								    <div class="md-form">
+								        <i class="fa fa-lock prefix grey-text"></i>
+								        <input type="password" id="materialFormLoginPasswordEx" class="form-control">
+								        <label for="materialFormLoginPasswordEx">Your password</label>
+								    </div>
+
+								    <div class="text-center mt-4">
+								        <button class="btn btn-default" type="submit">Login</button>
+								    </div>
+								</form>
+								<!-- Material form login -->
+
+							</div>
+
+							<div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
+								<form>
+									<input class="entry-field form-control form-group-sm" type="text" placeholder="first name" required="required" ng-model="firstname"></input>
+									<br />
+									<input class="entry-field form-control form-group-sm" type="text" placeholder="last name" required="required" ng-model="lastname"></input>
+									<br />
+									<input class="entry-field form-control form-group-sm" type="email" placeholder="email" required="required" ng-model="email"></input>
+									<br />
+									<input class="entry-field form-control form-group-sm" type="text" placeholder="username" required="required" ng-model="username"></input>
+									<br />
+									<input class="entry-field form-control form-group-sm" type="password" placeholder="password" required="required" ng-model="password"></input>
+									<br />
+									<input class="entry-field form-control form-group-sm" type="password" placeholder="confirm password" required="required" ng-model="password2"></input>
+									<br />
+									<p class="dark-text text-danger">{{responseDetails}}</p>
+									<a ui-sref="home" ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Sign Me Up!</button></a>
+								</form>
+							</div>
+						</div>
 					</div>
-				</nav>
-			</section>
-			<!-- Content -->
-			<section id="frame">
-      			<div id="landing-wrapper">
-        			<div id="left-half">
-          				<div id="another-wrapper">
-            				<div class="vctr" id="description-wrapper" ng-controller="statsController">
-								<div id="counter" >
-									<h1> {{ recipeCount }} Recipes and counting. </h1>
-								</div>
-								<div id="call-to-action">
-									<p>Join the world's most comprehensive resource today. All you need is a name and a password to join {{userCount}} bajillion other users in creating a fine apocrypha.</p>
-              					</div>
-            				</div>
-          				</div>
+				</div>
+
+				<div class="col-lg-6 content-ctr">
+					<div class="white-text" ng-controller="statsController">
+						<div>
+							<h2>{{ recipeCount }} recipes and counting.</h2>
+							<p>Join the world's most comprehensive resource today. All you need is a name and a password to join {{userCount}} bajillion other users in creating a fine apocrypha.</p>
+						</div>
 					</div>
-					<div id="right-half">
-            			<div id="another-wrapper">
-              				<div class="vctr" id="description-wrapper">
-                				<div id="vctr form-wrapper description-wrapper" class="login-form-container justify-content-center">
-								  <div ng-app="sign-in-app">
-										<ul class="nav nav-tabs nav-fill justify-content-center" id="enterTabs" role="tablist">
-											<li class="nav-item">
-												<a class="signin-tab nav-link btn-outline-success" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Sign In</a>
-											</li>
-											<li class="nav-item signin-tab">
-												<a class="nav-link active btn-outline-success" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Sign Up</a>
-											</li>
-										</ul>
-
-										<div class="tab-content" id="myTabContent">
-											<div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab" ng-controller="loginController">
-												<form>
-													<input class="entry-field form-control" type="text" placeholder="username" required="required" ng-model="username"></input>
-													<br />
-													<input class="entry-field form-control" type="password" name="password" placeholder="password" required="required" ng-model="password"></input>
-													<br />
-													<p class="text-danger dark-text">{{responseDetails}}</p>
-													<a  ui-sref="home"><button class="submit-button btn btn-success" ng-click="SendData()" type="submit">Feed Me!</button></a>
-
-
-												</form>
-											</div>
-
-											<div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab" ng-controller="landingController">
-												<form>
-													<input class="entry-field form-control form-group-sm" type="text" placeholder="first name" required="required" ng-model="firstname"></input>
-													<br />
-													<input class="entry-field form-control form-group-sm" type="text" placeholder="last name" required="required" ng-model="lastname"></input>
-													<br />
-													<input class="entry-field form-control form-group-sm" type="email" placeholder="email" required="required" ng-model="email"></input>
-													<br />
-													<input class="entry-field form-control form-group-sm" type="text" placeholder="username" required="required" ng-model="username"></input>
-													<br />
-													<input class="entry-field form-control form-group-sm" type="password" placeholder="password" required="required" ng-model="password"></input>
-													<br />
-													<input class="entry-field form-control form-group-sm" type="password" placeholder="confirm password" required="required" ng-model="password2"></input>
-													<br />
-													<p class="dark-text text-danger">{{responseDetails}}</p>
-													<a ui-sref="home" ><button class="submit-button btn btn-success" type="submit" ng-click="SendData()">Sign Me Up!</button></a>
-												</form>
-											</div>
-										</div>
-									</div>
-                				</div>
-            		  		</div>
-            			</div>
-        			</div>
-      			</div>
-    		</section>
-  		</div>
-	</div>
-	<!--components/landingPage/-->
-	<script src="components/landingPage/landingPageController.js"></script>
-</html>
+				</div>
+			</div>
+		</div>
+</div>
