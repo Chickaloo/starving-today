@@ -69,6 +69,12 @@ var routes = Routes{
 		RecipeGetByID,
 	},
 	Route{
+		"RecipesGetByUserID",
+		"GET",
+		"/recipes/user/{userid}",
+		RecipesGetByUserID,
+	},
+	Route{
 		"RecipeSearchByUser",
 		"GET",
 		"/recipes/user/{userid}",
@@ -154,6 +160,31 @@ var routes = Routes{
 		"/users/id/{userid}",
 		UserGetByID,
 	},
+	// Comments
+		Route{
+			"CommentCreate",
+			"POST",
+			"/comments",
+			CommentCreate,
+		},
+		Route{
+			"CommentGetByID",
+			"GET",
+			"/comments/comment/{commentid}",
+			CommentGetByID,
+		},
+		Route{
+			"CommentDelete",
+			"DELETE",
+			"/comments/{commentid}",
+			CommentDelete,
+		},
+		Route{
+			"CommentsGetByRecipeID",
+			"GET",
+			"/comments/recipe/{recipeid}",
+			CommentsGetByRecipeID,
+		},
 }
 
 // Logger hook to implement logging of HTTP requests

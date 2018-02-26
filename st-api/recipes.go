@@ -262,13 +262,13 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
-// RecipeGetByID implements the GET /api/recipes/{recipeid} to retrieve info about a particular recipe
+// RecipeGetByID implements the GET /recipes/id/{recipeid} to retrieve info about a particular recipe
 func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
 	var res Response
 	params := mux.Vars(r)
 
-	err := db.Connection.QueryRow(fmt.Sprintf("SELECT * FROM recipe WHERE recipe_id=\"%s\"", params["recipeid"])).Scan(&rdata.RecipeID, &rdata.UserID, &rdata.RecipeName, &rdata.RecipeDescription, &rdata.RecipeInstructions, &rdata.ImageURL, &rdata.Calories, &rdata.PrepTime, &rdata.CookTime, &rdata.TotalTime, &rdata.Servings, &rdata.Upvotes, &rdata.Downvotes, &rdata.Made)
+	err := db.Connection.QueryRow(fmt.Sprintf("SELECT recipe_id, user_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made FROM recipe WHERE recipe_id=\"%s\"", params["recipeid"])).Scan(&rdata.RecipeID, &rdata.UserID, &rdata.RecipeName, &rdata.RecipeDescription, &rdata.RecipeInstructions, &rdata.ImageURL, &rdata.Calories, &rdata.PrepTime, &rdata.CookTime, &rdata.TotalTime, &rdata.Servings, &rdata.Upvotes, &rdata.Downvotes, &rdata.Made)
 	switch {
 	case err == sql.ErrNoRows:
 		res.Content = fmt.Sprintf("Recipe not found. Error: %s", err.Error())
@@ -319,6 +319,77 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 			fmt.Printf("%s\n", rdata.Ingredients)
 		}
 	}
+
+	Respond(w, rdata, http.StatusOK)
+}
+
+// RecipesGetByUserID implements the GET /recipes/user/{userid} to retrieve info about a user's recipes
+func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
+	var rdata Recipes
+	var res Response
+	var RecipesIDs []int
+	params := mux.Vars(r)
+
+	rows, err := db.Connection.Query(fmt.Sprintf("SELECT recipe_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made FROM recipe WHERE user_id=%s", params["userid"]))
+	if err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+	rdata.RecipeList = make(map[int]Recipe)
+	for rows.Next() {
+		var re Recipe
+		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription, &re.RecipeInstructions, &re.ImageURL, &re.Calories, &re.PrepTime, &re.CookTime, &re.TotalTime, &re.Servings, &re.Upvotes, &re.Downvotes, &re.Made); err != nil {
+			res.Content = "Creation of User Recipes Failed!"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		if *Debug {
+			fmt.Printf("%d: %s %s %s %s %d %d %d %d %d %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.RecipeInstructions, re.ImageURL, re.Calories, re.PrepTime, re.CookTime, re.TotalTime, re.Servings, re.Upvotes, re.Downvotes, re.Made)
+		}
+		rdata.RecipeList[re.RecipeID] = re
+		RecipesIDs = append(RecipesIDs, re.RecipeID)
+	}
+	if err := rows.Err(); err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	//Getting the tags for the recipes
+	/*tquery := fmt.Sprintf("SELECT * FROM tag WHERE recipe_id in (")
+	for i := 0; i < len(RecipesIDs); i++ {
+		tquery += fmt.Sprintf("\"%d\"", RecipesIDs[i])
+		if i != len(RecipesIDs) - 1 {
+			tquery += ","
+		}
+	}
+	tquery += ")"
+	trows, terr := db.Connection.Query(tquery)
+	if terr != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	if terr != nil {
+		if *Debug {
+			fmt.Println("Tags Retrieval Failed: ", terr,Error())
+		}
+		res.Content = fmt.Sprintf("Tags Retrieval Failed: %s", terr.Error())
+		Responde(w, tresult, http.StatusInternalServerError)
+	}
+
+	defer trows.Close()
+	for trows.Next() {
+		var tag string
+		var id int
+		if terr := trows.Scan(&id, &tag); terr != nil {
+			res.Content = "Tags Retrieval Failed"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		rdata.RecipeList[id].Tags = append(rdata.RecipeList[id].Tags, tag)
+	}*/
 
 	Respond(w, rdata, http.StatusOK)
 }
