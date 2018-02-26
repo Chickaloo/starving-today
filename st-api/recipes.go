@@ -17,6 +17,27 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// RecipeCount implements the GET /recipes/count endpoint to get the total number of recipes
+func RecipeCount(w http.ResponseWriter, r *http.Request) {
+	var rdata int
+	var res Response
+
+	err := db.Connection.QueryRow(fmt.Sprintf("SELECT recipe_count FROM stat WHERE 1")).Scan(&rdata)
+	switch {
+	case err == sql.ErrNoRows:
+		res.Content = fmt.Sprintf("Recipe Count not found. Error: %s", err.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	case err != nil:
+		res.Content = fmt.Sprintf("Recipe Count retrieval failed: %s", err.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	default:
+		res.Content = "Recipe Count retrieval successful!"
+	}
+	Respond(w, rdata, http.StatusOK)
+}
+
 // RecipeCreate implements the POST /recipes/ endpoint to create a recipe.
 func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
@@ -262,6 +283,89 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
+// RecipeEdit implements the PUT /recipes/{recipeid} endpoint to edit a recipe
+func RecipeEdit(w http.ResponseWriter, r *http.Request) {
+	var rdata Recipe
+	var res Response
+	var column string
+	var value = ""
+	var number = 0
+	var flag = true
+	params := mux.Vars(r)
+
+	if err := Decode(w, r, &rdata); err != nil {
+		if *Debug {
+			fmt.Println("Error")
+		}
+		res.Content = "Invalid JSON format received!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+
+	if rdata.RecipeName != "" {
+		column = "recipe_name"
+		value = rdata.RecipeName
+	} else if rdata.RecipeDescription != "" {
+		column = "recipe_description"
+		value = rdata.RecipeDescription
+	} else if rdata.RecipeInstructions != "" {
+		column = "recipe_instructions"
+		value = rdata.RecipeInstructions
+	} else if rdata.ImageURL != "" {
+		column = "image_url"
+		value = rdata.ImageURL
+	} else if rdata.Calories != 0 {
+		column = "calories"
+		number = int(rdata.Calories)
+		flag = false
+	} else if rdata.PrepTime != 0 {
+		column = "prep_time"
+		number = int(rdata.PrepTime)
+		flag = false
+	} else if rdata.CookTime != 0 {
+		column = "cook_time"
+		number = int(rdata.CookTime)
+		flag = false
+	} else if rdata.TotalTime != 0 {
+		column = "total_time"
+		number = int(rdata.TotalTime)
+		flag = false
+	} else if rdata.Servings != 0 {
+		column = "servings"
+		number = int(rdata.Servings)
+		flag = false
+	} else if rdata.Upvotes != 0 {
+		column = "upvotes"
+		number = int(rdata.Upvotes)
+		flag = false
+	} else if rdata.Downvotes != 0 {
+		column = "downvotes"
+		number = int(rdata.Downvotes)
+		flag = false
+	} else if rdata.Made != 0 {
+		column = "made"
+		number = int(rdata.Made)
+		flag = false
+	}
+
+	query := ""
+	if flag == true {
+		query += fmt.Sprintf("UPDATE recipe\nSET %s=\"%s\"\nWHERE recipe_id=\"%s\"", column, value, params["recipeid"])
+	} else {
+		query += fmt.Sprintf("UPDATE recipe\nSET %s=%d\nWHERE recipe_id=\"%s\"", column, number, params["recipeid"])
+	}
+	result, err := db.Connection.Exec(query)
+	if err != nil {
+		if *Debug {
+			fmt.Println("Recipe Edit Failed: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("Recipe Edit Failed: %s", err.Error())
+		Respond(w, result, http.StatusInternalServerError)
+		return
+	}
+	Respond(w, rdata, http.StatusOK)
+}
+
 // RecipeGetByID implements the GET /recipes/id/{recipeid} to retrieve info about a particular recipe
 func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
@@ -355,41 +459,6 @@ func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
-
-	//Getting the tags for the recipes
-	/*tquery := fmt.Sprintf("SELECT * FROM tag WHERE recipe_id in (")
-	for i := 0; i < len(RecipesIDs); i++ {
-		tquery += fmt.Sprintf("\"%d\"", RecipesIDs[i])
-		if i != len(RecipesIDs) - 1 {
-			tquery += ","
-		}
-	}
-	tquery += ")"
-	trows, terr := db.Connection.Query(tquery)
-	if terr != nil {
-		Respond(w, res, http.StatusInternalServerError)
-		return
-	}
-
-	if terr != nil {
-		if *Debug {
-			fmt.Println("Tags Retrieval Failed: ", terr,Error())
-		}
-		res.Content = fmt.Sprintf("Tags Retrieval Failed: %s", terr.Error())
-		Responde(w, tresult, http.StatusInternalServerError)
-	}
-
-	defer trows.Close()
-	for trows.Next() {
-		var tag string
-		var id int
-		if terr := trows.Scan(&id, &tag); terr != nil {
-			res.Content = "Tags Retrieval Failed"
-			Respond(w, res, http.StatusInternalServerError)
-			return
-		}
-		rdata.RecipeList[id].Tags = append(rdata.RecipeList[id].Tags, tag)
-	}*/
 
 	Respond(w, rdata, http.StatusOK)
 }
