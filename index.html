@@ -21,6 +21,8 @@
 
 <body ng-app="starvingToday">
 
+    <ng-include src="'components/modals.html'"></ng-include>
+
     <div id="content-wrapper" class="content-wrapper" ng-controller="mainController">
         <div id="landing-page" style="height: 100%"  ng-if="!auth" >
             <ng-include src="'components/landingPage/landingPage.html'"></ng-include>
@@ -50,10 +52,10 @@
     <script src="router.js"></script>
     <script src="components/landingPage/landingPageController.js"></script>
     <script src="components/recipesPage/recipesPageController.js"></script>
-    <script src="components/addRecipe/addRecipeController.js"></script>
     <script src="components/viewRecipePage/viewRecipePageController.js"></script>
     <script src="components/header/headerController.js"></script>
     <script src="components/myHub/myHubController.js"></script>
+    <script src="js/modal-functions.js"></script>
 
 </body>
 
