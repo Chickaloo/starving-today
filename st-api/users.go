@@ -31,14 +31,14 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusBadRequest)
 		return
 	}
-
-	ndata := strings.Split(rdata.Firstname, " ")
-	fname := ndata[0]
-	lname := strings.Join(ndata[1:], " ")
-	rdata.Firstname = fname
-	rdata.Lastname = lname
-
-	query := fmt.Sprintf("INSERT INTO user (user_name, first_name, last_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", rdata.Username, rdata.Firstname, rdata.Lastname, rdata.Password, rdata.Email)
+	/*
+		ndata := strings.Split(rdata.Firstname, " ")
+		fname := ndata[0]
+		lname := strings.Join(ndata[1:], " ")
+		rdata.Firstname = fname
+		rdata.Lastname = lname
+	*/
+	query := fmt.Sprintf("INSERT INTO user (user_name, first_name, last_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", rdata.Username, "Stranger", "Danger", rdata.Password, rdata.Email)
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
@@ -59,38 +59,13 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
+	rdata.UserID = int(rid)
 
-	//UserCount update block
-	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
-	if serr != nil {
-		if *Debug {
-			fmt.Println("Count Retrieval Failed: ", serr.Error())
-		}
-		res.Content = fmt.Sprintf("Count Retrieval Failed: %s", serr.Error())
+	// Increment User count in stats
+	if uperr := StatUpdate(0, 1); uperr != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
-
-	defer rows.Close()
-	for rows.Next() {
-		if rerr := rows.Scan(&res.RecipeCount, &res.UserCount); rerr != nil {
-			res.Content = "Count Reading Failed"
-			Respond(w, res, http.StatusInternalServerError)
-			return
-		}
-	}
-
-	uresult, uerr := db.Connection.Exec(fmt.Sprintf("UPDATE stat SET recipe_count = \"%d\", user_count = \"%d\" WHERE 1", res.RecipeCount, res.UserCount+1))
-	if uerr != nil {
-		if *Debug {
-			fmt.Println("Count Update Failed: ", uerr.Error())
-		}
-		res.Content = fmt.Sprintf("Count Update Failed: %s", uerr.Error())
-		Respond(w, uresult, http.StatusInternalServerError)
-		return
-	}
-
-	rdata.UserID = int(rid)
 
 	Respond(w, rdata, http.StatusOK)
 	return
@@ -123,37 +98,11 @@ func UserDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//UserCount update block
-	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
-	if serr != nil {
-		if *Debug {
-			fmt.Println("Count Retrieval Failed: ", serr.Error())
-		}
-		res.Content = fmt.Sprintf("Count Retrieval Failed: %s", serr.Error())
+	// Decrement recipe count in stats
+	if uperr := StatUpdate(0, -1); uperr != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
-
-	defer rows.Close()
-	for rows.Next() {
-		if rerr := rows.Scan(&res.RecipeCount, &res.UserCount); rerr != nil {
-			res.Content = "Count Reading Failed"
-			Respond(w, res, http.StatusInternalServerError)
-			return
-		}
-	}
-
-	uresult, uerr := db.Connection.Exec(fmt.Sprintf("UPDATE stat SET recipe_count = \"%d\", user_count = \"%d\" WHERE 1", res.RecipeCount, res.UserCount-1))
-	if uerr != nil {
-		if *Debug {
-			fmt.Println("Count Update Failed: ", uerr.Error())
-		}
-		res.Content = fmt.Sprintf("Count Update Failed: %s", uerr.Error())
-		Respond(w, uresult, http.StatusInternalServerError)
-		return
-	}
-
-	res.UserCount -= 1
 
 	Respond(w, res, http.StatusOK)
 }

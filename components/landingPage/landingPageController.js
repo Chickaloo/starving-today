@@ -18,11 +18,11 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 
 	$scope.Register = function() {
 		var user_data = {
-			firstname: $scope.fullname,
+			//firstname: $scope.fullname,
 			username: $scope.rusername,
 			password: $scope.rpassword,
 			password2: $scope.password2,
-			email: $scope.email
+			//email: $scope.email
 		};
 
 		var data = JSON.stringify(user_data);
