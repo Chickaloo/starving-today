@@ -30,6 +30,7 @@ type Response struct {
 	RecipeCount int               `json:"recipecount,omitempty"`
 	User        *User             `json:"user,omitempty"`
 	UserCount   int               `json:"usercount,omitempty"`
+	Posts       map[string]Post   `json:"posts,omitempty"`
 	Content     string            `json:"content,omitempty"`
 }
 
@@ -77,14 +78,23 @@ type Recipes struct {
 	RecipeList map[int]Recipe `json:"recipes,omitempty"`
 }
 
+type Post struct {
+	PostID   int     `json:"postid,omitempty"`
+	UserID   int     `json:"userid,omitempty"`
+	PosterID int     `json:"posterid,omitempty"`
+	Title    string  `json:"title,omitempty"`
+	Content  string  `json:"content,omitempty"`
+	Date     []uint8 `json:"date,omitempty"`
+}
+
 // Comment structure
 type Comment struct {
-	CommentID	int		`json:"commentid,omitempty"`
-	Date		[]uint8	`json:"date,omitempty"`
-	Comment		string	`json:"comment,omitempty"`
-	RecipeID	int		`json:"recipeid,omitempty"`
-	UserID		int		`json:"userid,omitempty"`
-	PosterID	int		`json:"posterid,omitempty"`
+	CommentID int     `json:"commentid,omitempty"`
+	Date      []uint8 `json:"date,omitempty"`
+	Comment   string  `json:"comment,omitempty"`
+	RecipeID  int     `json:"recipeid,omitempty"`
+	UserID    int     `json:"userid,omitempty"`
+	PosterID  int     `json:"posterid,omitempty"`
 }
 
 // Comments list of a recipe
