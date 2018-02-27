@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	db "./database"
 )
@@ -105,4 +106,95 @@ func Intersection(a []int, b []int) (inter []int) {
 		}
 	}
 	return
+}
+
+// Search is intended to work as an umbrella function of sorts that implements POST /search. it recieves 4 true/false values and a string and calls the relevant search methods from recipes.go
+func Search(w http.ResponseWriter, r *http.Request) {
+	// Since we need the logical OR of multiple searches, a map will be used here (Recipes struct within Response)
+	var res Response
+	// As well as an int array to store the RecipeIDs from each individual search
+	var req SearchParameters
+	//var obj Recipes
+	res.Recipes = make(map[string]Recipe)
+
+	derr := Decode(w, r, &req)
+	if derr != nil {
+		if *Debug {
+			fmt.Println("Decode Error.")
+		}
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+
+	if req.ByIngredient == true {
+		temp, serr := RecipeSearchByIngredients(req.Keywords)
+		if serr != nil {
+			fmt.Println(serr.Error())
+			return
+		}
+		for i := 0; i < len(temp); i++ {
+			key := strconv.Itoa(temp[i])
+			value, cerr := RecipeIDHelper(temp[i])
+			res.Recipes[key] = value
+			if cerr != nil {
+				fmt.Println(serr.Error())
+				return
+			}
+		}
+	}
+
+	if req.ByUserID == true {
+		temp, serr := RecipeSearchByUser(req.Keywords)
+		if serr != nil {
+			fmt.Println(serr.Error())
+			return
+		}
+		for i := 0; i < len(temp); i++ {
+			key := strconv.Itoa(temp[i])
+			value, cerr := RecipeIDHelper(temp[i])
+			res.Recipes[key] = value
+			if cerr != nil {
+				fmt.Println(serr.Error())
+				return
+			}
+		}
+	}
+
+	if req.ByName == true {
+		temp, serr := RecipeSearchByName(req.Keywords)
+		if serr != nil {
+			fmt.Println(serr.Error())
+			return
+		}
+		for i := 0; i < len(temp); i++ {
+			key := strconv.Itoa(temp[i])
+			value, cerr := RecipeIDHelper(temp[i])
+			res.Recipes[key] = value
+			if cerr != nil {
+				fmt.Println(serr.Error())
+				return
+			}
+		}
+	}
+
+	if req.ByTag == true {
+		temp, serr := RecipeSearchByTags(req.Keywords)
+		if serr != nil {
+			fmt.Println(serr.Error())
+			return
+		}
+		for i := 0; i < len(temp); i++ {
+			key := strconv.Itoa(temp[i])
+			value, cerr := RecipeIDHelper(temp[i])
+			res.Recipes[key] = value
+			if cerr != nil {
+				fmt.Println(serr.Error())
+				return
+			}
+		}
+	}
+
+	//res.Recipes = &obj
+	Respond(w, res, http.StatusOK)
 }

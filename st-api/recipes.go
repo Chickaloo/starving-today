@@ -323,14 +323,65 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
-// RecipeSearchByIngredients implements the GET /api/recipes/ingredients/{ingredients} to retrieve all recipes that contain all listed ingredients
-func RecipeSearchByIngredients(w http.ResponseWriter, r *http.Request) {
-	var rdata []int
+// RecipeIDHelper Is utilized by the search function to translate recipe IDs to recipes
+func RecipeIDHelper(recipeid int) (rdata Recipe, cerr error) {
+	idstring := strconv.Itoa(recipeid)
+	err := db.Connection.QueryRow(fmt.Sprintf("SELECT * FROM recipe WHERE recipe_id=\"%s\"", idstring)).Scan(&rdata.RecipeID, &rdata.UserID, &rdata.RecipeName, &rdata.RecipeDescription, &rdata.RecipeInstructions, &rdata.ImageURL, &rdata.Calories, &rdata.PrepTime, &rdata.CookTime, &rdata.TotalTime, &rdata.Servings, &rdata.Upvotes, &rdata.Downvotes, &rdata.Made)
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Printf("Recipe not found. Error: %s", err.Error())
+		return
+	case err != nil:
+		fmt.Printf("Recipe retrieval failed: %s", err.Error())
+		return
+	default:
+		fmt.Print("Recipe retrieval successful!")
+	}
+
+	rows, err := db.Connection.Query(fmt.Sprintf("SELECT tag FROM tag WHERE recipe_id=%s", idstring))
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var tag string
+		if err := rows.Scan(&tag); err != nil {
+			fmt.Print("Tag population failed!")
+			return
+		}
+		rdata.Tags = append(rdata.Tags, tag)
+		if *Debug {
+			fmt.Printf("%s\n", rdata.Tags)
+		}
+	}
+
+	irows, err := db.Connection.Query(fmt.Sprintf("SELECT count, unit, ingredient FROM ingredient WHERE recipe_id=%s", idstring))
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer irows.Close()
+	for irows.Next() {
+		var ingredient Ingredient
+		if err := irows.Scan(&ingredient.Amount, &ingredient.Unit, &ingredient.Ingredient); err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+		rdata.Ingredients = append(rdata.Ingredients, ingredient)
+		if *Debug {
+			fmt.Printf("%s\n", rdata.Ingredients)
+		}
+	}
+
+	return
+}
+
+// RecipeSearchByIngredients implements the GET /api/recipes/tags/{tags} to retrieve all recipes that contain all listed ingredients
+func RecipeSearchByIngredients(s string) (rdata []int, serr error) {
 	var search []int
 	var temp int
-	var res Response
-	params := mux.Vars(r)
-	keywords := params["ingredients"]
+	keywords := s
 
 	ingredients := strings.Split(keywords, ",")
 	for i := 0; i < len(ingredients); i++ {
@@ -340,16 +391,13 @@ func RecipeSearchByIngredients(w http.ResponseWriter, r *http.Request) {
 		//Populate search with all recipes that include the current ingredient.
 		rows, qerr := db.Connection.Query(fmt.Sprintf("SELECT recipe_id FROM ingredient WHERE ingredient = \"%s\"", ingredients[i]))
 		if qerr != nil {
-			res.Content = qerr.Error()
-			Respond(w, res, http.StatusInternalServerError)
+			fmt.Println(qerr.Error())
 			return
 		}
 		defer rows.Close()
 		for rows.Next() {
 			if qerr := rows.Scan(&temp); qerr != nil {
 				fmt.Println(qerr.Error())
-				res.Content = "Recipe Search Failed!"
-				Respond(w, res, http.StatusInternalServerError)
 				return
 			}
 			if *Debug {
@@ -365,17 +413,14 @@ func RecipeSearchByIngredients(w http.ResponseWriter, r *http.Request) {
 			rdata = Intersection(rdata, search)
 		}
 	}
-	Respond(w, rdata, http.StatusOK)
+	return
 }
 
 // RecipeSearchByTags implements the GET /api/recipes/tags/{tags} to retrieve all recipes that contain all listed tags
-func RecipeSearchByTags(w http.ResponseWriter, r *http.Request) {
-	var rdata []int
+func RecipeSearchByTags(s string) (rdata []int, serr error) {
 	var search []int
 	var temp int
-	var res Response
-	params := mux.Vars(r)
-	keywords := params["tags"]
+	keywords := s
 
 	tags := strings.Split(keywords, ",")
 	for i := 0; i < len(tags); i++ {
@@ -384,16 +429,13 @@ func RecipeSearchByTags(w http.ResponseWriter, r *http.Request) {
 		//Populate search with all recipes that include the current tag.
 		rows, qerr := db.Connection.Query(fmt.Sprintf("SELECT recipe_id FROM tag WHERE tag = \"%s\"", tags[i]))
 		if qerr != nil {
-			res.Content = qerr.Error()
-			Respond(w, res, http.StatusInternalServerError)
+			fmt.Println(qerr.Error())
 			return
 		}
 		defer rows.Close()
 		for rows.Next() {
 			if qerr := rows.Scan(&temp); qerr != nil {
 				fmt.Println(qerr.Error())
-				res.Content = "Recipe Search Failed!"
-				Respond(w, res, http.StatusInternalServerError)
 				return
 			}
 			if *Debug {
@@ -409,18 +451,15 @@ func RecipeSearchByTags(w http.ResponseWriter, r *http.Request) {
 			rdata = Intersection(rdata, search)
 		}
 	}
-	Respond(w, rdata, http.StatusOK)
+	return
 }
 
 // RecipeSearchByName implements the GET /api/recipes/name/{recipename} to retrieve all recipes that contain any listed words in the name
-func RecipeSearchByName(w http.ResponseWriter, r *http.Request) {
-	var rdata []int
+func RecipeSearchByName(s string) (rdata []int, serr error) {
 	var temp int
-	var res Response
 	var query string
 
-	params := mux.Vars(r)
-	keywords := params["recipename"]
+	keywords := s
 
 	namesToSearch := strings.Split(keywords, ",")
 	query = "SELECT recipe_id FROM recipe WHERE recipe_name LIKE '%" + namesToSearch[0] + "%'"
@@ -432,16 +471,13 @@ func RecipeSearchByName(w http.ResponseWriter, r *http.Request) {
 
 	rows, qerr := db.Connection.Query(query)
 	if qerr != nil {
-		res.Content = qerr.Error()
-		Respond(w, res, http.StatusInternalServerError)
+		fmt.Println(qerr.Error())
 		return
 	}
 	defer rows.Close()
 	for rows.Next() {
 		if qerr := rows.Scan(&temp); qerr != nil {
 			fmt.Println(qerr.Error())
-			res.Content = "Recipe Search Failed!"
-			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
 		if *Debug {
@@ -450,23 +486,19 @@ func RecipeSearchByName(w http.ResponseWriter, r *http.Request) {
 		rdata = append(rdata, temp)
 	}
 
-	Respond(w, rdata, http.StatusOK)
+	return
 }
 
 // RecipeSearchByUser implements the GET /api/recipes/user/{userid} to retrieve all recipes by a particular user
-func RecipeSearchByUser(w http.ResponseWriter, r *http.Request) {
-	var rdata []int
+func RecipeSearchByUser(s string) (rdata []int, serr error) {
 	var temp int
-	var res Response
 	var query string
 
-	params := mux.Vars(r)
-	username := params["userid"]
+	username := s
 
 	userid, cerr := strconv.Atoi(username)
 	if cerr != nil {
-		res.Content = cerr.Error()
-		Respond(w, res, http.StatusInternalServerError)
+		fmt.Println(cerr.Error())
 		return
 	}
 
@@ -474,16 +506,13 @@ func RecipeSearchByUser(w http.ResponseWriter, r *http.Request) {
 
 	rows, qerr := db.Connection.Query(query)
 	if qerr != nil {
-		res.Content = qerr.Error()
-		Respond(w, res, http.StatusInternalServerError)
+		fmt.Println(qerr.Error())
 		return
 	}
 	defer rows.Close()
 	for rows.Next() {
 		if qerr := rows.Scan(&temp); qerr != nil {
 			fmt.Println(qerr.Error())
-			res.Content = "Recipe Search Failed!"
-			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
 		if *Debug {
@@ -492,5 +521,5 @@ func RecipeSearchByUser(w http.ResponseWriter, r *http.Request) {
 		rdata = append(rdata, temp)
 	}
 
-	Respond(w, rdata, http.StatusOK)
+	return
 }

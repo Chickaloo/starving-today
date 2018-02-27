@@ -8,6 +8,15 @@ package main
 
 // A collection of data structures used to return responses in JSON format.
 
+// SearchParameters is for POST /Search
+type SearchParameters struct {
+	ByIngredient bool   `json:"byingredient,omitempty"`
+	ByTag        bool   `json:"bytag,omitempty"`
+	ByName       bool   `json:"byname,omitempty"`
+	ByUserID     bool   `json:"byuserid,omitempty"`
+	Keywords     string `json:"keywords,omitempty"`
+}
+
 // Request is for general calls and inter API communication.
 type Request struct {
 	Name    string                 `json:"name,omitempty"`
