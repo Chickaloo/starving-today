@@ -427,7 +427,42 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
-<<<<<<< HEAD
+// RecipesGetByUserID implements the GET /recipes/user/{userid} to retrieve info about a user's recipes
+func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
+	var rdata Recipes
+	var res Response
+	var RecipesIDs []int
+	params := mux.Vars(r)
+
+	rows, err := db.Connection.Query(fmt.Sprintf("SELECT recipe_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made FROM recipe WHERE user_id=%s", params["userid"]))
+	if err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+	rdata.RecipeList = make(map[int]Recipe)
+	for rows.Next() {
+		var re Recipe
+		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription, &re.RecipeInstructions, &re.ImageURL, &re.Calories, &re.PrepTime, &re.CookTime, &re.TotalTime, &re.Servings, &re.Upvotes, &re.Downvotes, &re.Made); err != nil {
+			res.Content = "Creation of User Recipes Failed!"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		if *Debug {
+			fmt.Printf("%d: %s %s %s %s %d %d %d %d %d %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.RecipeInstructions, re.ImageURL, re.Calories, re.PrepTime, re.CookTime, re.TotalTime, re.Servings, re.Upvotes, re.Downvotes, re.Made)
+		}
+		rdata.RecipeList[re.RecipeID] = re
+		RecipesIDs = append(RecipesIDs, re.RecipeID)
+	}
+	if err := rows.Err(); err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	Respond(w, rdata, http.StatusOK)
+}
+
 // RecipeIDHelper Is utilized by the search function to translate recipe IDs to recipes
 func RecipeIDHelper(recipeid int) (rdata Recipe, cerr error) {
 	idstring := strconv.Itoa(recipeid)
@@ -484,47 +519,6 @@ func RecipeIDHelper(recipeid int) (rdata Recipe, cerr error) {
 
 // RecipeSearchByIngredients implements the GET /api/recipes/tags/{tags} to retrieve all recipes that contain all listed ingredients
 func RecipeSearchByIngredients(s string) (rdata []int, serr error) {
-=======
-// RecipesGetByUserID implements the GET /recipes/user/{userid} to retrieve info about a user's recipes
-func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
-	var rdata Recipes
-	var res Response
-	var RecipesIDs []int
-	params := mux.Vars(r)
-
-	rows, err := db.Connection.Query(fmt.Sprintf("SELECT recipe_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made FROM recipe WHERE user_id=%s", params["userid"]))
-	if err != nil {
-		Respond(w, res, http.StatusInternalServerError)
-		return
-	}
-
-	defer rows.Close()
-	rdata.RecipeList = make(map[int]Recipe)
-	for rows.Next() {
-		var re Recipe
-		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription, &re.RecipeInstructions, &re.ImageURL, &re.Calories, &re.PrepTime, &re.CookTime, &re.TotalTime, &re.Servings, &re.Upvotes, &re.Downvotes, &re.Made); err != nil {
-			res.Content = "Creation of User Recipes Failed!"
-			Respond(w, res, http.StatusInternalServerError)
-			return
-		}
-		if *Debug {
-			fmt.Printf("%d: %s %s %s %s %d %d %d %d %d %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.RecipeInstructions, re.ImageURL, re.Calories, re.PrepTime, re.CookTime, re.TotalTime, re.Servings, re.Upvotes, re.Downvotes, re.Made)
-		}
-		rdata.RecipeList[re.RecipeID] = re
-		RecipesIDs = append(RecipesIDs, re.RecipeID)
-	}
-	if err := rows.Err(); err != nil {
-		Respond(w, res, http.StatusInternalServerError)
-		return
-	}
-
-	Respond(w, rdata, http.StatusOK)
-}
-
-// RecipeSearchByIngredients implements the GET /api/recipes/ingredients/{ingredients} to retrieve all recipes that contain all listed ingredients
-func RecipeSearchByIngredients(w http.ResponseWriter, r *http.Request) {
-	var rdata []int
->>>>>>> 84f23d6f34be85dd3cb2dbdf95bd365b2ed134c2
 	var search []int
 	var temp int
 	keywords := s

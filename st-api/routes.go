@@ -80,63 +80,13 @@ var routes = Routes{
 		"/recipes/id/{recipeid}",
 		RecipeGetByID,
 	},
-<<<<<<< HEAD
-	// Route{
-	// 	"RecipeSearchByUser",
-	// 	"GET",
-	// 	"/recipes/user/{userid}",
-	// 	RecipeSearchByUser,
-	// },
-	// Route{
-	// 	"RecipeSearchByName",
-	// 	"GET",
-	// 	"/recipes/name/{recipename}",
-	// 	RecipeSearchByName,
-	// },
-	// Route{
-	// 	"RecipeSearchByIngredients",
-	// 	"GET",
-	// 	"/recipes/ingredients/{ingredients}",
-	// 	RecipeSearchByIngredients,
-	// },
-	// Route{
-	// 	"RecipeSearchByTags",
-	// 	"GET",
-	// 	"/recipes/tag/{tags}",
-	// 	RecipeSearchByTags,
-	// },
-=======
 	Route{
 		"RecipesGetByUserID",
 		"GET",
 		"/recipes/user/{userid}",
 		RecipesGetByUserID,
 	},
-	Route{
-		"RecipeSearchByUser",
-		"GET",
-		"/recipes/user/{userid}",
-		RecipeSearchByUser,
-	},
-	Route{
-		"RecipeSearchByName",
-		"GET",
-		"/recipes/name/{recipename}",
-		RecipeSearchByName,
-	},
-	Route{
-		"RecipeSearchByIngredients",
-		"GET",
-		"/recipes/ingredients/{ingredients}",
-		RecipeSearchByIngredients,
-	},
-	Route{
-		"RecipeSearchByTags",
-		"GET",
-		"/recipes/tag/{tags}",
-		RecipeSearchByTags,
-	},
->>>>>>> 84f23d6f34be85dd3cb2dbdf95bd365b2ed134c2
+
 	// Route{
 	// 	"RecipeGetTop",
 	// 	"GET",
