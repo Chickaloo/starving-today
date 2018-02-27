@@ -45,6 +45,12 @@ var routes = Routes{
 
 	// Recipes
 	Route{
+		"RecipeCount",
+		"GET",
+		"/recipes/count",
+		RecipeCount,
+	},
+	Route{
 		"RecipeCreate",
 		"POST",
 		"/recipes",
@@ -63,10 +69,22 @@ var routes = Routes{
 		RecipeDump,
 	},
 	Route{
+		"RecipeEdit",
+		"PUT",
+		"/recipes/{recipeid}",
+		RecipeEdit,
+	},
+	Route{
 		"RecipeGetByID",
 		"GET",
 		"/recipes/id/{recipeid}",
 		RecipeGetByID,
+	},
+	Route{
+		"RecipesGetByUserID",
+		"GET",
+		"/recipes/user/{userid}",
+		RecipesGetByUserID,
 	},
 	Route{
 		"RecipeSearchByUser",
@@ -153,6 +171,43 @@ var routes = Routes{
 		"GET",
 		"/users/id/{userid}",
 		UserGetByID,
+	},
+	// Comments
+	Route{
+		"CommentCreate",
+		"POST",
+		"/comments",
+		CommentCreate,
+	},
+	Route{
+		"CommentDelete",
+		"DELETE",
+		"/comments/{commentid}",
+		CommentDelete,
+	},
+	Route{
+		"CommentEdit",
+		"PUT",
+		"/comments/{commentid}",
+		CommentEdit,
+	},
+	Route{
+		"CommentGetByID",
+		"GET",
+		"/comments/comment/{commentid}",
+		CommentGetByID,
+	},
+	Route{
+		"CommentsGetByRecipeID",
+		"GET",
+		"/comments/recipe/{recipeid}",
+		CommentsGetByRecipeID,
+	},
+	Route{
+		"CommentsGetByUserID",
+		"GET",
+		"/comments/user/{userid}",
+		CommentsGetByUserID,
 	},
 }
 
