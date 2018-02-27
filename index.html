@@ -21,22 +21,16 @@
 
 <body ng-app="starvingToday">
 
+    <ng-include src="'components/modals.html'"></ng-include>
+
     <div id="content-wrapper" class="content-wrapper" ng-controller="mainController">
         <div id="landing-page" style="height: 100%"  ng-if="!auth" >
             <ng-include src="'components/landingPage/landingPage.html'"></ng-include>
         </div>
 
-        <div id="home" ng-if="auth" ng-controller="userController">
-            <!--
-            email: {{useremail}}
-            first: {{firstname}}
-            last: {{lastname}}
-            username: {{username}}
-            id: {{userid}}
-            -->
+        <div id="home" style="height: 80%;" ng-if="auth">
             <ng-include src="'components/header/header.html'"></ng-include>
-            <!-- background-color:rgba(240,240,240,.8)-->
-            <div class="content-view" ui-view></div>
+            <div class="content-view" style="height: 100%; overflow-y: auto; padding-right: -17px;" ui-view></div>
         </div>
     </div>
 
@@ -45,7 +39,7 @@
     <!-- SCRIPTS -->
     <!-- AngularJS + UI-Router -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
-    <script src="http://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+    <script src="js/angular-ui-router.min.js"></script>
     <!-- JQuery -->
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -56,11 +50,12 @@
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <!-- HHJS -->
     <script src="router.js"></script>
-    <script src="js/userController.js"></script>
     <script src="components/landingPage/landingPageController.js"></script>
     <script src="components/recipesPage/recipesPageController.js"></script>
-    <script src="components/addRecipe/addRecipeController.js"></script>
     <script src="components/viewRecipePage/viewRecipePageController.js"></script>
+    <script src="components/header/headerController.js"></script>
+    <script src="components/myHub/myHubController.js"></script>
+    <script src="js/modal-functions.js"></script>
 
 </body>
 

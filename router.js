@@ -1,6 +1,6 @@
 var app = angular.module('starvingToday',['ui.router']);
 
-app.controller('mainController' , ['$scope', '$http', function($scope, $http){
+app.controller('mainController' , ['$scope', '$http', 'dataUser', function($scope, $http, dataUser){
 		var config = {
       withCredentials: 'true',
 			headers : {
@@ -12,6 +12,8 @@ app.controller('mainController' , ['$scope', '$http', function($scope, $http){
 		.then(
 			function(response){
 				$scope.auth = true;
+
+				dataUser.setUser(response.data.user)
 			},
 			function(response){
 				$scope.auth = false;
@@ -27,13 +29,6 @@ app.controller('mainController' , ['$scope', '$http', function($scope, $http){
 app.config(function($stateProvider, $httpProvider) {
 
   $httpProvider.defaults.withCredentials = true;
-	var landingState = {
-    name: 'login',
-    url: '/login',
-    templateUrl: 'components/landingPage/landingPage.html',
-	  controller: 'landingController'
-  }
-
   var addRecipeState = {
     name: 'addRecipe',
     url: '/addRecipe',
@@ -41,10 +36,11 @@ app.config(function($stateProvider, $httpProvider) {
 	 controller: 'addRecipeController'
   }
 
-  var aboutState = {
-    name: 'about',
-    url: '/about',
-    template: '<h3>Its the UI-Router hello world app!</h3>'
+  var myHubState = {
+    name: 'myHub',
+    url: '/myHub',
+    templateUrl: 'components/myHub/myHub.html',
+    controller: 'myHubController'
   }
 
   var recipeState = {
@@ -54,9 +50,16 @@ app.config(function($stateProvider, $httpProvider) {
     controller: 'recipesController'
   }
 
+  var defaultState = {
+    name: 'default',
+    url: '',
+    templateUrl: 'components/homePage/home.html',
+    controller: 'landingController'
+  }
+
   var homeState = {
     name: 'home',
-    url: '',
+    url: '/home',
     templateUrl: 'components/homePage/home.html',
     controller: 'landingController'
   }
@@ -68,10 +71,39 @@ app.config(function($stateProvider, $httpProvider) {
     controller: 'viewRecipeController'
   }
 
-  $stateProvider.state(landingState);
+  $stateProvider.state(myHubState);
   $stateProvider.state(addRecipeState);
-  $stateProvider.state(aboutState);
+  $stateProvider.state(defaultState);
   $stateProvider.state(homeState);
   $stateProvider.state(recipeState);
   $stateProvider.state(viewRecipesState);
 });
+
+
+angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
+    var dataUser = {};
+    var user;
+
+    dataUser.getUser = function (userid) {
+        return $http.get('http://138.68.22.10:84/users/id/' + userid);
+    };
+
+    dataUser.searchUser = function () {
+        return $http.get('http://138.68.22.10:84/recipe/user/' + userid)
+    };
+
+    dataUser.pushUser = function(value) {
+        dataUser.push(value);
+    };
+
+    dataUser.popUser = function() {
+        dataUser.pop();
+    };
+
+    return {
+      setUser: function(user){
+          this.user = user;
+      }
+    }
+
+}]);

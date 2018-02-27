@@ -17,6 +17,27 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// RecipeCount implements the GET /recipes/count endpoint to get the total number of recipes
+func RecipeCount(w http.ResponseWriter, r *http.Request) {
+	var rdata int
+	var res Response
+
+	err := db.Connection.QueryRow(fmt.Sprintf("SELECT recipe_count FROM stat WHERE 1")).Scan(&rdata)
+	switch {
+	case err == sql.ErrNoRows:
+		res.Content = fmt.Sprintf("Recipe Count not found. Error: %s", err.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	case err != nil:
+		res.Content = fmt.Sprintf("Recipe Count retrieval failed: %s", err.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	default:
+		res.Content = "Recipe Count retrieval successful!"
+	}
+	Respond(w, rdata, http.StatusOK)
+}
+
 // RecipeCreate implements the POST /recipes/ endpoint to create a recipe.
 func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
@@ -262,13 +283,96 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
-// RecipeGetByID implements the GET /api/recipes/{recipeid} to retrieve info about a particular recipe
+// RecipeEdit implements the PUT /recipes/{recipeid} endpoint to edit a recipe
+func RecipeEdit(w http.ResponseWriter, r *http.Request) {
+	var rdata Recipe
+	var res Response
+	var column string
+	var value = ""
+	var number = 0
+	var flag = true
+	params := mux.Vars(r)
+
+	if err := Decode(w, r, &rdata); err != nil {
+		if *Debug {
+			fmt.Println("Error")
+		}
+		res.Content = "Invalid JSON format received!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+
+	if rdata.RecipeName != "" {
+		column = "recipe_name"
+		value = rdata.RecipeName
+	} else if rdata.RecipeDescription != "" {
+		column = "recipe_description"
+		value = rdata.RecipeDescription
+	} else if rdata.RecipeInstructions != "" {
+		column = "recipe_instructions"
+		value = rdata.RecipeInstructions
+	} else if rdata.ImageURL != "" {
+		column = "image_url"
+		value = rdata.ImageURL
+	} else if rdata.Calories != 0 {
+		column = "calories"
+		number = int(rdata.Calories)
+		flag = false
+	} else if rdata.PrepTime != 0 {
+		column = "prep_time"
+		number = int(rdata.PrepTime)
+		flag = false
+	} else if rdata.CookTime != 0 {
+		column = "cook_time"
+		number = int(rdata.CookTime)
+		flag = false
+	} else if rdata.TotalTime != 0 {
+		column = "total_time"
+		number = int(rdata.TotalTime)
+		flag = false
+	} else if rdata.Servings != 0 {
+		column = "servings"
+		number = int(rdata.Servings)
+		flag = false
+	} else if rdata.Upvotes != 0 {
+		column = "upvotes"
+		number = int(rdata.Upvotes)
+		flag = false
+	} else if rdata.Downvotes != 0 {
+		column = "downvotes"
+		number = int(rdata.Downvotes)
+		flag = false
+	} else if rdata.Made != 0 {
+		column = "made"
+		number = int(rdata.Made)
+		flag = false
+	}
+
+	query := ""
+	if flag == true {
+		query += fmt.Sprintf("UPDATE recipe\nSET %s=\"%s\"\nWHERE recipe_id=\"%s\"", column, value, params["recipeid"])
+	} else {
+		query += fmt.Sprintf("UPDATE recipe\nSET %s=%d\nWHERE recipe_id=\"%s\"", column, number, params["recipeid"])
+	}
+	result, err := db.Connection.Exec(query)
+	if err != nil {
+		if *Debug {
+			fmt.Println("Recipe Edit Failed: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("Recipe Edit Failed: %s", err.Error())
+		Respond(w, result, http.StatusInternalServerError)
+		return
+	}
+	Respond(w, rdata, http.StatusOK)
+}
+
+// RecipeGetByID implements the GET /recipes/id/{recipeid} to retrieve info about a particular recipe
 func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
 	var res Response
 	params := mux.Vars(r)
 
-	err := db.Connection.QueryRow(fmt.Sprintf("SELECT * FROM recipe WHERE recipe_id=\"%s\"", params["recipeid"])).Scan(&rdata.RecipeID, &rdata.UserID, &rdata.RecipeName, &rdata.RecipeDescription, &rdata.RecipeInstructions, &rdata.ImageURL, &rdata.Calories, &rdata.PrepTime, &rdata.CookTime, &rdata.TotalTime, &rdata.Servings, &rdata.Upvotes, &rdata.Downvotes, &rdata.Made)
+	err := db.Connection.QueryRow(fmt.Sprintf("SELECT recipe_id, user_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made FROM recipe WHERE recipe_id=\"%s\"", params["recipeid"])).Scan(&rdata.RecipeID, &rdata.UserID, &rdata.RecipeName, &rdata.RecipeDescription, &rdata.RecipeInstructions, &rdata.ImageURL, &rdata.Calories, &rdata.PrepTime, &rdata.CookTime, &rdata.TotalTime, &rdata.Servings, &rdata.Upvotes, &rdata.Downvotes, &rdata.Made)
 	switch {
 	case err == sql.ErrNoRows:
 		res.Content = fmt.Sprintf("Recipe not found. Error: %s", err.Error())
@@ -323,6 +427,7 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
+<<<<<<< HEAD
 // RecipeIDHelper Is utilized by the search function to translate recipe IDs to recipes
 func RecipeIDHelper(recipeid int) (rdata Recipe, cerr error) {
 	idstring := strconv.Itoa(recipeid)
@@ -379,6 +484,47 @@ func RecipeIDHelper(recipeid int) (rdata Recipe, cerr error) {
 
 // RecipeSearchByIngredients implements the GET /api/recipes/tags/{tags} to retrieve all recipes that contain all listed ingredients
 func RecipeSearchByIngredients(s string) (rdata []int, serr error) {
+=======
+// RecipesGetByUserID implements the GET /recipes/user/{userid} to retrieve info about a user's recipes
+func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
+	var rdata Recipes
+	var res Response
+	var RecipesIDs []int
+	params := mux.Vars(r)
+
+	rows, err := db.Connection.Query(fmt.Sprintf("SELECT recipe_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made FROM recipe WHERE user_id=%s", params["userid"]))
+	if err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+	rdata.RecipeList = make(map[int]Recipe)
+	for rows.Next() {
+		var re Recipe
+		if err := rows.Scan(&re.RecipeID, &re.RecipeName, &re.RecipeDescription, &re.RecipeInstructions, &re.ImageURL, &re.Calories, &re.PrepTime, &re.CookTime, &re.TotalTime, &re.Servings, &re.Upvotes, &re.Downvotes, &re.Made); err != nil {
+			res.Content = "Creation of User Recipes Failed!"
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		if *Debug {
+			fmt.Printf("%d: %s %s %s %s %d %d %d %d %d %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.RecipeInstructions, re.ImageURL, re.Calories, re.PrepTime, re.CookTime, re.TotalTime, re.Servings, re.Upvotes, re.Downvotes, re.Made)
+		}
+		rdata.RecipeList[re.RecipeID] = re
+		RecipesIDs = append(RecipesIDs, re.RecipeID)
+	}
+	if err := rows.Err(); err != nil {
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	Respond(w, rdata, http.StatusOK)
+}
+
+// RecipeSearchByIngredients implements the GET /api/recipes/ingredients/{ingredients} to retrieve all recipes that contain all listed ingredients
+func RecipeSearchByIngredients(w http.ResponseWriter, r *http.Request) {
+	var rdata []int
+>>>>>>> 84f23d6f34be85dd3cb2dbdf95bd365b2ed134c2
 	var search []int
 	var temp int
 	keywords := s

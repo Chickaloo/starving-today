@@ -8,10 +8,10 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	db "./database"
@@ -32,7 +32,13 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("INSERT INTO user (user_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\")", rdata.Username, rdata.Password, rdata.Email)
+	ndata := strings.Split(rdata.Firstname, " ")
+	fname := ndata[0]
+	lname := strings.Join(ndata[1:], " ")
+	rdata.Firstname = fname
+	rdata.Lastname = lname
+
+	query := fmt.Sprintf("INSERT INTO user (user_name, first_name, last_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", rdata.Username, rdata.Firstname, rdata.Lastname, rdata.Password, rdata.Email)
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
@@ -198,17 +204,42 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	res.User = &rdata
 
 	http.SetCookie(w, &cookie)
-	w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
-	w.WriteHeader(200)
-
-	json.NewEncoder(w).Encode(res)
+	Respond(w, res, http.StatusOK)
 
 	return
+}
+
+// UserLogout logs a user out.
+func UserLogout(w http.ResponseWriter, r *http.Request) {
+	var res Response
+
+	if r.Method == "OPTIONS" {
+		Respond(w, res, http.StatusOK)
+		return
+	}
+
+	_, err := r.Cookie("HungerHub-Auth")
+	if err != nil {
+		res.Content = "Cookie Reading Failed"
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+
+	var dcookie = http.Cookie{
+		Name:   "HungerHub-Auth",
+		Value:  "-1",
+		Path:   "/",
+		MaxAge: -1,
+	}
+
+	http.SetCookie(w, &dcookie)
+	Respond(w, res, http.StatusOK)
 }
 
 // UserAuth implements GET /users/auth
 func UserAuth(w http.ResponseWriter, r *http.Request) {
 	var res Response
+	var rdata User
 
 	if r.Method == "OPTIONS" {
 		Respond(w, res, http.StatusOK)
@@ -227,6 +258,25 @@ func UserAuth(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusTeapot)
 		return
 	}
+
+	id := strings.Split(cookie.Value, "-")[0]
+
+	uerr := db.Connection.QueryRow(fmt.Sprintf("SELECT user_id, user_name, first_name, last_name, email, bio, profile_image FROM user WHERE user_id=\"%s\"", id)).Scan(&rdata.UserID, &rdata.Username, &rdata.Firstname, &rdata.Lastname, &rdata.Email, &rdata.Bio, &rdata.ProfileImage)
+	switch {
+	case uerr == sql.ErrNoRows:
+		res.Content = fmt.Sprintf("Login Combination not found. Error: %s", err.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+
+	case uerr != nil:
+		res.Content = fmt.Sprintf("Login DB Failed: %s", err.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	default:
+		res.Content = "Login successful!"
+	}
+
+	res.User = &rdata
 
 	res.Content = "Login OK"
 	Respond(w, res, http.StatusOK)

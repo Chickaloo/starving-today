@@ -16,9 +16,13 @@ html, body {
 }
 
 .content-view{
-  position: absolute;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  width: 100%;
+  height: 90%;
+  padding: 50px 50px;
+}
+
+.navbar {
+  box-shadow: none;
 }
 
 .nav-justified {
@@ -29,7 +33,7 @@ html, body {
   color:#fff;
   border: 1px solid transparent;
   background-color: rgba(26,26,26,.1);
-  border-color: white;
+  border-color: rgba(240,240,240,.4)
 }
 
 .nav-left {
@@ -44,10 +48,12 @@ html, body {
 .nav-link:hover {
   color:#fff;
   background-color: rgba(240,240,240,.4);
+  border-color: rgba(240,240,240,.7);
 }
 
 .active {
   color:#444;
+  border-color: rgba(240,240,240,1);
   background-color: rgba(255,255,255,1);
 }
 
@@ -185,3 +191,10 @@ html, body {
 	align-content: center;
 	float: right !important;
 }
+
+.modal{
+  background-color: rgba(0,0,0,.5);
+  height:100%;
+  width: 100%;
+}
+
