@@ -67,3 +67,18 @@ type User struct {
 type Recipes struct {
 	RecipeList map[int]Recipe `json:"recipes,omitempty"`
 }
+
+// Comment structure
+type Comment struct {
+	CommentID	int		`json:"commentid,omitempty"`
+	Date		[]uint8	`json:"date,omitempty"`
+	Comment		string	`json:"comment,omitempty"`
+	RecipeID	int		`json:"recipeid,omitempty"`
+	UserID		int		`json:"userid,omitempty"`
+	PosterID	int		`json:"posterid,omitempty"`
+}
+
+// Comments list of a recipe
+type Comments struct {
+	CommentsList map[int]Comment `json:"comments,omitempty"`
+}
