@@ -15,14 +15,14 @@
           <div class="md-form">
               <i class="fa fa-cutlery fa-xs prefix grey-text"></i>
               <input type="text" id="recipetitle" class="form-control" ng-model="recipename" value="{{recipename}}">
-              <label for="recipetitle">Recipe Title</label>
+              <p class="font-small grey-text d-flex justify-content-end">Recipe Title</p>
           </div>
 
           <!-- description -->
           <div class="md-form">
               <i class="fa fa-pencil fa-xs prefix grey-text"></i>
               <textarea type="text" id="description" class="form-control md-textarea" rows="3" ng-model="recipedescription" value="{{recipedescription}}"></textarea>
-              <label for="description">Description</label>
+              <p class="font-small grey-text d-flex justify-content-end">Description</p>
           </div>
 
           <!--servings-->
@@ -30,28 +30,28 @@
           <div class="md-form">
               <i class="fa fa-group fa-xs prefix grey-text"></i>
               <input type="text" id="servings" class="form-control" ng-model="servings" value="{{servings}}">
-              <label for="servings">Number of Servings</label>
+              <p class="font-small grey-text d-flex justify-content-end">Number of Servings</p>
           </div>
 
           <!--calories-->
           <div class="md-form">
               <i class="fa fa-bar-chart fa-xs prefix grey-text"></i>
               <input type="text" id="calories" class="form-control" ng-model="calories" value="{{calories}}">
-              <label for="calories">Calories</label>
+              <p class="font-small grey-text d-flex justify-content-end">Calories</p>
           </div>
 
           <!--preptime-->
           <div class="md-form">
               <i class="fa fa-hourglass-half fa-xs prefix grey-text"></i>
               <input type="text" id="preptime" class="form-control" ng-model="preptime" value="{{preptime}}">
-              <label for="preptime">Preparation Time</label>
+              <p class="font-small grey-text d-flex justify-content-end">Preparation Time</p>
           </div>
 
           <!--cooktime-->
           <div class="md-form">
               <i class="fa fa-hourglass-end fa-xs prefix grey-text"></i>
               <input type="text" id="cooktime" class="form-control" ng-model="cooktime" value="{{cooktime}}">
-              <label for="cooktime">Cooking Time</label>
+              <p class="font-small grey-text d-flex justify-content-end">Cooking Time</p>
           </div>
 
           <!-- ingredients -->
@@ -59,14 +59,14 @@
           <div class="md-form">
               <i class="fa fa-cart-plus fa-xs prefix grey-text"></i>
               <textarea type="text" id="ingredients" class="form-control md-textarea" rows="3" ng-model="ingredients" value="{{ingredients}}"></textarea>
-              <label for="ingredients">Ingredients</label>
+              <p class="font-small grey-text d-flex justify-content-end">Ingredients</p>
           </div>
 
           <!-- instructions -->
           <div class="md-form">
               <i class="fa fa-map prefix fa-xs grey-text"></i>
               <textarea type="text" id="instructions" class="form-control md-textarea" rows="3" ng-model="recipeinstructions" value="{{recipeinstructions}}"></textarea>
-              <label for="instructions">Instructions</label>
+              <p class="font-small grey-text d-flex justify-content-end">Instructions</p>
           </div>
 
           <!-- tags -->
@@ -74,7 +74,7 @@
           <div class="md-form">
               <i class="fa fa-tag prefix grey-text"></i>
               <textarea type="text" id="tags" class="form-control md-textarea" rows="3" ng-model="tags" value="{{tags}}"></textarea>
-              <label for="tags">Tags</label>
+              <p class="font-small grey-text d-flex justify-content-end">Tags</p>
           </div>
 
         </form>
@@ -87,7 +87,7 @@
 </div>
 
 <!-- User Info Modal -->
-<div class="modal fade" id="user-editor" role="dialog" data-backdrop="true" ng-controller="myHubController">
+<div class="modal fade" id="user-editor" tabindex="-1" role="dialog" data-backdrop="true" ng-controller="myHubController">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -101,22 +101,22 @@
           <!--full name-->
           <div class="md-form">
               <i class="fa fa-user prefix grey-text"></i>
-              <input type="text" id="userFullName" class="form-control" ng-model="tempuser.lastname" value="{{user.firstname + user.lastname}}" autofocus>
-              <label for="userFullName">Name</label>
+              <input type="text" id="userFullName" class="form-control" ng-model="fullname">
+              <p class="font-small grey-text d-flex justify-content-end">Name</p>
           </div>
 
           <!-- email -->
           <div class="md-form">
               <i class="fa fa-envelope prefix grey-text"></i>
-              <input type="email" id="useremail" class="form-control" ng-model="tempuser.email" value="{{user.email}}">
-              <label for="useremail">Email</label>
+              <input type="email" id="useremail" class="form-control" ng-model="user.email">
+              <p class="font-small grey-text d-flex justify-content-end">Email</p>
           </div>
 
           <!-- bio -->
           <div class="md-form">
               <i class="fa fa-pencil prefix grey-text"></i>
-              <textarea type="text" id="userbio" class="form-control md-textarea" rows="3" ng-model="tempuser.bio" value="{{user.bio}}"></textarea>
-              <label for="userbio">Bio</label>
+              <textarea type="text" id="userbio" class="form-control md-textarea" rows="3" ng-model="bio"></textarea>
+              <p class="font-small grey-text d-flex justify-content-end">Bio</p>
           </div>
         </form>
       </div>
