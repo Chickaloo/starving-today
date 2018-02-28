@@ -1,25 +1,32 @@
 <!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark" ng-controller="headerController">
-	<div class="container-fluid">
-    <!-- Navbar brand -->
-    <a class="navbar-brand" ui-sref="home">
-			<img class="navbar-brand" src="http://138.68.22.10/ckong/starving-today/images/hungerHubLogo.png" height="100"/></a>
+<div ng-controller="headerController">
+	<nav class="navbar navbar-expand-lg navbar-dark">
+		<div class="container-fluid">
+	    <!-- Navbar brand -->
+	    <a class="navbar-brand" ui-sref="home">
+				<img class="navbar-brand" src="http://138.68.22.10/ckong/starving-today/images/hungerHubLogo.png" height="100"/></a>
 
-    <form class="form-inline" ng-submit="runSearch()">
-        <div class="md-form mt-0">
-            <input class="form-control" style="width: 450px;" type="text" placeholder="Search" aria-label="Search">
-        </div>
+	    <form class="form-inline" ng-submit="runSearch(searchquery)">
+	        <div class="md-form mt-0">
+	            <input class="form-control" style="width: 450px;" type="text" placeholder="Search" aria-label="Search" ng-model="searchquery">
+	        </div>
 
-    </form>
+	    </form>
 
-    <div class="col-lg-4 d-flex" style="height:100px; width: 100%; max-width: 500px; float: right;">
-			<div class="justify-content-center align-self-center white-text" style="padding: 20px; float: left; text-align:right;">
-				<h4 class="white-text">Welcome, {{ user.firstname }}</h4>
-				<a class="white-text" ui-sref="myHub">Edit Profile </a> | <a class="red-text" ng-click="Logout()">Sign Out <i class="fa fa-sign-out prefix red-text"></i> </a>
-			</div>
-			<div style="text-align:right; float: right;">
-				<img class="img-thumbnail" style="height: 100px; width: 100px;" src="{{ user.profileimage }}"/>
-			</div>
+	    <div class="col-lg-4 d-flex" style="height:100px; width: 100%; max-width: 500px; float: right;">
+				<div class="justify-content-center align-self-center white-text" style="padding: 20px; float: left; text-align:right;">
+					<h4 class="white-text">Welcome, {{ user.firstname }}</h4>
+					<a class="white-text" ui-sref="myHub">Edit Profile </a> | <a class="red-text" ng-click="Logout()">Sign Out <i class="fa fa-sign-out prefix red-text"></i> </a>
+				</div>
+				<div style="text-align:right; float: right;">
+					<img class="img-thumbnail" style="height: 100px; width: 100px;" src="{{ user.profileimage }}"/>
+				</div>
+		</div>
+	</div>
+	</nav>
+	<div class="container-fluid" style="text-align: center;">
+		<div class="alert alert-warning" role="alert" ng-if="recipecount == 0">
+		  <strong>Uh oh!</strong> Unfortunately, we couldn't find any results for "{{ search }}". Please try again!
+		</div>
 	</div>
 </div>
-</nav>
