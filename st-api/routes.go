@@ -155,6 +155,12 @@ var routes = Routes{
 		"/users/id/{userid}",
 		UserGetByID,
 	},
+	Route{
+	    "UserEdit",
+	    "PUT",
+	    "/users/{userid}",
+	    UserEdit,
+	},
 	// Comments
 	Route{
 		"CommentCreate",
@@ -191,6 +197,18 @@ var routes = Routes{
 		"GET",
 		"/comments/user/{userid}",
 		CommentsGetByUserID,
+	},
+	Route{
+	    "TagCreate",
+	    "POST",
+	    "/tags/{recipeid}",
+	    TagCreate,
+	},
+	Route{
+	    "TagDelete",
+	    "DELETE",
+	    "/tags/{recipeid}",
+	    TagDelete,
 	},
 }
 

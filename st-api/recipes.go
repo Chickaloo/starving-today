@@ -237,10 +237,6 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
 	var res Response
-	var column string
-	var value = ""
-	var number = 0
-	var flag = true
 	params := mux.Vars(r)
 
 	if err := Decode(w, r, &rdata); err != nil {
@@ -251,59 +247,9 @@ func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusBadRequest)
 		return
 	}
-
-	if rdata.RecipeName != "" {
-		column = "recipe_name"
-		value = rdata.RecipeName
-	} else if rdata.RecipeDescription != "" {
-		column = "recipe_description"
-		value = rdata.RecipeDescription
-	} else if rdata.RecipeInstructions != "" {
-		column = "recipe_instructions"
-		value = rdata.RecipeInstructions
-	} else if rdata.ImageURL != "" {
-		column = "image_url"
-		value = rdata.ImageURL
-	} else if rdata.Calories != 0 {
-		column = "calories"
-		number = int(rdata.Calories)
-		flag = false
-	} else if rdata.PrepTime != 0 {
-		column = "prep_time"
-		number = int(rdata.PrepTime)
-		flag = false
-	} else if rdata.CookTime != 0 {
-		column = "cook_time"
-		number = int(rdata.CookTime)
-		flag = false
-	} else if rdata.TotalTime != 0 {
-		column = "total_time"
-		number = int(rdata.TotalTime)
-		flag = false
-	} else if rdata.Servings != 0 {
-		column = "servings"
-		number = int(rdata.Servings)
-		flag = false
-	} else if rdata.Upvotes != 0 {
-		column = "upvotes"
-		number = int(rdata.Upvotes)
-		flag = false
-	} else if rdata.Downvotes != 0 {
-		column = "downvotes"
-		number = int(rdata.Downvotes)
-		flag = false
-	} else if rdata.Made != 0 {
-		column = "made"
-		number = int(rdata.Made)
-		flag = false
-	}
-
-	query := ""
-	if flag == true {
-		query += fmt.Sprintf("UPDATE recipe\nSET %s=\"%s\"\nWHERE recipe_id=\"%s\"", column, value, params["recipeid"])
-	} else {
-		query += fmt.Sprintf("UPDATE recipe\nSET %s=%d\nWHERE recipe_id=\"%s\"", column, number, params["recipeid"])
-	}
+	number, err := strconv.Atoi(params["recipeid"])
+	rdata.RecipeID = number
+	query := fmt.Sprintf("UPDATE recipe\nSET recipe_name=\"%s\", recipe_description=\"%s\", recipe_instructions=\"%s\", image_url=\"%s\", calories=\"%d\", prep_time=\"%d\", cook_time=\"%d\", total_time=\"%d\", servings=\"%d\", upvotes=\"%d\", downvotes=\"%d\", made=\"%d\"\nWHERE recipe_id=\"%s\"", rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.ImageURL, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, rdata.Upvotes, rdata.Downvotes, rdata.Made, params["recipeid"])
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
@@ -381,7 +327,6 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipes
 	var res Response
-	var RecipesIDs []int
 	params := mux.Vars(r)
 
 	rows, err := db.Connection.Query(fmt.Sprintf("SELECT recipe_id, recipe_name, recipe_description, recipe_instructions, image_url, calories, prep_time, cook_time, total_time, servings, upvotes, downvotes, made FROM recipe WHERE user_id=%s", params["userid"]))
@@ -402,8 +347,47 @@ func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
 		if *Debug {
 			fmt.Printf("%d: %s %s %s %s %d %d %d %d %d %d %d %d\n", re.RecipeID, re.RecipeName, re.RecipeDescription, re.RecipeInstructions, re.ImageURL, re.Calories, re.PrepTime, re.CookTime, re.TotalTime, re.Servings, re.Upvotes, re.Downvotes, re.Made)
 		}
+		// Gets the tags for a recipe
+		trows, terr := db.Connection.Query(fmt.Sprintf("SELECT tag FROM tag WHERE recipe_id=%d", re.RecipeID))
+		if terr != nil {
+			fmt.Println("Error: " + terr.Error())
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		defer trows.Close()
+		for trows.Next() {
+			var tag string
+			if terr := trows.Scan(&tag); terr != nil {
+				res.Content = "Tag population failed!"
+				Respond(w, res, http.StatusInternalServerError)
+				return
+			}
+			re.Tags = append(re.Tags, tag)
+			if *Debug {
+				fmt.Printf("%s\n", re.Tags)
+			}
+		}
+		// Gets the ingredients for a recipe
+		irows, ierr := db.Connection.Query(fmt.Sprintf("SELECT count, unit, ingredient FROM ingredient WHERE recipe_id=%d", re.RecipeID))
+		if ierr != nil {
+			fmt.Println("Error: " + ierr.Error())
+			Respond(w, res, http.StatusInternalServerError)
+			return
+		}
+		defer irows.Close()
+		for irows.Next() {
+			var ingredient Ingredient
+			if ierr := irows.Scan(&ingredient.Amount, &ingredient.Unit, &ingredient.Ingredient); ierr != nil {
+				res.Content = "Ingredient population failed!"
+				Respond(w, res, http.StatusInternalServerError)
+				return
+			}
+			re.Ingredients = append(re.Ingredients, ingredient)
+			if *Debug {
+				fmt.Printf("%s\n", re.Ingredients)
+			}
+		}
 		rdata.RecipeList[re.RecipeID] = re
-		RecipesIDs = append(RecipesIDs, re.RecipeID)
 	}
 	if err := rows.Err(); err != nil {
 		Respond(w, res, http.StatusInternalServerError)
@@ -411,6 +395,75 @@ func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	Respond(w, rdata, http.StatusOK)
+}
+
+// TagCreate implements the POST /tags/{recipeid} endpoint to add a tag to a recipe
+func TagCreate(w http.ResponseWriter, r *http.Request) {
+	var rdata Recipe
+	var res Response
+	params := mux.Vars(r)
+
+	if err := Decode(w, r, &rdata); err != nil {
+		if *Debug {
+			fmt.Println("Erreeeer")
+		}
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+	number, terr := strconv.Atoi(params["recipeid"])
+	rdata.RecipeID = number
+	//Adds a tag to the tag table
+	tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES (\"%s\", \"%s\")", params["recipeid"], rdata.Tags[0])
+
+	tresult, terr := db.Connection.Exec(tquery)
+	if terr != nil {
+		if *Debug {
+			fmt.Println("Tag Creation Failed: ", terr.Error())
+		}
+		res.Content = fmt.Sprintf("Tag Creation Failed: %s", terr.Error())
+		Respond(w, tresult, http.StatusInternalServerError)
+		return
+	}
+	Respond(w, rdata, http.StatusOK)
+}
+
+// TagDelete implements the DELETE /tags/{recipeid} endpoint to delete a tag
+func TagDelete(w http.ResponseWriter, r *http.Request) {
+	var rdata Recipe
+	var res Response
+	params := mux.Vars(r)
+
+	if err := Decode(w, r, &rdata); err != nil {
+		if *Debug {
+			fmt.Println("Erreeeer")
+		}
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+	//Delete tags according to recipe id
+	tquery := fmt.Sprintf("DELETE FROM tag WHERE recipe_id=%s AND tag=\"%s\"", params["recipeid"], rdata.Tags[0])
+	tresult, terr := db.Connection.Exec(tquery)
+	if terr != nil {
+		if *Debug {
+			fmt.Println("Tag Not Found: ", terr.Error())
+		}
+		res.Content = fmt.Sprintf("Tag Not Found: %s", terr.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	}
+
+	_, tcerr := tresult.RowsAffected()
+	if tcerr != nil {
+		if *Debug {
+			fmt.Println("Tag Deletion failed: ", tcerr.Error())
+		}
+		res.Content = fmt.Sprintf("Tag Deletion failed: %s", tcerr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+	Respond(w, res, http.StatusOK)
 }
 
 // RecipeIDHelper Is utilized by the search function to translate recipe IDs to recipes
