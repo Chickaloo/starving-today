@@ -259,3 +259,31 @@ func UserGetByID(w http.ResponseWriter, r *http.Request) {
 	Respond(w, res, http.StatusOK)
 
 }
+
+// UserEdit implements the PUT /users/{userid} endpoint to edit a user's info
+func UserEdit(w http.ResponseWriter, r *http.Request) {
+	var rdata User
+	var res Response
+	params := mux.Vars(r)
+
+	if err := Decode(w, r, &rdata); err != nil {
+		if *Debug {
+			fmt.Println("Error")
+		}
+		res.Content = "Invalid JSON format received!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+
+	query := fmt.Sprintf("UPDATE user\nSET user_name=\"%s\", first_name=\"%s\", last_name=\"%s\", email=\"%s\", password=\"%s\", bio=\"%s\", profile_image=\"%s\"\nWHERE user_id=\"%s\"", rdata.Username, rdata.Firstname, rdata.Lastname, rdata.Email, rdata.Password, rdata.Bio, rdata.ProfileImage, params["userid"])
+	result, err := db.Connection.Exec(query)
+	if err != nil {
+		if *Debug {
+			fmt.Println("User Edit Failed: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("User Edit Failed: %s", err.Error())
+		Respond(w, result, http.StatusInternalServerError)
+		return
+	}
+	Respond(w, res, http.StatusOK)
+}
