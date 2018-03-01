@@ -1,6 +1,7 @@
-angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$http', 'dataRecipe', function($scope, $http, dataRecipe)
+angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$http', 'dataRecipe', 'dataUser', function($scope, $http, dataRecipe, dataUser)
 {
     $scope.recipe;
+    $scope.user = dataUser.user;
 
     getRecipe();
     function getRecipe() {
@@ -23,8 +24,14 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
     }
 
     $scope.SendData = function() {
+      if ($scope.user.userid === 0) {
+        $scope.responseDetails = "not logged in!";
+        console.log($scope.responseDetails);
+        return 1
+      }
+
   		var recipe_data = {
-  			//authorid: parseInt($scope.authorid),
+  			userid: parseInt($scope.user.userid),
   			recipename: $scope.recipename,
   			recipedescription: $scope.recipedescription,
   			recipeinstructions: $scope.recipeinstructions,

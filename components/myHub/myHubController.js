@@ -3,7 +3,7 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
     $scope.user = dataUser.user;
     $scope.fullname = dataUser.user.firstname + " " + dataUser.user.lastname;
     $scope.bio = dataUser.user.bio + " ";
-
+    $scope.reciperating = 0;
     $scope.updateUser = function(){
       var user_data = {
   			firstname: $scope.fullname,
@@ -40,17 +40,6 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
 
     //SEARCH BY THIS USER TO POPULATE THEIR RECIPIES
 
-
-        var query = {
-          keywords: "pod",
-          bytag: true,
-          byname: true,
-          byingredient: true,
-          byuser: false
-        };
-
-        var data = JSON.stringify(query);
-
   		var config = {
           withCredentials: 'true',
     			headers : {
@@ -58,10 +47,15 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
     			}
     		}
 
-  		$http.post('http://138.68.22.10:84/search', query, config)
+  		$http.get('http://138.68.22.10:84/recipes/user/'+dataUser.user.userid, config)
   		.then(
   			function (response) {
-					$scope.usersrecipies = response.data.recipes;
+          console.log(dataUser.user.username);
+					$scope.userrecipes = response.data.recipes;
+          $scope.recipecount = Object.keys($scope.userrecipes).length;
+          angular.forEach($scope.userrecipes, function(value, key){
+            $scope.reciperating = $scope.reciperating + value.upvotes - value.downvotes;
+          });
   			},
   			function (response) {
   				if (response.status === 500) {

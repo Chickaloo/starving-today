@@ -197,3 +197,15 @@ html, body {
   height:100%;
   width: 100%;
 }
+
+.recipie-thumbnail{
+  border-radius: 4px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  opacity: .7;
+}
+
+.recipie-thumbnail:hover{
+  opacity: 1;
+}
