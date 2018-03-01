@@ -221,3 +221,8 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	//res.Recipes = &obj
 	Respond(w, res, http.StatusOK)
 }
+
+// ImageUpload saves and processes an image.
+func ImageUpload(w http.ResponseWriter, r *http.Request) {
+
+}
