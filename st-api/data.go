@@ -56,6 +56,7 @@ type Recipe struct {
 
 // Ingredient structure
 type Ingredient struct {
+	RecipeID   string `json:"recipeid"`
 	Amount     string `json:"amount,omitempty"`
 	Unit       string `json:"unit,omitempty"`
 	Ingredient string `json:"ingredient,omitempty"`

@@ -43,6 +43,26 @@ var routes = Routes{
 		Stats,
 	},
 
+	// Ingredients
+	Route{
+		"AddIngredientToRecipe",
+		"POST",
+		"/recipes/ingredient",
+		AddIngredientToRecipe,
+	},
+	Route{
+		"DeleteIngredientFromRecipe",
+		"DELETE",
+		"/recipes/ingredient",
+		DeleteIngredientFromRecipe,
+	},
+	Route{
+		"EditIngredientInRecipe",
+		"PUT",
+		"/recipes/ingredient",
+		EditIngredientInRecipe,
+	},
+
 	// Recipes
 	Route{
 		"RecipeCount",
@@ -162,6 +182,12 @@ var routes = Routes{
 		"/users/id/{userid}",
 		UserGetByID,
 	},
+	Route{
+	    "UserEdit",
+	    "PUT",
+	    "/users/{userid}",
+	    UserEdit,
+	},
 	// Comments
 	Route{
 		"CommentCreate",
@@ -198,6 +224,18 @@ var routes = Routes{
 		"GET",
 		"/comments/user/{userid}",
 		CommentsGetByUserID,
+	},
+	Route{
+	    "TagCreate",
+	    "POST",
+	    "/tags/{recipeid}",
+	    TagCreate,
+	},
+	Route{
+	    "TagDelete",
+	    "DELETE",
+	    "/tags/{recipeid}",
+	    TagDelete,
 	},
 }
 
