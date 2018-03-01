@@ -1,11 +1,11 @@
   <div class="container h-100" style="justify-content:center">
     <div class="row justify-content-center align-self-center">
-      <div class="col-lg-4">
+      <div class="col-md-4">
         <!--USER PROFILE CARD-->
-        <div class="card narrower" ng-controller="myHubController">
+        <div class="card">
           <!--Card image-->
           <div class="view overlay">
-            <img src="{{ user.profileimage }}" class="img-fluid">
+            <img class="card-img-top" src="{{ user.profileimage }}" class="img-fluid">
             <a>
                 <div class="mask rgba-white-slight"></div>
             </a>
@@ -13,7 +13,8 @@
           <!--Card content-->
           <div class="card-body">
             <!--Title-->
-            <h4 class="card-title black-text">{{ user.firstname }} {{ user.lastname }}
+            <h3 class="card-title black-text">{{ user.firstname }} {{ user.lastname }}</h3>
+            <h4>{{ user.username}}
             <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="fa fa-pencil fa-xs pr-1"></i><a>
             </h4>
             <hr>
@@ -34,18 +35,38 @@
           </div>
         </div>
 
-
-
         <!--RECIPIES CARD-->
-        <div class="card" style="background-color: grey;">
-          <div class="card-body text-center">
-            <a class="white-text" data-toggle="modal" data-target="#recipe-editor">Add Recipe</a> | <a class="white-text"  ui-sref="recipes"> View All </a>
+        <div class="card" style="margin-top:10px; background-color: grey;">
+          <!--links to add and view all recipies-->
+          <div class="card-header white-text">
+            <h3>Recipies
+            <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor"><i class="fa fa-plus fa-xs pr-1" style="height=80%;"></i></a></h3>
+          </div>
+
+          <!--some recipies-->
+          <div class="card-body">
+            <div class="row justify-content-center">
+            <div ng-repeat="(key,value) in usersrecipies | limitTo:Math.ceil(usersrecipes.length/3)">
+
+              <div class="card tea fill" style="padding:0px; margin:5px; height:100px; width:100px;" data-toggle="tooltip" data-placement="top" title="{{value.recipename}}">
+                <div class="view overlay" style="height=100px;">
+                    <img class="img-fluid" src="images/food/{{ value.recipename }}.jpg" alt="{{value.recipename}}">
+                </div>
+              </div>
+
+            </div>
+            </div>
           </div>
 
         </div>
+
+
   </div>
-  <div class="col-lg-8">
-    <div class="comment-container" style="height:100%; background-color: #f1f1f1;">
+  <div class="col-md-8">
+
+
+    <!--COMMENTS-->
+    <div class="comment-container" style="height:100%; background-color: #f1f1f1; padding-top:10px;">
       <h3 class="dark-text" style="padding:10px;">HubBub:</h3>
       <h3 class="dark-text" style="padding:10px;">A user's newest recipes and guestbook comments will go here!</h3>
     </div>

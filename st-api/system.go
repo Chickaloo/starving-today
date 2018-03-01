@@ -72,6 +72,29 @@ func Stats(w http.ResponseWriter, r *http.Request) {
 	Respond(w, res, http.StatusOK)
 }
 
+func StatUpdate(r int, u int) error {
+	var res Response
+
+	rows, serr := db.Connection.Query("SELECT * FROM stat WHERE 1")
+	if serr != nil {
+		return serr
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		if rerr := rows.Scan(&res.RecipeCount, &res.UserCount); rerr != nil {
+			return rerr
+		}
+	}
+
+	_, uerr := db.Connection.Exec(fmt.Sprintf("UPDATE stat SET recipe_count = \"%d\", user_count = \"%d\" WHERE 1", res.RecipeCount+r, res.UserCount+u))
+	if uerr != nil {
+		return uerr
+	}
+
+	return nil
+}
+
 // Intersection should return the logical AND of two arrays of, in this case, RecipeIDs (ints). Used internally for search.
 func Intersection(a []int, b []int) (inter []int) {
 	// interacting on the smallest list first can potentailly be faster...but not by much, worse case is the same
