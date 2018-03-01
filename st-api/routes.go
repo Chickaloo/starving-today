@@ -120,6 +120,13 @@ var routes = Routes{
 		Search,
 	},
 
+	Route{
+		"Upload",
+		"POST",
+		"/upload",
+		ImageUpload,
+	},
+
 	// Users
 	Route{
 		"UserCreate",
