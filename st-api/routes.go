@@ -45,19 +45,19 @@ var routes = Routes{
 
 	// Ingredients
 	Route{
-		"IngredientAddToRecipe",
+		"AddIngredientToRecipe",
 		"POST",
 		"/recipes/ingredient",
 		AddIngredientToRecipe,
 	},
 	Route{
-		"IngredientDeleteFromRecipe",
+		"DeleteIngredientFromRecipe",
 		"DELETE",
 		"/recipes/ingredient",
 		DeleteIngredientFromRecipe,
 	},
 	Route{
-		"IngredientEditInRecipe",
+		"EditIngredientInRecipe",
 		"PUT",
 		"/recipes/ingredient",
 		EditIngredientInRecipe,
