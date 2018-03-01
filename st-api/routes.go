@@ -43,6 +43,26 @@ var routes = Routes{
 		Stats,
 	},
 
+	// Ingredients
+	Route{
+		"IngredientAddToRecipe",
+		"POST",
+		"/recipes/ingredient",
+		AddIngredientToRecipe,
+	},
+	Route{
+		"IngredientDeleteFromRecipe",
+		"DELETE",
+		"/recipes/ingredient",
+		DeleteIngredientFromRecipe,
+	},
+	Route{
+		"IngredientEditInRecipe",
+		"PUT",
+		"/recipes/ingredient",
+		EditIngredientInRecipe,
+	},
+
 	// Recipes
 	Route{
 		"RecipeCount",

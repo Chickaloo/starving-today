@@ -663,3 +663,84 @@ func RecipeSearchByUser(s string) (rdata []int, serr error) {
 
 	return
 }
+
+// AddIngredientToRecipe implements POST /api/recipes/ingredient to add a single ingredient to a recipe
+func AddIngredientToRecipe(w http.ResponseWriter, r *http.Request) {
+	var res Response
+	var req Ingredient
+	var exec string
+	derr := Decode(w, r, &req)
+	if derr != nil {
+		if *Debug {
+			fmt.Println("Decode Error.")
+		}
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+
+	exec = fmt.Sprintf("INSERT INTO ingredient (recipe_id, count, unit, ingredient) VALUES (\"%s\", \"%s\", \"%s\", \"%s\")", req.RecipeID, req.Amount, req.Unit, req.Ingredient)
+	result, eerr := db.Connection.Exec(exec)
+	if eerr != nil {
+		fmt.Println(eerr.Error())
+		res.Content = fmt.Sprintf("Ingredient Addition Failed: %s", eerr.Error())
+		Respond(w, result, http.StatusInternalServerError)
+		return
+	}
+	res.Content = "Ingredient Added Successfully"
+	Respond(w, res, http.StatusOK)
+}
+
+// DeleteIngredientFromRecipe implements DELETE /api/recipes/ingredient to remove a single ingredient from a recipe
+func DeleteIngredientFromRecipe(w http.ResponseWriter, r *http.Request) {
+	var res Response
+	var req Ingredient
+	var exec string
+
+	derr := Decode(w, r, &req)
+	if derr != nil {
+		if *Debug {
+			fmt.Println("Decode Error.")
+		}
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+	exec = fmt.Sprintf("DELETE FROM ingredient WHERE recipe_id = \"%s\" AND count = \"%s\" AND unit = \"%s\" AND ingredient.ingredient = \"%s\"", req.RecipeID, req.Amount, req.Unit, req.Ingredient)
+	result, eerr := db.Connection.Exec(exec)
+	if eerr != nil {
+		fmt.Println(eerr.Error())
+		res.Content = fmt.Sprintf("Ingredient Removal Failed: %s", eerr.Error())
+		Respond(w, result, http.StatusInternalServerError)
+		return
+	}
+	res.Content = "Ingredient Removed Successfully"
+	Respond(w, res, http.StatusOK)
+}
+
+// EditIngredientInRecipe implements PUT /api/recipes/ingredient to modify the quantity and unit of an ingredient in a recipe
+func EditIngredientInRecipe(w http.ResponseWriter, r *http.Request) {
+	var res Response
+	var req Ingredient
+	var exec string
+
+	derr := Decode(w, r, &req)
+	if derr != nil {
+		if *Debug {
+			fmt.Println("Decode Error.")
+		}
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+	exec = fmt.Sprintf("UPDATE ingredient SET count = \"%s\", unit = \"%s\" WHERE recipe_id = \"%s\" AND ingredient = \"%s\"", req.Amount, req.Unit, req.RecipeID, req.Ingredient)
+	result, eerr := db.Connection.Exec(exec)
+	if eerr != nil {
+		fmt.Println(eerr.Error())
+		res.Content = fmt.Sprintf("Ingredient Modification Failed: %s", eerr.Error())
+		Respond(w, result, http.StatusInternalServerError)
+		return
+	}
+	res.Content = "Ingredient Modified Successfully"
+	Respond(w, res, http.StatusOK)
+}

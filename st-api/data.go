@@ -55,6 +55,7 @@ type Recipe struct {
 
 // Ingredient structure
 type Ingredient struct {
+	RecipeID   string `json:"recipeid"`
 	Amount     string `json:"amount,omitempty"`
 	Unit       string `json:"unit,omitempty"`
 	Ingredient string `json:"ingredient,omitempty"`
@@ -79,12 +80,12 @@ type Recipes struct {
 
 // Comment structure
 type Comment struct {
-	CommentID	int		`json:"commentid,omitempty"`
-	Date		[]uint8	`json:"date,omitempty"`
-	Comment		string	`json:"comment,omitempty"`
-	RecipeID	int		`json:"recipeid,omitempty"`
-	UserID		int		`json:"userid,omitempty"`
-	PosterID	int		`json:"posterid,omitempty"`
+	CommentID int     `json:"commentid,omitempty"`
+	Date      []uint8 `json:"date,omitempty"`
+	Comment   string  `json:"comment,omitempty"`
+	RecipeID  int     `json:"recipeid,omitempty"`
+	UserID    int     `json:"userid,omitempty"`
+	PosterID  int     `json:"posterid,omitempty"`
 }
 
 // Comments list of a recipe
