@@ -1,47 +1,53 @@
-  <body ng-app="recipePage" style="height:100%;">
+<body ng-app="recipePage" style="height:100%;">
+  <div class="container h-100" style="justify-content:center;">
+    <div class="row justify-content-center align-self-center">
+      <div class="col-md-4">
+        <!--RECIPE INFO CARD-->
+        <div class="card">
+          <!--Card image-->
+          <div class="view overlay">
+            <img class="card-img-top white fill" src="{{ recipe.imageurl }}">
+            <a>
+                <div class="mask rgba-white-slight"></div>
+            </a>
+          </div>
+          <!--Card content-->
+          <div class="card-body">
+            <!--Title-->
+            <h3 style="margin-bottom:0px;" class="card-title black-text">{{ recipe.recipename }}</h3>
+            <h5>{{ recipe.tags }}</i>
+            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="fa fa-pencil fa-xs pr-1"></i></a>
+            </h5>
+            <hr>
+            <!--Text-->
+            <div>{{ recipe.recipedescription }}</div>
+            <hr>
+            <div>{{ recipe.ingredients }}</div>
+          </div>
+          <!--/.Card content-->
+          <!-- Card footer -->
+          <div class=" card-body tea lighten-3 text-center">
 
-      <!-- Content -->
-      <div class="container white" style="border-radius: 10px; height: 100%; padding: 10px;">
+              <ul class="list-unstyled list-inline mt-3">
+                <li class="list-inline-item pr-2 black-text"><i class="fa fa-cutlery pr-1"></i>{{ recipe.preptime + recipe.cooktime}} mins</li>
+                <li class="list-inline-item pr-2 black-text"><i class="fa fa-thumbs-o-up pr-1"></i>{{ recipe.calories }}</li>
+                <li class="list-inline-item pr-2 black-text"><i class="fa fa-group pr-1"></i>{{ recipe.servings }}</li>
+              </ul>
 
-        <div class="row">
-          <div class="col-lg-12 white-text" style="transform: translateY(-53px);">
-
-            <img src="images/food/{{ recipe.recipename }}.jpg" class="img-thumbnail" style="overflow-y:hidden; height: 100%; width: 100%; max-height: 150px; max-width: 150px; margin: 10px; box-shadow: -2px 2px 2px #888; float: left;"/>
-
-            <h2>
-              {{ recipe.recipename }}
-            </h2>
-
-            <p style="color: #111;">
-              {{ recipe.recipedescription }}
-            </p>
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-lg-4" style="background-color: #fff7dd; border-style: solid; border-color: #fde79c; border-width: 1px; padding: 20px;">
-            <h4>
-              Quick Facts
-            </h4>
-            <p>
-              Servings: {{ recipe.servings }}<br />
-              Calories: {{ recipe.calories }}<br />
-              Time: {{ recipe.preptime + recipe.cooktime}} mins<br />
-            </p>
-
-          </div>
-          <div class="col-lg-8">
-
-            <p style="color: #111;">
-              Instructions: <br/>
-                {{ recipe.recipeinstructions }}
-            </p>
-          </div>
-
-          <div id="ingredients-wrapper" style="width: 80%; float: left;">
-            {{ recipe.ingredients }}
-          </div>
-        </div>
-
       </div>
-    </body>
+
+      <div class="col-md-8">
+        <!--COMMENTS-->
+        <div class="comment-container" style="height:100%; width:100%; background-color: #f1f1f1; padding-top:10px;">
+          <h3 class="dark-text" style="padding:10px;">Instructions:</h3>
+          <h3 class="dark-text" style="padding:10px;">{{ recipe.instructions }}</h3>
+          <h3 class="dark-text" style="padding:10px;">HubBub:</h3>
+          <h3 class="dark-text" style="padding:10px;">A user's newest recipes and guestbook comments will go here!</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>

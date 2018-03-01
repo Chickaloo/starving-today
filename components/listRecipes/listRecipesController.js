@@ -45,7 +45,7 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
     return dataRecipe;
 }]);
 
-angular.module('starvingToday').controller('recipesController', ['$scope', '$http', 'dataRecipe', function($scope, $http, dataRecipe)
+angular.module('starvingToday').controller('listRecipesController', ['$scope', '$http', 'dataRecipe', function($scope, $http, dataRecipe)
 {
     $scope.recipes = dataRecipe.getRecipes();
 
