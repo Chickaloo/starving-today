@@ -133,3 +133,24 @@
     </div>
   </div>
 </div>
+
+<!-- User Info Modal -->
+<div class="modal fade" id="friends-viewer" tabindex="-1" role="dialog" data-backdrop="true" ng-controller="myHubController">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="md-form mt-0">
+          <input class="form-control" style="width: 100%;" type="text" placeholder="Search" aria-label="Search" ng-model="searchquery">
+        </div>
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+
+        <ul class="list-group" ng-repeat="(key,value) in userrecipes">
+          <li class="list-group-item">{{ value.recipename }}</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>

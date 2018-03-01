@@ -15,7 +15,7 @@
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ user.firstname }} {{ user.lastname }}</h3>
             <h5><i>{{ user.username}}</i>
-            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="fa fa-pencil fa-xs pr-1"></i><a>
+            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="fa fa-pencil fa-xs pr-1"></i></a>
             </h5>
             <hr>
             <!--Text-->
@@ -29,7 +29,7 @@
               <ul class="list-unstyled list-inline mt-3">
                 <li class="list-inline-item pr-2 black-text"><i class="fa fa-cutlery pr-1"></i>{{recipecount}}</li>
                 <li class="list-inline-item pr-2 black-text"><i class="fa fa-thumbs-o-up pr-1"></i>{{reciperating}}</li>
-                <li class="list-inline-item pr-2 black-text"><i class="fa fa-group pr-1"></i>-99.9</li>
+                <li class="list-inline-item pr-2 black-text"><a data-toggle="modal" data-target="#friends-viewer"><i class="fa fa-group pr-1"></i></a>-99.9</li>
               </ul>
 
           </div>
@@ -40,7 +40,7 @@
           <!--links to add and view all recipies-->
           <div class="card-header white-text">
             <h3>Recipes
-            <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor"><i class="fa fa-plus fa-xs pr-1" style="height=80%;"></i></a></h3>
+            <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor"><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
           </div>
 
           <!--some recipies-->
@@ -50,7 +50,7 @@
 
               <div class="card tea fill" style="padding:0px; margin:5px; height:100px; width:100px;" data-toggle="tooltip" data-placement="top" title="{{value.recipename}}">
                 <div class="view overlay" style="height=100px;">
-                    <a ui-sref="viewRecipesState" ui-sref-active="active"  ng-click="selectRecipe(key)" class="text-center white-text"><strong><img class="recipie-thumbnail black-text align-self-center" src="images/food/{{ value.recipename }}.jpg" alt="{{value.recipename}}"></strong></a>
+                    <a ui-sref="viewRecipesState" ui-sref-active="active"  ng-click="selectRecipe(key)" class="text-center white-text"><img class="recipie-thumbnail black-text" style="veritcal-align: middle;" src="images/food/{{ value.recipename }}.jpg" alt="{{value.recipename}}"></a>
                 </div>
               </div>
 

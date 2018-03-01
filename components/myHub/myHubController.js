@@ -50,7 +50,6 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
   		$http.get('http://138.68.22.10:84/recipes/user/'+dataUser.user.userid, config)
   		.then(
   			function (response) {
-          console.log(dataUser.user.username);
 					$scope.userrecipes = response.data.recipes;
           $scope.recipecount = Object.keys($scope.userrecipes).length;
           angular.forEach($scope.userrecipes, function(value, key){
