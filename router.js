@@ -46,7 +46,7 @@ app.config(function($stateProvider, $httpProvider) {
   var recipeState = {
     name: 'recipes',
     url: '/recipes',
-    templateUrl: 'components/recipesPage/listRecipes.html',
+    templateUrl: 'components/listRecipes/listRecipes.html',
     controller: 'listRecipesController'
   }
 
