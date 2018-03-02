@@ -91,13 +91,13 @@ type Post struct {
 	PosterID int     `json:"posterid,omitempty"`
 	Title    string  `json:"title,omitempty"`
 	Content  string  `json:"content,omitempty"`
-	Date     []uint8 `json:"date,omitempty"`
+	Date     string `json:"date,omitempty"`
 }
 
 // Comment structure
 type Comment struct {
 	CommentID int     `json:"commentid,omitempty"`
-	Date      []uint8 `json:"date,omitempty"`
+	Date      string `json:"date,omitempty"`
 	Comment   string  `json:"comment,omitempty"`
 	RecipeID  int     `json:"recipeid,omitempty"`
 	UserID    int     `json:"userid,omitempty"`

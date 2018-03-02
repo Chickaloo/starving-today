@@ -59,6 +59,7 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
           dataRecipe.recipelen = 0;
       });
     }
+
     $scope.MakePost = function(){
 
         var post_data = {
@@ -78,6 +79,43 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
         }
 
       $http.post('http://138.68.22.10:84/posts', data, config)
+      .then(
+        function (response) {
+          $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(
+            function (response) {
+              var temp = [];
+              Object.keys(response.data).forEach(function(key) {
+                  temp.push(response.data[key]);
+              });
+              $scope.userPosts = temp.reverse();
+            },
+            function (response) {
+              userPosts = 0;
+          });
+        },
+        function (response) {
+          if (response.status === 500) {
+              $scope.responseDetails = "Something went wrong with our servers!";
+          } else if(response.status === 400){
+              $scope.responseDetails = "The input was invalid. Please try again.";
+          } else if(response.status === 404){
+              $scope.responseDetails = "The entered username and password combination was not found.";
+          } else {
+              $scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
+          }
+      });
+    }
+
+    $scope.DeletePost = function(value){
+
+      var config = {
+          withCredentials: 'true',
+          headers : {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        }
+
+      $http.delete('http://138.68.22.10:84/posts/' + value, config)
       .then(
         function (response) {
           $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(

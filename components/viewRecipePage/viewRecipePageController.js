@@ -11,10 +11,12 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
     $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
       function (response) {
           var temp = [];
-          Object.keys(response.data.comments).forEach(function(key) {
-              temp.push(response.data.comments[key]);
-          });
-          $scope.comments = temp.reverse();
+          if (typeof response.data.comments !== "undefined") {
+            Object.keys(response.data.comments).forEach(function(key) {
+                temp.push(response.data.comments[key]);
+            });
+            $scope.comments = temp.reverse();
+          }
       },
       function (response) {
           $scope.comments = 0;
