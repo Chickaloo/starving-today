@@ -74,6 +74,12 @@ type User struct {
 	ProfileImage string `json:"profileimage,omitempty"`
 }
 
+// FollowerPair structure for subscription methods
+type FollowerPair struct {
+	SubID    int `json:"subid,omitempty"`
+	FollowID int `json:"followid,omitempty"`
+}
+
 // Recipes list of recipes response
 type Recipes struct {
 	RecipeList map[int]Recipe `json:"recipes,omitempty"`
