@@ -3,6 +3,10 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
     $scope.user = dataUser.user;
     $scope.recipelength = -1;
 
+    $scope.LoadMyHub = function() {
+      $state.go('myHub', {}, {reload:true});
+    };
+
   	$scope.Logout = function() {
 
   		var config = {
@@ -52,7 +56,7 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
   		$http.post('http://138.68.22.10:84/search', query, config)
   		.then(
   			function (response) {
-					dataRecipe.setRecipes(response.data.recipes);
+					  dataRecipe.setRecipes(response.data.recipes);
             $scope.recipecount = dataRecipe.getRecipeLength();
             $scope.search = $scope.searchquery;
             $state.go('recipes', {}, {reload:true});

@@ -183,11 +183,38 @@ var routes = Routes{
 		UserGetByID,
 	},
 	Route{
-	    "UserEdit",
-	    "PUT",
-	    "/users/{userid}",
-	    UserEdit,
+		"UserEdit",
+		"PUT",
+		"/users/{userid}",
+		UserEdit,
 	},
+
+	// Subscriptions
+	Route{
+		"GetSubscribers",
+		"GET",
+		"/users/subscribers/{followid}",
+		GetSubscribers,
+	},
+	Route{
+		"GetSubscribedTo",
+		"GET",
+		"/users/subscribedto/{subid}",
+		GetSubscribedTo,
+	},
+	Route{
+		"Subscribe",
+		"POST",
+		"/users/subscribedto",
+		Subscribe,
+	},
+	Route{
+		"DeleteSubscription",
+		"DELETE",
+		"/users/subscribedto",
+		DeleteSubscription,
+	},
+
 	// Comments
 	Route{
 		"CommentCreate",
@@ -226,16 +253,16 @@ var routes = Routes{
 		CommentsGetByUserID,
 	},
 	Route{
-	    "TagCreate",
-	    "POST",
-	    "/tags/{recipeid}",
-	    TagCreate,
+		"TagCreate",
+		"POST",
+		"/tags/{recipeid}",
+		TagCreate,
 	},
 	Route{
-	    "TagDelete",
-	    "DELETE",
-	    "/tags/{recipeid}",
-	    TagDelete,
+		"TagDelete",
+		"DELETE",
+		"/tags/{recipeid}",
+		TagDelete,
 	},
 	// Posts
 	Route{

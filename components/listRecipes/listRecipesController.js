@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http) {
     var dataRecipe = {};
     var recipe = [];
@@ -54,6 +55,8 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
     return dataRecipe;
 }]);
 
+=======
+>>>>>>> c5c26008afa388cc2fb7c09eec0dabc2f06147cf
 angular.module('starvingToday').controller('listRecipesController', ['$scope', '$state', '$http', 'dataRecipe', function($scope, $state, $http, dataRecipe)
 {
     $scope.recipes = dataRecipe.getRecipes();
@@ -61,14 +64,22 @@ angular.module('starvingToday').controller('listRecipesController', ['$scope', '
     // getRecipeDump();
     // function getRecipeDump(){
     //     dataRecipe.getRecipeDump()
-    //         .then(function (response) {
-    //             $scope.recipes = response.data.recipes;});
+    //          .then(function (response) {
+    //              $scope.recipes = response.data.recipes;});
     // }
 
     $scope.selectRecipe = function(value){
-        console.log(value);
-        dataRecipe.getRecipe(value);
-        console.log(dataRecipe.getCurrRecipe());
-        $state.go('viewRecipesState', {}, {reload:true});
+      $http.get('http://138.68.22.10:84/recipes/id/' + value).then(
+        function (response) {
+          currRecipe = response.data;
+          console.log("retrieved this recipe:");
+          console.log(currRecipe);
+          dataRecipe.setCurrRecipe(currRecipe);
+          dataRecipe.recipelen = 1;
+            $state.go('viewRecipesState', {}, {reload: true});
+        },
+        function (response) {
+          dataRecipe.recipelen = 0;
+      });
     }
 }]);

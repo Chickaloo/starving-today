@@ -7,8 +7,11 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
 
     $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(
       function (response) {
-        $scope.userPosts = response.data;
-        console.log($scope.userPosts);
+          var temp = [];
+          Object.keys(response.data).forEach(function(key) {
+              temp.push(response.data[key]);
+          });
+          $scope.userPosts = temp.reverse();
       },
       function (response) {
         userPosts = 0;
@@ -43,10 +46,19 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
 		});
 
     $scope.selectRecipe = function(value){
-        dataRecipe.getRecipe(value);
-        $state.go('viewRecipesState', {}, {reload:true});
+      $http.get('http://138.68.22.10:84/recipes/id/' + value).then(
+        function (response) {
+          currRecipe = response.data;
+          console.log("retrieved this recipe:");
+          console.log(currRecipe);
+          dataRecipe.setCurrRecipe(currRecipe);
+          dataRecipe.recipelen = 1;
+            $state.go('viewRecipesState', {}, {reload: true});
+        },
+        function (response) {
+          dataRecipe.recipelen = 0;
+      });
     }
-
     $scope.MakePost = function(){
 
         var post_data = {
@@ -70,8 +82,11 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
         function (response) {
           $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(
             function (response) {
-              $scope.userPosts = response.data;
-              console.log($scope.userPosts);
+              var temp = [];
+              Object.keys(response.data).forEach(function(key) {
+                  temp.push(response.data[key]);
+              });
+              $scope.userPosts = temp.reverse();
             },
             function (response) {
               userPosts = 0;
