@@ -49,7 +49,7 @@
               <div ng-repeat="(key, value) in userrecipes | limitTo:9">
                 <div class="card white fill" style="padding: 0px; margin: 5px; height: 100px; width: 100px;" data-toggle="tooltip" data-placement="top">
                   <div class="view overlay" style="height: 100px;">
-                    <a ui-sref="viewRecipesState" ui-sref-active="active"  ng-click="selectRecipe(key)" class="text-center white-text">
+                    <a ng-click="selectRecipe(key)" class="text-center white-text">
                       <strong>
                         <img class="recipie-thumbnail black-text align-self-center" src="{{ value.imageurl }}" alt="{{value.recipename}}">
                         <div style="background-color: rgba(0,0,0,.3); width: 100%; height: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">

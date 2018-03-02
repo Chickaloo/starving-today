@@ -1,6 +1,6 @@
 var app = angular.module('starvingToday',['ui.router']);
 
-app.controller('mainController' , ['$scope', '$http', 'dataUser', function($scope, $http, dataUser){
+app.controller('mainController' , ['$scope', '$http', 'dataUser', 'dataRecipe', function($scope, $http, dataUser, dataRecipe){
 		var config = {
       withCredentials: 'true',
 			headers : {
@@ -13,7 +13,8 @@ app.controller('mainController' , ['$scope', '$http', 'dataUser', function($scop
 			function(response){
 				$scope.auth = true;
 
-				dataUser.setUser(response.data.user)
+				dataUser.setUser(response.data.user);
+				dataRecipe.getCurrRecipe();
 			},
 			function(response){
 				$scope.auth = false;
@@ -124,4 +125,70 @@ angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
       }
     }
 
+}]);
+
+angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http) {
+    var dataRecipe = {};
+    var recipe = [];
+    var currRecipe;
+    var recipes;
+    var recipelen = 0;
+
+    dataRecipe.setRecipes = function(incomingrecipes) {
+      if (typeof incomingrecipes !== "undefined"){
+        recipes = incomingrecipes;
+        recipelen = Object.keys(recipes).length;
+      } else {
+        recipelen = 0;
+      }
+      console.log(recipelen);
+    };
+
+    dataRecipe.getRecipes = function() {
+      return recipes;
+    };
+
+    dataRecipe.setRecipeLength = function(value) {
+        recipelen = value;
+    }
+
+    dataRecipe.getRecipeLength = function() {
+      return recipelen;
+    };
+
+    dataRecipe.getRecipeDump = function () {
+        return $http.get('http://138.68.22.10:84/recipes');
+    };
+
+    dataRecipe.getRecipe = function () {
+      return currRecipe;
+    };
+
+    dataRecipe.getRecipeComments = function(recipeid) {
+        $http.get('http://138.68.22.10:84/comments/recipe/' + recipeid).then(
+            function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+    };
+
+    dataRecipe.setCurrRecipe = function (recipe) {
+      currRecipe = recipe;
+      console.log("inside datarecipe");
+      console.log(currRecipe);
+    }
+
+    dataRecipe.getCurrRecipe = function () {
+        return currRecipe;
+    };
+
+    dataRecipe.pushRecipe = function(value) {
+        recipe.push(value);
+    };
+
+    dataRecipe.popRecipe = function() {
+        recipe.pop();
+    };
+
+    return dataRecipe;
 }]);

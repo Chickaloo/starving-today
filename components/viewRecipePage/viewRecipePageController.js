@@ -1,13 +1,15 @@
 angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$http', '$state', 'dataRecipe', 'dataUser', function($scope, $http, $state, dataRecipe, dataUser)
 {
 
+    console.log("Loaded into view");
+
     $scope.recipe = dataRecipe.getCurrRecipe();
     $scope.recipelen = dataRecipe.getRecipeLength();
     $scope.user = dataUser.user;
+    console.log($scope.recipe);
 
     $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
       function (response) {
-        console.log(response.data);
           var temp = [];
           Object.keys(response.data.comments).forEach(function(key) {
               temp.push(response.data.comments[key]);
@@ -36,26 +38,19 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
   		}
 
         $http.post('http://138.68.22.10:84/comments', data, config)
-        .then(
-            function(response) {
-
-                  $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
-                    function (response) {
-                      console.log(response.data);
-                        var temp = [];
-                        Object.keys(response.data.comments).forEach(function(key) {
-                            temp.push(response.data.comments[key]);
-                        });
-                        $scope.comments = temp.reverse();
-                    },
-                    function (response) {
-                        $scope.comments = 0;
-                  });
-            });
-    }
-
-    if ($scope.recipelen === 0){
-      console.log("redirect?");
-      $state.go("myHub");
+        .then(function(response) {
+          $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
+            function (response) {
+              console.log(response.data);
+                var temp = [];
+                Object.keys(response.data.comments).forEach(function(key) {
+                    temp.push(response.data.comments[key]);
+                });
+                $scope.comments = temp.reverse();
+            },
+            function (response) {
+                $scope.comments = 0;
+          });
+        });
     }
 }]);
