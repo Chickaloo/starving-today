@@ -27,17 +27,23 @@
             <div>{{ recipe.recipedescription }}</div>
             <hr>
             Ingredients:
-            <div>{{ recipe.ingredients }}</div>
+
+            <table>
+              <tr ng-repeat="i in recipe.ingredients">
+                <td>{{ i.ingredient }}</td>
+              </tr>
+            </table>
+
           </div>
           <!--/.Card content-->
           <!-- Card footer -->
           <div class=" card-body tea lighten-3 text-center">
 
-              <ul class="list-unstyled list-inline mt-3">
-                <li class="list-inline-item pr-2 black-text"><i class="fa fa-cutlery pr-1"></i>{{ recipe.preptime + recipe.cooktime}} mins</li>
-                <li class="list-inline-item pr-2 black-text"><i class="fa fa-thumbs-o-up pr-1"></i>{{ recipe.calories }}</li>
-                <li class="list-inline-item pr-2 black-text"><i class="fa fa-group pr-1"></i>{{ recipe.servings }}</li>
-              </ul>
+            <ul class="list-unstyled list-inline mt-3">
+              <li class="list-inline-item pr-2 black-text"><i class="fa fa-cutlery pr-1"></i>{{ recipe.preptime + recipe.cooktime}} mins</li>
+              <li class="list-inline-item pr-2 black-text"><i class="fa fa-thumbs-o-up pr-1"></i>{{ recipe.calories }}</li>
+              <li class="list-inline-item pr-2 black-text"><i class="fa fa-group pr-1"></i>{{ recipe.servings }}</li>
+            </ul>
 
           </div>
         </div>
@@ -46,28 +52,33 @@
       <div class="col-md-8">
         <div class="comment-container" style="width:100%; background-color: #f1f1f1; padding:10px;">
           <h3 class="dark-text" style="padding:10px;">Instructions:</h3>
-          <h3 class="dark-text" style="padding:10px;">{{ recipe.recipeinstructions }}</h3>
+          <h4 class="dark-text" style="padding:10px;white-space: pre-wrap;" >{{recipe.recipeinstructions}}</h4>
+
+        <!--COMMENTS-->
+        </div>
+        <div style="width:100%; background-color: #f1f1f1; padding:10px; margin-top: 10px;">
 
         <!--  COMMENTS Form -->
-        <form name="reviewForm">
-            <h4>Comments</h4>
-             <fieldset class="form-group">
-                 <textarea ng-model="comment.body" class="form-control" placeholder="Witty Comment Here" title="Review"></textarea>
-            </fieldset>
+        <form name="reviewForm" ng-submit="Comment()">
+           <fieldset class="form-group">
+               <input ng-model="comment.body" class="form-control" placeholder="Submit a comment" title="Review"></input>
+          </fieldset>
 
-            <fieldset class="form-group">
-                  <input type="submit" class="btn btn-primary pull-right" value="Submit Comment" ng-click="Comment()" />
-            </fieldset>
         </form>
-        <!--COMMENTS-->
-          Comments:
-          <div ng-repeat="(key, value) in comments">
-            <div style="padding:10px">
-                By: {{value.userid}} </br>
-                <b>{{value.comment}}</b></br>
-                <small>{{value.date}}</small>
+        <h3>Comments:</h3>
+        <div ng-repeat="(key, value) in comments">
+          <div class="container-fluid card" style="padding:10px; margin-bottom: 10px; background-color: #fff;">
+            <div class="row">
+              <div class="col-md-12">
+                <div style="float:left;"><b>{{ value.authorname }}</b> <small> {{value.date}}</small></div><div class="red-text" style="float:right;" ng-if="value.posterid === user.userid"><a ng-click="DeleteComment(value.commentid)">delet this</a></div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">{{value.comment}}
+              </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
