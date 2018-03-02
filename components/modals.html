@@ -1,7 +1,6 @@
 
-<div ng-controller="modalController">
 <!-- Recipe Editor Modal -->
-<div class="modal fade" id="recipe-editor" tabindex="-1" role="dialog">
+<div class="modal fade" id="recipe-editor" tabindex="-1" role="dialog" ng-controller="recipeModalController">
 
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -24,7 +23,7 @@
           <div class="md-form">
               <i class="fa fa-cutlery fa-xs prefix grey-text"></i>
               <input type="text" id="recipetitle" class="form-control" ng-model="recipename">
-              <p class="font-small grey-text d-flex justify-content-end">Name of rec: {{recipe.recipename}}</p>
+              <p class="font-small grey-text d-flex justify-content-end">Name of rec: {{recipename}}</p>
               <p class="font-small grey-text d-flex justify-content-end">Recipe Title</p>
           </div>
 
@@ -97,7 +96,7 @@
 </div>
 
 <!-- User Info Modal -->
-<div class="modal fade" id="user-editor" tabindex="-1" role="dialog" data-backdrop="true">
+<div class="modal fade" id="user-editor" tabindex="-1" role="dialog" data-backdrop="true" ng-controller="userModalController">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -112,7 +111,7 @@
           <div class="md-form">
               <i class="fa fa-user prefix grey-text"></i>
               <input type="text" id="userFullName" class="form-control" ng-model="fullname">
-              <p class="font-small grey-text d-flex justify-content-end">Name: {{fullname}}</p>
+              <p class="font-small grey-text d-flex justify-content-end">Name</p>
           </div>
 
           <!-- email -->
@@ -143,7 +142,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="md-form mt-0">
-          <input class="form-control" style="width: 100%;" type="text" placeholder="Search" aria-label="Search" ng-model="">
+          <input class="form-control" style="width: 100%;" type="text" placeholder="Search" aria-label="Search">
         </div>
         <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
       </div>
@@ -156,5 +155,4 @@
       </div>
     </div>
   </div>
-</div>
 </div>
