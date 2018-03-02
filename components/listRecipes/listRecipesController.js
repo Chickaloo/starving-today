@@ -38,6 +38,14 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
   				recipelen = 0;
   		});
     };
+    
+    dataRecipe.getRecipeComments = function(recipeid) {
+        $http.get('http://138.68.22.10:84/comments/recipe/' + recipeid).then(
+            function (response) {
+                console.log(response.data);
+                return response.data;
+            })
+    };
 
     dataRecipe.getCurrRecipe = function () {
         return currRecipe;
