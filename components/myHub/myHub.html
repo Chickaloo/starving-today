@@ -79,8 +79,8 @@
       <div class="card-body" style="padding: 0px;">
         <div class="row" style="padding: 20px;">
           <div class="col-md-9 form-group" style="margin: 0px;">
-              <textarea class="form-control" ng-model="posttitle" rows="3" style="width: 100%;"></textarea>
-              <textarea class="form-control" ng-model="postcontent" rows="3" style="width: 100%;"></textarea>
+              <input class="form-control" ng-model="posttitle" placeholder="Post Title" required="required" style="width: 100%;"></input>
+              <textarea class="form-control" ng-model="postcontent" placeholder="Post Content" rows="3" required="required" style="width: 100%;"></textarea>
           </div>
           <div class="col-md-3 form-group" style="padding: 10px;">
             <center>
@@ -91,20 +91,28 @@
       </div>
 
     </div>
-    <!--COMMENTS-->
+
+
     <div class="comment-container" style="background-color: rgba(0,0,0,0); margin-top: 20px; margin-bottom: 20px;">
       <div ng-repeat="value in userPosts">
         <div class="card" style="margin-bottom:10px; background-color: #f1f1f1;">
-          <!--links to add and view all recipies-->
+
+
           <div class="card-header white-text" style="background-color: grey;">
-            <h4 style="margin-bottom:0px;">{{ user.firstname }} {{ value.title }}</h4>
+            <div style="float:left;">
+              <h6 style="margin-bottom:0px;">{{ user.firstname }} {{ value.date }}</h6>
+            </div>
+            <div ng-if="user.userid === value.posterid" style="float:right;">
+              <a>Edit | </a>
+              <a style="color: #e50000;" ng-click="DeletePost(value.postid)">Delete <i class="fa fa-trash"></i></a>
+            </div>
           </div>
 
-          <!--some recipies-->
           <div class="card-body" style="padding: 0px;">
             <div class="row" style="padding: 20px;">
               <div class="col-md-9 form-group" style="margin: 0px;">
-                {{ value.content }}
+                <h3>{{ value.title }}</h3>
+                <p>{{ value.content }}</p>
               </div>
               <div class="col-md-3 form-group" style="padding: 10px;">
                 <center>

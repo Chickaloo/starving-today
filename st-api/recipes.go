@@ -76,39 +76,43 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	rdata.RecipeID = int(rid)
 
 	//Adds the tags to the tag table
-	tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
-	for i := 0; i < len(rdata.Tags); i++ {
-		tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, rdata.Tags[i])
-		if i != len(rdata.Tags)-1 {
-			tquery += ","
+	if rdata.Tags != nil {
+		tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
+		for i := 0; i < len(rdata.Tags); i++ {
+			tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, rdata.Tags[i])
+			if i != len(rdata.Tags)-1 {
+				tquery += ","
+			}
 		}
-	}
-	tresult, terr := db.Connection.Exec(tquery)
-	if terr != nil {
-		if *Debug {
-			fmt.Println("Tags Insertion Failed: ", err.Error())
+		tresult, terr := db.Connection.Exec(tquery)
+		if terr != nil {
+			if *Debug {
+				fmt.Println("Tags Insertion Failed: ", terr.Error())
+			}
+			res.Content = fmt.Sprintf("Tags Insertion Failed: %s", terr.Error())
+			Respond(w, tresult, http.StatusInternalServerError)
+			return
 		}
-		res.Content = fmt.Sprintf("Tags Insertion Failed: %s", err.Error())
-		Respond(w, tresult, http.StatusInternalServerError)
-		return
 	}
 
 	//Adds the ingredients to the ingredient table
-	iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, count, unit, ingredient)\nVALUES ")
-	for i := 0; i < len(rdata.Ingredients); i++ {
-		iquery += fmt.Sprintf("(\"%d\", \"%s\", \"%s\", \"%s\")", rdata.RecipeID, rdata.Ingredients[i].Amount, rdata.Ingredients[i].Unit, rdata.Ingredients[i].Ingredient)
-		if i != len(rdata.Ingredients)-1 {
-			iquery += ","
+	if rdata.Ingredients != nil {
+		iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, count, unit, ingredient)\nVALUES ")
+		for i := 0; i < len(rdata.Ingredients); i++ {
+			iquery += fmt.Sprintf("(\"%d\", \"%s\", \"%s\", \"%s\")", rdata.RecipeID, rdata.Ingredients[i].Amount, rdata.Ingredients[i].Unit, rdata.Ingredients[i].Ingredient)
+			if i != len(rdata.Ingredients)-1 {
+				iquery += ","
+			}
 		}
-	}
-	iresult, ierr := db.Connection.Exec(iquery)
-	if ierr != nil {
-		if *Debug {
-			fmt.Println("Ingredients Insertion Failed: ", err.Error())
+		iresult, ierr := db.Connection.Exec(iquery)
+		if ierr != nil {
+			if *Debug {
+				fmt.Println("Ingredients Insertion Failed: ", ierr.Error())
+			}
+			res.Content = fmt.Sprintf("Ingredients Insertion Failed: %s", ierr.Error())
+			Respond(w, iresult, http.StatusInternalServerError)
+			return
 		}
-		res.Content = fmt.Sprintf("Ingredients Insertion Failed: %s", err.Error())
-		Respond(w, iresult, http.StatusInternalServerError)
-		return
 	}
 
 	// Increment recipe count in stats

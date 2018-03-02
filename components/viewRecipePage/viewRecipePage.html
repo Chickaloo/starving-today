@@ -15,7 +15,11 @@
           <div class="card-body">
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ recipe.recipename }}</h3>
-            <h5>{{ recipe.tags }}</i>
+            <div class="row" style="margin-top: 5px;" ng-repeat="tag in recipe.tags">
+              <div class="card hh" style="padding: 5px;">
+                <h5 style="margin: 0px;">{{ tag }}</h5>
+              </div>
+            </div>
             <a style="float: right; color: grey;" data-toggle="modal" data-target="#recipe-editor"><i class="fa fa-pencil fa-xs pr-1"></i></a>
             </h5>
             <hr>
