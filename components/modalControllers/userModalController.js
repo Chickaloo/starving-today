@@ -39,6 +39,4 @@ angular.module('starvingToday').controller('userModalController' , ['$scope' , '
         }
     });
   }
-
-
 }]);

@@ -39,7 +39,7 @@
         <div class="card" style="margin-top:10px; background-color: #f1f1f1;">
           <!--links to add and view all recipies-->
           <div class="card-header white-text" style="background-color: grey;">
-            <h3 style="margin-bottom:0px;">Recipes<div ng-controller="recipeModalController"><a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor" ng-click="OpenModal()"><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></div></h3>
+            <h3 style="margin-bottom:0px;">Recipes<a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
           </div>
 
           <!--some recipies-->
@@ -125,4 +125,45 @@
     </div>
   </div>
 </div>
+</div>
+
+<!-- User Info Modal -->
+<div class="modal fade" id="user-editor" tabindex="-1" role="dialog" data-backdrop="true" ng-controller="userModalController">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">User Information</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!--full name-->
+          <div class="md-form">
+              <i class="fa fa-user prefix grey-text"></i>
+              <input type="text" id="userFullName" class="form-control" ng-model="fullname">
+              <p class="font-small grey-text d-flex justify-content-end">Name</p>
+          </div>
+
+          <!-- email -->
+          <div class="md-form">
+              <i class="fa fa-envelope prefix grey-text"></i>
+              <input type="email" id="useremail" class="form-control" ng-model="user.email">
+              <p class="font-small grey-text d-flex justify-content-end">Email</p>
+          </div>
+
+          <!-- bio -->
+          <div class="md-form">
+              <i class="fa fa-pencil prefix grey-text"></i>
+              <textarea type="text" id="userbio" class="form-control md-textarea" rows="3" ng-model="bio"></textarea>
+              <p class="font-small grey-text d-flex justify-content-end">Bio</p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn hh" ng-click="UpdateUser()">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
