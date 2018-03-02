@@ -26,14 +26,12 @@
           </div>
           <!--/.Card content-->
           <!-- Card footer -->
-          <div class=" card-body tea lighten-3 text-center">
-
+          <div class="card-body tea lighten-3 text-center">
               <ul class="list-unstyled list-inline mt-3">
                 <li class="list-inline-item pr-2 black-text"><i class="fa fa-cutlery pr-1"></i>{{ recipe.preptime + recipe.cooktime}} mins</li>
                 <li class="list-inline-item pr-2 black-text"><i class="fa fa-thumbs-o-up pr-1"></i>{{ recipe.calories }}</li>
                 <li class="list-inline-item pr-2 black-text"><i class="fa fa-group pr-1"></i>{{ recipe.servings }}</li>
               </ul>
-
           </div>
         </div>
       </div>
@@ -42,33 +40,31 @@
         <div class="comment-container" style="width:100%; background-color: #f1f1f1; padding:10px;">
           <h3 class="dark-text" style="padding:10px;">Instructions:</h3>
           <h3 class="dark-text" style="padding:10px;">{{ recipe.recipeinstructions }}</h3>
-        <!--COMMENTS-->
-          Comments:
-          <div ng-repeat="(key, value) in comments">
 
-            <div>
-                By: {{value.userid}}
-                <b>{{value.comment}}</b>
-            </div>
-          </div>
 
         <!--  COMMENTS Form -->
-        <form name="reviewForm">
-            <!--  Live Preview -->
-            <blockquote>{{comment.body}}</blockquote>
-            <!--  COMMENTS Form -->
+        <form name="commentsForm">
             <h4>Comments</h4>
              <fieldset class="form-group">
-                 <textarea ng-model="comment.body" class="form-control" placeholder="Witty Comment Here" title="Review"></textarea>
+                 <textarea ng-model="comment.body" class="form-control" placeholder="Witty Comment Here" title="Comments"></textarea>
             </fieldset>
 
             <fieldset class="form-group">
-                  <input type="submit" class="btn btn-primary pull-right" value="Submit Comment" ng-click="Comment()" />
+                <div class = "text-right">
+                  <input type="submit" class="btn hh" value="Submit Comment" ng-click="Comment()" />
+                </div>
             </fieldset>
         </form>
+        <!--COMMENTS-->
+          <div style = "padding:10px;" ng-repeat="(key, value) in comments">
+            <div>
+                By: {{value.userid}}</br>
+              <b>{{value.comment}}</b></br>
+                <small>{{value.date}}</small>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
 </body>
