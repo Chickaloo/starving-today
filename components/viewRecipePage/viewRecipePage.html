@@ -39,10 +39,33 @@
       </div>
 
       <div class="col-md-8">
-        <!--COMMENTS-->
         <div class="comment-container" style="width:100%; background-color: #f1f1f1; padding:10px;">
           <h3 class="dark-text" style="padding:10px;">Instructions:</h3>
           <h3 class="dark-text" style="padding:10px;">{{ recipe.recipeinstructions }}</h3>
+        <!--COMMENTS-->
+          Comments:
+          <div ng-repeat="(key, value) in comments">
+
+            <div>
+                By: {{value.userid}}
+                <b>{{value.comment}}</b>
+            </div>
+          </div>
+
+        <!--  COMMENTS Form -->
+        <form name="reviewForm">
+            <!--  Live Preview -->
+            <blockquote>{{comment.body}}</blockquote>
+            <!--  COMMENTS Form -->
+            <h4>Comments</h4>
+             <fieldset class="form-group">
+                 <textarea ng-model="comment.body" class="form-control" placeholder="Witty Comment Here" title="Review"></textarea>
+            </fieldset>
+
+            <fieldset class="form-group">
+                  <input type="submit" class="btn btn-primary pull-right" value="Submit Comment" ng-click="Comment()" />
+            </fieldset>
+        </form>
         </div>
       </div>
     </div>
