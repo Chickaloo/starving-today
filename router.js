@@ -93,8 +93,11 @@ angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
 		dataUser.getPosts = function (userid) {
 	      $http.get('http://138.68.22.10:84/posts/' + userid).then(
 	  			function (response) {
-	  				userPosts = response.data;
-	          console.log(userPosts);
+						var temp = [];
+						Object.keys(response.data).forEach(function(key) {
+						    temp.push(response.data[key]);
+						});
+	  				userPosts = temp.reverse();
 	  			},
 	  			function (response) {
 	  				userPosts = 0;

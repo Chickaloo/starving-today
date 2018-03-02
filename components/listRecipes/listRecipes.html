@@ -3,8 +3,8 @@
           <div class="row" >
             <div class="col-md-4" ng-repeat="(key, value) in recipes | limitTo:Math.ceil(recipes.length/3)">
               <div class="card mb-4 box-shadow">
-                <div style="padding-bottom:100%; overflow:hidden; position:relative; height:200px;" >
-                  <img class="card-img-top" src="{{ value.imageurl }}" alt="{{ value.recipename }} Image" style="overflow-y: hidden; background-color: #f0f0f0;">
+                <div style="padding-bottom:100%; overflow:hidden; position:relative; max-height:50px;" >
+                  <img class="card-img-top" src="{{ value.imageurl }}" alt="{{ value.recipename }} Image" style="object-fit: cover; overflow-y: hidden; background-color: #f0f0f0;">
                 </div>
                 <div class="card-body">
                   <p class="card-title">{{ value.recipename }}</p>
