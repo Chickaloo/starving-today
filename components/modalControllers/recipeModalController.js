@@ -1,6 +1,8 @@
 angular.module('starvingToday').controller('recipeModalController' , ['$scope' , '$http' , 'dataUser' , 'dataRecipe', function($scope , $http , dataUser , dataRecipe)
 {
   $scope.user = dataUser.user;
+  console.log("recipeModalController: dataUser: " + $scope.user.username);
+  //console.log("checking user from recipeModal:" + $scope.user);
   //recipe fields
   $scope.recipename;
   $scope.recipedescription;
@@ -10,16 +12,22 @@ angular.module('starvingToday').controller('recipeModalController' , ['$scope' ,
   $scope.cooktime;
   $scope.new = true;
 
-  dataRecipe.getCurrRecipe();
-  if(typeof dataRecipe.recipe !== "undefined"){
-    $scope.new = false;
-    $scope.recipename = dataRecipe.recipe.recipename + " ";
-    $scope.recipedescription = dataRecipe.recipe.recipedescription + " ";
-    $scope.recipeinstructions =dataRecipe.recipe.recipeinstructions + " ";
-    $scope.calories = dataRecipe.recipe.calories + " ";
-    $scope.preptime = dataRecipe.recipe.preptime + " ";
-    $scope.cooktime = dataRecipe.recipe.cooktime + " ";
-    console.log("Recipie already exists, it is: " + $scope.recipename);
+  $scope.OpenModal = function(){
+    $scope.curRec = dataRecipe.getCurrRecipe();
+    if(typeof $scope.curRec !== "undefined"){
+      $scope.new = false;
+      $scope.recipename = dataRecipe.recipe.recipename + " ";
+      $scope.recipedescription = dataRecipe.recipe.recipedescription + " ";
+      $scope.recipeinstructions =dataRecipe.recipe.recipeinstructions + " ";
+      $scope.calories = dataRecipe.recipe.calories + " ";
+      $scope.preptime = dataRecipe.recipe.preptime + " ";
+      $scope.cooktime = dataRecipe.recipe.cooktime + " ";
+      console.log("Recipie already exists, it is: " + $scope.recipename);
+    }
+    console.log("recipeModalController: user: " + $scope.user.username);
+    console.log("recipeModalController: current recipe: typeof: " + typeof $scope.curRec);
+    console.log("new: " + $scope.new);
+    //console.log("checking user in open Modal:" + $scope.user);
   }
 
   $scope.UpdateRecipe = function() {
@@ -28,6 +36,8 @@ angular.module('starvingToday').controller('recipeModalController' , ['$scope' ,
       console.log($scope.responseDetails);
       return 1;
     }
+
+    console.log("recipeModalController: user: " + $scope.user.username);
 
     var recipe_data = {
       userid: parseInt($scope.user.userid),
@@ -48,7 +58,11 @@ angular.module('starvingToday').controller('recipeModalController' , ['$scope' ,
       }
     }
 
+    console.log("new: " + $scope.new);
+    console.log("checking user in open Modal:" + $scope.user.username);
+
     if($scope.new == true){
+      console.log("Posting a NEW recipe");
       $http.post('http://138.68.22.10:84/recipes', data, config)
       .then(
         function (response) {
@@ -58,6 +72,7 @@ angular.module('starvingToday').controller('recipeModalController' , ['$scope' ,
           $scope.responseDetails = "You couldn't even enter a recipe correctly.. for SHAME!" + response.status;
       });
     }else{
+      console.log("Editing an OLD recipie");
       $http.put('http://138.68.22.10:84/recipes', data, config)
       .then(
         function (response) {

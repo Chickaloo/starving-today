@@ -16,7 +16,7 @@
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ recipe.recipename }}</h3>
             <h5>{{ recipe.tags }}</i>
-            <a style="float: right; color: grey;" data-toggle="modal" data-target="#recipe-editor"><i class="fa fa-pencil fa-xs pr-1"></i></a>
+            <div ng-controller="recipeModalController"><a style="float: right; color: grey;" data-toggle="modal" data-target="#recipe-editor" ng-click="OpenModal()"><i class="fa fa-pencil fa-xs pr-1"></i></a></div>
             </h5>
             <hr>
             <!--Text-->

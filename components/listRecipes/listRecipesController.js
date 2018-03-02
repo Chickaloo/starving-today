@@ -31,7 +31,7 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
       $http.get('http://138.68.22.10:84/recipes/id/' + recipeid).then(
   			function (response) {
   				currRecipe = response.data;
-          console.log(currRecipe)
+          console.log("listRecipiesController: curr recipe: " + currRecipe.recipename);
   				recipelen = 1;
   			},
   			function (response) {

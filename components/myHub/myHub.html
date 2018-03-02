@@ -40,7 +40,7 @@
           <!--links to add and view all recipies-->
           <div class="card-header white-text" style="background-color: grey;">
             <h3 style="margin-bottom:0px;">Recipes
-            <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor"><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
+            <div ng-controller="recipeModalController"><a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor" ng-click="OpenModal()"><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></div></h3>
           </div>
 
           <!--some recipies-->
