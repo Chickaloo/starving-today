@@ -3,7 +3,14 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
     $scope.user = dataUser.user;
     $scope.reciperating = 0;
 
-    //SEARCH BY THIS USER TO POPULATE THEIR RECIPIES
+    $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(
+      function (response) {
+        $scope.userPosts = response.data;
+        console.log($scope.userPosts);
+      },
+      function (response) {
+        userPosts = 0;
+    });
 
 		var config = {
         withCredentials: 'true',
@@ -31,12 +38,53 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
 				} else {
 						$scope.responseDetails = "Something broke!";
 				}
-  		});
+		});
 
-      $scope.selectRecipe = function(value){
-          console.log(value);
-          dataRecipe.getRecipe(value);
-          console.log(dataRecipe.getCurrRecipe());
-          $state.go('viewRecipesState', {}, {reload:true});
-      }
+    $scope.selectRecipe = function(value){
+        dataRecipe.getRecipe(value);
+        $state.go('viewRecipesState', {}, {reload:true});
+    }
+
+    $scope.MakePost = function(){
+
+        var post_data = {
+          posterid: $scope.user.userid,
+          userid: $scope.user.userid,
+          title: $scope.posttitle,
+          content: $scope.postcontent
+        };
+
+        var data = JSON.stringify(post_data);
+
+      var config = {
+          withCredentials: 'true',
+          headers : {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        }
+
+      $http.post('http://138.68.22.10:84/posts', data, config)
+      .then(
+        function (response) {
+          $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(
+            function (response) {
+              $scope.userPosts = response.data;
+              console.log($scope.userPosts);
+            },
+            function (response) {
+              userPosts = 0;
+          });
+        },
+        function (response) {
+          if (response.status === 500) {
+              $scope.responseDetails = "Something went wrong with our servers!";
+          } else if(response.status === 400){
+              $scope.responseDetails = "The input was invalid. Please try again.";
+          } else if(response.status === 404){
+              $scope.responseDetails = "The entered username and password combination was not found.";
+          } else {
+              $scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
+          }
+      });
+    }
 }]);

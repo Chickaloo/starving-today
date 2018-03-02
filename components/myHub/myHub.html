@@ -79,11 +79,12 @@
       <div class="card-body" style="padding: 0px;">
         <div class="row" style="padding: 20px;">
           <div class="col-md-9 form-group" style="margin: 0px;">
-              <textarea class="form-control" rows="3" style="width: 100%;"></textarea>
+              <textarea class="form-control" ng-model="posttitle" rows="3" style="width: 100%;"></textarea>
+              <textarea class="form-control" ng-model="postcontent" rows="3" style="width: 100%;"></textarea>
           </div>
           <div class="col-md-3 form-group" style="padding: 10px;">
             <center>
-              <button class="btn hh">Post</button>
+              <button class="btn hh" ng-click="MakePost()">Post</button>
             </center>
           </div>
         </div>
@@ -91,22 +92,28 @@
 
     </div>
     <!--COMMENTS-->
-    <div class="comment-container card" style="background-color: #fff; padding-top: 10px; margin-top: 20px; margin-bottom: 20px;">
-      <div ng-repeat="(key, value) in userposts | limitTo:9">
+    <div class="comment-container" style="background-color: rgba(0,0,0,0); margin-top: 20px; margin-bottom: 20px;">
+      <div ng-repeat="(key, value) in userPosts | limitTo:9">
+        <div class="card" style="margin-bottom:10px; background-color: #f1f1f1;">
+          <!--links to add and view all recipies-->
+          <div class="card-header white-text" style="background-color: grey;">
+            <h4 style="margin-bottom:0px;">{{ user.firstname }} {{ value.title }}</h4>
+          </div>
 
-        <div class="card white fill" style="padding:0px; margin:5px; height:100px; width:100px;" data-toggle="tooltip" data-placement="top">
-          <div class="view overlay" style="height:100px;">
-              <a ng-click="selectRecipe(key)" class="text-center white-text">
-                <strong>
-                  <img class="recipie-thumbnail black-text align-self-center" src="{{ value.imageurl }}" alt="{{value.recipename}}">
-                  <div style="background-color: rgba(0,0,0,.3); width: 100%; height: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                    {{value.recipename}}
-                  </div>
-                </strong>
-              </a>
+          <!--some recipies-->
+          <div class="card-body" style="padding: 0px;">
+            <div class="row" style="padding: 20px;">
+              <div class="col-md-9 form-group" style="margin: 0px;">
+                {{ value.content }}
+              </div>
+              <div class="col-md-3 form-group" style="padding: 10px;">
+                <center>
+
+                </center>
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>

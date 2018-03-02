@@ -82,14 +82,29 @@ app.config(function($stateProvider, $httpProvider) {
 
 angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
     var dataUser = {};
+		var otherUser;
     var user;
+		var userPosts;
 
     dataUser.getUser = function (userid) {
         return $http.get('http://138.68.22.10:84/users/id/' + userid);
     };
 
-    dataUser.searchUser = function () {
-        return $http.get('http://138.68.22.10:84/recipe/user/' + userid)
+		dataUser.getPosts = function (userid) {
+	      $http.get('http://138.68.22.10:84/posts/' + userid).then(
+	  			function (response) {
+	  				userPosts = response.data;
+	          console.log(userPosts);
+	  			},
+	  			function (response) {
+	  				userPosts = 0;
+	  		});
+				return userPosts;
+	    };
+
+
+    dataUser.searchUser = function (userid) {
+        return $http.get('http://138.68.22.10:84/users/id/' + userid);
     };
 
     dataUser.pushUser = function(value) {
