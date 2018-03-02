@@ -36,20 +36,19 @@
         </div>
 
         <!--RECIPIES CARD-->
-        <div class="card" style="margin-top:10px; background-color: grey;">
+        <div class="card" style="margin-top:10px; background-color: #f1f1f1;">
           <!--links to add and view all recipies-->
-          <div class="card-header white-text">
-            <h3>Recipes
+          <div class="card-header white-text" style="background-color: grey;">
+            <h3 style="margin-bottom:0px;">Recipes
             <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor"><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
           </div>
 
           <!--some recipies-->
           <div class="card-body">
             <div class="row justify-content-center">
-            <div ng-repeat="(key,value) in userrecipes | limitTo:9">
-
-              <div class="card white fill" style="padding:0px; margin:5px; height:100px; width:100px;" data-toggle="tooltip" data-placement="top">
-                <div class="view overlay" style="height=100px;">
+              <div ng-repeat="(key, value) in userrecipes | limitTo:9">
+                <div class="card white fill" style="padding: 0px; margin: 5px; height: 100px; width: 100px;" data-toggle="tooltip" data-placement="top">
+                  <div class="view overlay" style="height: 100px;">
                     <a ui-sref="viewRecipesState" ui-sref-active="active"  ng-click="selectRecipe(key)" class="text-center white-text">
                       <strong>
                         <img class="recipie-thumbnail black-text align-self-center" src="{{ value.imageurl }}" alt="{{value.recipename}}">
@@ -58,24 +57,57 @@
                         </div>
                       </strong>
                     </a>
+                  </div>
                 </div>
               </div>
-
-            </div>
             </div>
           </div>
-
         </div>
 
 
   </div>
   <div class="col-md-8">
 
+    <div class="card" style="margin-top:10px; background-color: #f1f1f1;">
+      <!--links to add and view all recipies-->
+      <div class="card-header white-text" style="background-color: grey;">
+        <h3 style="margin-bottom:0px;">Make a Post
+        <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-editor"><h5 style="margin-bottom:0px;">Add Recipe <i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
+      </div>
 
+      <!--some recipies-->
+      <div class="card-body" style="padding: 0px;">
+        <div class="row" style="padding: 20px;">
+          <div class="col-md-9 form-group" style="margin: 0px;">
+              <textarea class="form-control" rows="3" style="width: 100%;"></textarea>
+          </div>
+          <div class="col-md-3 form-group" style="padding: 10px;">
+            <center>
+              <button class="btn hh">Post</button>
+            </center>
+          </div>
+        </div>
+      </div>
+
+    </div>
     <!--COMMENTS-->
-    <div class="comment-container" style="height:100%; background-color: #f1f1f1; padding-top:10px;">
-      <h3 class="dark-text" style="padding:10px;">HubBub:</h3>
-      <h3 class="dark-text" style="padding:10px;">A user's newest recipes and guestbook comments will go here!</h3>
+    <div class="comment-container card" style="background-color: #fff; padding-top: 10px; margin-top: 20px; margin-bottom: 20px;">
+      <div ng-repeat="(key, value) in userposts | limitTo:9">
+
+        <div class="card white fill" style="padding:0px; margin:5px; height:100px; width:100px;" data-toggle="tooltip" data-placement="top">
+          <div class="view overlay" style="height:100px;">
+              <a ng-click="selectRecipe(key)" class="text-center white-text">
+                <strong>
+                  <img class="recipie-thumbnail black-text align-self-center" src="{{ value.imageurl }}" alt="{{value.recipename}}">
+                  <div style="background-color: rgba(0,0,0,.3); width: 100%; height: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    {{value.recipename}}
+                  </div>
+                </strong>
+              </a>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>

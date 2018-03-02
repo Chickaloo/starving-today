@@ -11,7 +11,7 @@
                   <p class="card-text" style="height:120px; overflow-y: auto;">{{ value.recipedescription }}</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary" ui-sref="viewRecipesState" ui-sref-active="active"  ng-click="selectRecipe(key)">View</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" ng-click="selectRecipe(key)">View</button>
                     </div>
                     <small class="text-success">+{{value.upvotes}}</small>
                     <small class="text-danger">-{{value.downvotes}}</small>

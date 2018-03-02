@@ -237,6 +237,31 @@ var routes = Routes{
 	    "/tags/{recipeid}",
 	    TagDelete,
 	},
+	// Posts
+	Route{
+		"PostCreate",
+		"POST",
+		"/posts",
+		PostCreate,
+	},
+	Route{
+		"PostDelete",
+		"DELETE",
+		"/posts/{postid}",
+		PostDelete,
+	},
+	Route{
+		"PostEdit",
+		"PUT",
+		"/posts/{postid}",
+		PostEdit,
+	},
+	Route{
+		"PostsGetByUserID",
+		"GET",
+		"/posts/{userid}",
+		PostsGetByUserID,
+	},
 }
 
 // Logger hook to implement logging of HTTP requests

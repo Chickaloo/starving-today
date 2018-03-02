@@ -30,13 +30,20 @@
             <ng-include src="'components/landingPage/landingPage.html'"></ng-include>
         </div>
 
-        <div id="home" style="height: 80%;" ng-if="auth">
+        <div id="home" style="height: 100%;" ng-if="auth">
             <ng-include src="'components/header/header.html'"></ng-include>
             <ng-include src="'components/modals.html'"></ng-include>
-            <div class="content-view" style="height: 100%; overflow-y: auto; padding-right: -17px;" ui-view></div>
+            <div class="content-view" style="height:calc(100% - 100px); overflow-y: auto; padding-right: -17px;" ui-view></div>
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+
+<!--
+    <section class="footer" style="color: #FFFFFF">TOS | All Rights Reserved | HungerHub 2018</section>
+-->
+>>>>>>> 015937ff7adb07baf54611a3aad111db380ea4ad
     <!-- SCRIPTS -->
     <!-- AngularJS + UI-Router -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
