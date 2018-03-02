@@ -133,6 +133,7 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
     var currRecipe;
     var recipes;
     var recipelen = 0;
+		var comment;
 
     dataRecipe.setRecipes = function(incomingrecipes) {
       if (typeof incomingrecipes !== "undefined"){
@@ -190,5 +191,12 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
         recipe.pop();
     };
 
+		dataRecipe.getComment = function(){
+				return comment;
+		};
+
+		dataRecipe.setComment = function(value){
+				comment = value;
+		};
     return dataRecipe;
 }]);

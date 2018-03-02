@@ -20,7 +20,10 @@
                 <h5 style="margin: 0px;">{{ tag }}</h5>
               </div>
             </div>
-            <div><a style="float: right; color: grey;" data-toggle="modal" data-target="#recipe-editor" ><i class="fa fa-pencil fa-xs pr-1"></i></a></div>
+            <div style="float: right; ">
+              <a style="color: grey;" data-toggle="modal" data-target="#recipe-editor" ><i class="fa fa-pencil fa-xs pr-1"></i></a>
+              <a style="color: red;" ng-click="DeleteRecipe()"><i class="fa fa-trash fa-xs pr-1"></i></a>
+            </div>
             </h5>
             <hr>
             <!--Text-->
@@ -70,7 +73,11 @@
           <div class="container-fluid card" style="padding:10px; margin-bottom: 10px; background-color: #fff;">
             <div class="row">
               <div class="col-md-12">
-                <div style="float:left;"><b>{{ value.authorname }}</b> <small> {{value.date}}</small></div><div class="red-text" style="float:right;" ng-if="value.posterid === user.userid"><a ng-click="DeleteComment(value.commentid)">delet this</a></div>
+                <div style="float:left;"><b>{{ value.authorname }}</b> <small> {{value.date}}</small></div>
+                <div style="float:right;" ng-if="value.posterid === user.userid" ng-controller="commentEditModalController">
+                  <!--<a class="grey-text" data-toggle="modal" data-target="#comment-editor" ng-click="PopulateComment(value.commentid)"><i class="fa fa-pencil fa-xs pr-1"></i></a>-->
+                  <a class="red-text" ng-click="DeleteComment(value.commentid)"><i class="fa fa-trash fa-xs pr-1"></i></a>
+                </div>
               </div>
             </div>
             <div class="col-md-12">
@@ -87,7 +94,7 @@
   <!-- Recipe Editor Modal -->
   <div  class="modal fade" id="recipe-editor" tabindex="-1" role="dialog" ng-controller="recipeEditModalController">
 
-    <div class="modal-dialog" role="document" onload="OpenModal()">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Recipe</h5>
@@ -100,21 +107,21 @@
             <!--image link upload-->
             <div class="md-form">
                 <i class="fa fa-camera fa-xs prefix grey-text"></i>
-                <input type="text" id="recipeimage" class="form-control" ng-model="imageurl">
+                <input type="text" id="recipeimage" class="form-control" ng-model="curRec.imageurl">
                 <p class="font-small grey-text d-flex justify-content-end">Image</p>
             </div>
 
             <!--recipe title-->
             <div class="md-form">
                 <i class="fa fa-cutlery fa-xs prefix grey-text"></i>
-                <input type="text" id="recipetitle" class="form-control" ng-model="recipename">
+                <input type="text" id="recipetitle" class="form-control" ng-model="curRec.recipename">
                 <p class="font-small grey-text d-flex justify-content-end">Recipe Title</p>
             </div>
 
             <!-- description -->
             <div class="md-form">
                 <i class="fa fa-pencil fa-xs prefix grey-text"></i>
-                <textarea type="text" id="description" class="form-control md-textarea" rows="3" ng-model="recipedescription"></textarea>
+                <textarea type="text" id="description" class="form-control md-textarea" rows="3" ng-model="curRec.recipedescription"></textarea>
                 <p class="font-small grey-text d-flex justify-content-end">Description</p>
             </div>
 
@@ -122,28 +129,28 @@
             <!-- CHANGE TO DROP DOWN -->
             <div class="md-form">
                 <i class="fa fa-group fa-xs prefix grey-text"></i>
-                <input type="text" id="servings" class="form-control" ng-model="servings">
+                <input type="text" id="servings" class="form-control" ng-model="curRec.servings">
                 <p class="font-small grey-text d-flex justify-content-end">Number of Servings</p>
             </div>
 
             <!--calories-->
             <div class="md-form">
                 <i class="fa fa-bar-chart fa-xs prefix grey-text"></i>
-                <input type="text" id="calories" class="form-control" ng-model="calories">
+                <input type="text" id="calories" class="form-control" ng-model="curRec.calories">
                 <p class="font-small grey-text d-flex justify-content-end">Calories</p>
             </div>
 
             <!--preptime-->
             <div class="md-form">
                 <i class="fa fa-hourglass-half fa-xs prefix grey-text"></i>
-                <input type="text" id="preptime" class="form-control" ng-model="preptime">
+                <input type="text" id="preptime" class="form-control" ng-model="curRec.preptime">
                 <p class="font-small grey-text d-flex justify-content-end">Preparation Time</p>
             </div>
 
             <!--cooktime-->
             <div class="md-form">
                 <i class="fa fa-hourglass-end fa-xs prefix grey-text"></i>
-                <input type="text" id="cooktime" class="form-control" ng-model="cooktime">
+                <input type="text" id="cooktime" class="form-control" ng-model="curRec.cooktime">
                 <p class="font-small grey-text d-flex justify-content-end">Cooking Time</p>
             </div>
 
@@ -151,14 +158,14 @@
             <!-- CHECK IF CAN ADD ONE AT A TIME -->
             <div class="md-form">
                 <i class="fa fa-cart-plus fa-xs prefix grey-text"></i>
-                <textarea type="text" id="ingredients" class="form-control md-textarea" rows="3" ng-model="ingredients"></textarea>
+                <textarea type="text" id="ingredients" class="form-control md-textarea" rows="3" ng-model="curRec.ingredients"></textarea>
                 <p class="font-small grey-text d-flex justify-content-end">Ingredients</p>
             </div>
 
             <!-- instructions -->
             <div class="md-form">
                 <i class="fa fa-map prefix fa-xs grey-text"></i>
-                <textarea type="text" id="instructions" class="form-control md-textarea" rows="3" ng-model="recipeinstructions"></textarea>
+                <textarea type="text" id="instructions" class="form-control md-textarea" rows="3" ng-model="curRec.recipeinstructions"></textarea>
                 <p class="font-small grey-text d-flex justify-content-end">Instructions</p>
             </div>
 
@@ -174,6 +181,36 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn hh" data-dismiss="modal" ng-click="UpdateRecipe()" type="submit">Save Recipe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Comment Editor Modal -->
+  <div  class="modal fade" id="comment-editor" tabindex="-1" role="dialog" ng-controller="commentEditModalController">
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Comment</h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <!--image link upload-->
+            <div class="md-form">
+                <i class="fa fa-pencil fa-xs prefix grey-text"></i>
+                <input type="text" class="form-control" ng-model="editcomment.comment">
+                <p class="font-small grey-text d-flex justify-content-end">Comment</p>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn hh" data-dismiss="modal" ng-click="UpdateComment()" type="submit">Save Comment</button>
         </div>
       </div>
     </div>

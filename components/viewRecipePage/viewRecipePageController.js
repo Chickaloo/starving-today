@@ -101,4 +101,12 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
       });
     }
 
+    $scope.DeleteRecipe = function() {
+
+      $http.delete('http://138.68.22.10:84/recipes/' + $scope.recipe.recipeid)
+      .then(function(response) {
+        $state.go('myHub',{},{reload:true});
+      });
+    }
+
 }]);

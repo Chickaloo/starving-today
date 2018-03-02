@@ -2,17 +2,19 @@ angular.module('starvingToday').controller('userModalController' , ['$scope' , '
 {
   console.log("IN THIS MODAL");
   //user fields
-  $scope.user = dataUser.user;
+  $scope.newuser = dataUser.user;
   $scope.fullname = dataUser.user.firstname + " " + dataUser.user.lastname;
-  $scope.bio = dataUser.user.bio + " ";
+  $scope.newbio = dataUser.user.bio;
+  $scope.newprofileimage = dataUser.user.profileimage;
+  $scope.newemail = dataUser.user.email;
 
   //update User
   $scope.UpdateUser = function(){
-    var user_data = {
-      firstname: $scope.fullname,
-      email: $scope.user.email,
-      bio: $scope.bio
-    };
+    var user_data = $scope.newuser;
+    user_data.firstname = $scope.fullname;
+    user_data.bio = $scope.newbio;
+    user_data.profileimage = $scope.newprofileimage;
+    user_data.email = $scope.newemail;
 
     var data = JSON.stringify(user_data);
 
@@ -22,7 +24,7 @@ angular.module('starvingToday').controller('userModalController' , ['$scope' , '
         }
       }
 
-    $http.put('http://138.68.22.10:84/users', data, config)
+    $http.put('http://138.68.22.10:84/users/'+user_data.userid, data, config)
     .then(
       function (response) {
         if (response.status === 200) {

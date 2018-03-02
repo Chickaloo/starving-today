@@ -2,13 +2,6 @@ angular.module('starvingToday').controller('listRecipesController', ['$scope', '
 {
     $scope.recipes = dataRecipe.getRecipes();
 
-    // getRecipeDump();
-    // function getRecipeDump(){
-    //     dataRecipe.getRecipeDump()
-    //          .then(function (response) {
-    //              $scope.recipes = response.data.recipes;});
-    // }
-
     $scope.selectRecipe = function(value){
       $http.get('http://138.68.22.10:84/recipes/id/' + value).then(
         function (response) {

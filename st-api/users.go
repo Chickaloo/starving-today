@@ -31,13 +31,7 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusBadRequest)
 		return
 	}
-	/*
-		ndata := strings.Split(rdata.Firstname, " ")
-		fname := ndata[0]
-		lname := strings.Join(ndata[1:], " ")
-		rdata.Firstname = fname
-		rdata.Lastname = lname
-	*/
+
 	query := fmt.Sprintf("INSERT INTO user (user_name, first_name, last_name, password, email)\nVALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", rdata.Username, "Stranger", "Danger", rdata.Password, rdata.Email)
 	result, err := db.Connection.Exec(query)
 	if err != nil {
@@ -257,7 +251,6 @@ func UserGetByID(w http.ResponseWriter, r *http.Request) {
 	}
 	res.User = &udata
 	Respond(w, res, http.StatusOK)
-
 }
 
 // UserEdit implements the PUT /users/{userid} endpoint to edit a user's info
@@ -275,7 +268,13 @@ func UserEdit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := fmt.Sprintf("UPDATE user\nSET user_name=\"%s\", first_name=\"%s\", last_name=\"%s\", email=\"%s\", password=\"%s\", bio=\"%s\", profile_image=\"%s\"\nWHERE user_id=\"%s\"", rdata.Username, rdata.Firstname, rdata.Lastname, rdata.Email, rdata.Password, rdata.Bio, rdata.ProfileImage, params["userid"])
+	ndata := strings.Split(rdata.Firstname, " ")
+	fname := ndata[0]
+	lname := strings.Join(ndata[1:], " ")
+	rdata.Firstname = fname
+	rdata.Lastname = lname
+
+	query := fmt.Sprintf("UPDATE user\nSET first_name=\"%s\", last_name=\"%s\", email=\"%s\", bio=\"%s\", profile_image=\"%s\"\nWHERE user_id=\"%s\"", rdata.Firstname, rdata.Lastname, rdata.Email, rdata.Bio, rdata.ProfileImage, params["userid"])
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {

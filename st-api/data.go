@@ -43,7 +43,9 @@ type Recipe struct {
 	RecipeInstructions string       `json:"recipeinstructions,omitempty"`
 	ImageURL           string       `json:"imageurl,omitempty"`
 	Ingredients        []Ingredient `json:"ingredients,omitempty"`
+	IngredientsIn			string `json:"ingredientsin,omitempty"`
 	Tags               []string     `json:"tags,omitempty"`
+	TagsIn string	`json:"tagsin,omitempty"`
 	Calories           uint16       `json:"calories,omitempty"`
 	PrepTime           uint16       `json:"preptime,omitempty"`
 	CookTime           uint16       `json:"cooktime,omitempty"`

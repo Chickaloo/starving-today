@@ -237,6 +237,10 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
+func addTags(s string, id int) {
+	
+}
+
 // RecipeEdit implements the PUT /recipes/{recipeid} endpoint to edit a recipe
 func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 	var rdata Recipe
@@ -253,7 +257,7 @@ func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 	}
 	number, err := strconv.Atoi(params["recipeid"])
 	rdata.RecipeID = number
-	query := fmt.Sprintf("UPDATE recipe\nSET recipe_name=\"%s\", recipe_description=\"%s\", recipe_instructions=\"%s\", image_url=\"%s\", calories=\"%d\", prep_time=\"%d\", cook_time=\"%d\", total_time=\"%d\", servings=\"%d\", upvotes=\"%d\", downvotes=\"%d\", made=\"%d\"\nWHERE recipe_id=\"%s\"", rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.ImageURL, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, rdata.Upvotes, rdata.Downvotes, rdata.Made, params["recipeid"])
+	query := fmt.Sprintf("UPDATE recipe\nSET recipe_name=\"%s\", recipe_description=\"%s\", recipe_instructions=\"%s\", image_url=\"%s\", calories=\"%d\", prep_time=\"%d\", cook_time=\"%d\", total_time=\"%d\", servings=\"%d\" \nWHERE recipe_id=\"%s\"", rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.ImageURL, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, params["recipeid"])
 	result, err := db.Connection.Exec(query)
 	if err != nil {
 		if *Debug {
