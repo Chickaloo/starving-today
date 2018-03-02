@@ -1,5 +1,6 @@
 angular.module('starvingToday').controller('userModalController' , ['$scope' , '$http' , 'dataUser' , function($scope , $http , dataUser)
 {
+  console.log("IN THIS MODAL");
   //user fields
   $scope.user = dataUser.user;
   $scope.fullname = dataUser.user.firstname + " " + dataUser.user.lastname;

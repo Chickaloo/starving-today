@@ -1,4 +1,4 @@
-angular.module('starvingToday').controller('recipeModalController' , ['$scope' , '$http' , 'dataUser' , 'dataRecipe', function($scope , $http , dataUser , dataRecipe)
+angular.module('starvingToday').controller('recipeModalController' , ['$scope' , '$http' , '$state' , 'dataUser' , 'dataRecipe', function($scope , $http , $state, dataUser , dataRecipe)
 {
   $scope.user = dataUser.user;
   console.log("recipeModalController: dataUser: " + $scope.user.username);
@@ -27,7 +27,6 @@ angular.module('starvingToday').controller('recipeModalController' , ['$scope' ,
     console.log("recipeModalController: user: " + $scope.user.username);
     console.log("recipeModalController: current recipe: typeof: " + typeof $scope.curRec);
     console.log("new: " + $scope.new);
-    //console.log("checking user in open Modal:" + $scope.user);
   }
 
   $scope.UpdateRecipe = function() {
@@ -73,7 +72,7 @@ angular.module('starvingToday').controller('recipeModalController' , ['$scope' ,
       });
     }else{
       console.log("Editing an OLD recipie");
-      $http.put('http://138.68.22.10:84/recipes', data, config)
+      $http.put('http://138.68.22.10:84/recipes/'+$scope.curRec.recipeid , data, config)
       .then(
         function (response) {
           $scope.responseDetails = "You entered a recipe! Eww!";
@@ -82,6 +81,8 @@ angular.module('starvingToday').controller('recipeModalController' , ['$scope' ,
           $scope.responseDetails = "You couldn't even enter a recipe correctly.. for SHAME!" + response.status;
       });
     }
+
+    $state.go('myHub',{},{reload:true});
 
   }
 }]);
