@@ -3,7 +3,7 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
     var recipe = [];
     var currRecipe;
     var recipes;
-    var recipelen;
+    var recipelen = 0;
 
     dataRecipe.setRecipes = function(incomingrecipes) {
       if (typeof incomingrecipes !== "undefined"){

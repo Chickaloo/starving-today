@@ -5,13 +5,6 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
 
   	$scope.Logout = function() {
 
-        var user_data = {
-          username: $scope.username,
-          password: $scope.password
-        };
-
-        var data = JSON.stringify(user_data);
-
   		var config = {
           withCredentials: 'true',
     			headers : {
