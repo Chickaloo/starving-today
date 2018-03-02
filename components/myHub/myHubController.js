@@ -1,4 +1,4 @@
-angular.module('starvingToday').controller('myHubController', ['$scope', '$http', 'dataUser', 'dataRecipe', function($scope, $http, dataUser, dataRecipe)
+angular.module('starvingToday').controller('myHubController', ['$scope', '$http', '$state', 'dataUser', 'dataRecipe', function($scope, $http, $state, dataUser, dataRecipe)
 {
     $scope.user = dataUser.user;
     $scope.fullname = dataUser.user.firstname + " " + dataUser.user.lastname;
@@ -68,9 +68,10 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
   				}
   		});
 
-        $scope.selectRecipe = function(value){
-                dataRecipe.popRecipe();
-                dataRecipe.pushRecipe(value);
-                console.log(value);
-        }
+      $scope.selectRecipe = function(value){
+          console.log(value);
+          dataRecipe.getRecipe(value);
+          console.log(dataRecipe.getCurrRecipe());
+          $state.go('viewRecipesState', {}, {reload:true});
+      }
 }]);

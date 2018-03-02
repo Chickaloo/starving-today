@@ -1,6 +1,7 @@
 angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http) {
     var dataRecipe = {};
     var recipe = [];
+    var currRecipe;
     var recipes;
     var recipelen;
 
@@ -12,26 +13,34 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
         recipelen = 0;
       }
       console.log(recipelen);
-    }
+    };
 
     dataRecipe.getRecipes = function() {
       return recipes;
-    }
+    };
 
     dataRecipe.getRecipeLength = function() {
       return recipelen;
-    }
+    };
 
     dataRecipe.getRecipeDump = function () {
         return $http.get('http://138.68.22.10:84/recipes');
     };
 
-    dataRecipe.getRecipe = function () {
-        return $http.get('http://138.68.22.10:84/recipes/id/' + recipe);
+    dataRecipe.getRecipe = function (recipeid) {
+      $http.get('http://138.68.22.10:84/recipes/id/' + recipeid).then(
+  			function (response) {
+  				currRecipe = response.data;
+          console.log(currRecipe)
+  				recipelen = 1;
+  			},
+  			function (response) {
+  				recipelen = 0;
+  		});
     };
 
-    dataRecipe.searchRecipe = function () {
-        return $http.get('http://138.68.22.10:84/recipe/id/')
+    dataRecipe.getCurrRecipe = function () {
+        return currRecipe;
     };
 
     dataRecipe.pushRecipe = function(value) {
@@ -45,7 +54,7 @@ angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http)
     return dataRecipe;
 }]);
 
-angular.module('starvingToday').controller('listRecipesController', ['$scope', '$http', 'dataRecipe', function($scope, $http, dataRecipe)
+angular.module('starvingToday').controller('listRecipesController', ['$scope', '$state', '$http', 'dataRecipe', function($scope, $state, $http, dataRecipe)
 {
     $scope.recipes = dataRecipe.getRecipes();
 
@@ -57,8 +66,9 @@ angular.module('starvingToday').controller('listRecipesController', ['$scope', '
     // }
 
     $scope.selectRecipe = function(value){
-            dataRecipe.popRecipe();
-            dataRecipe.pushRecipe(value);
-            console.log(value);
+        console.log(value);
+        dataRecipe.getRecipe(value);
+        console.log(dataRecipe.getCurrRecipe());
+        $state.go('viewRecipesState', {}, {reload:true});
     }
 }]);
