@@ -37,13 +37,6 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
   			}
   		}
 
-<<<<<<< HEAD
-    console.log("recipie from viewRecipiePage: " + $scope.recipe);
-
-    if ($scope.recipelen === 0){
-      console.log("redirect?");
-      $state.go("myHub");
-=======
         $http.post('http://138.68.22.10:84/comments', data, config)
         .then(function(response) {
           $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
@@ -59,6 +52,5 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
                 $scope.comments = 0;
           });
         });
->>>>>>> c5c26008afa388cc2fb7c09eec0dabc2f06147cf
     }
 }]);
