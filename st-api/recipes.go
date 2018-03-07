@@ -238,7 +238,7 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 }
 
 func addTags(s string, id int) {
-	
+
 }
 
 // RecipeEdit implements the PUT /recipes/{recipeid} endpoint to edit a recipe
@@ -756,10 +756,10 @@ func EditIngredientInRecipe(w http.ResponseWriter, r *http.Request) {
 	Respond(w, res, http.StatusOK)
 }
 
-// GetSubscribers implements GET /api/users/subscribers/{followid} to fetch the list of all users who subscribed to a particular user
+// GetSubscribers implements GET /api/subscribers/{followid} to fetch the list of all users who subscribed to a particular user
 func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 	var res Response
-	var udata []uint8
+	var udata []int
 	var query string
 	params := mux.Vars(r)
 
@@ -773,7 +773,7 @@ func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var temp *uint8
+		var temp int
 		if serr := rows.Scan(&temp); serr != nil {
 			fmt.Println(serr.Error())
 			res.Content = fmt.Sprintf("Subscriber Scanning Failed: %s", serr.Error())
@@ -785,16 +785,17 @@ func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 				fmt.Printf("%d\n", udata[i])
 			}
 		}
-		udata = append(udata, *temp)
+		udata = append(udata, temp)
 	}
 	res.Content = "Subscribers Retrieved Successfully"
+	fmt.Print(res.Content)
 	Respond(w, udata, http.StatusOK)
 }
 
-// GetSubscribedTo implements GET /api/users/subscribedto/{subid} to fetch the list of all users a particular user has subscribed to
-func GetSubscribedTo(w http.ResponseWriter, r *http.Request) {
+// GetSubscriptions implements GET /api/subscriptions/{subid} to fetch the list of all users a particular user has subscribed to
+func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	var res Response
-	var udata []uint8
+	var udata []int
 	var query string
 	params := mux.Vars(r)
 
@@ -808,7 +809,7 @@ func GetSubscribedTo(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var temp *uint8
+		var temp int
 		if serr := rows.Scan(&temp); serr != nil {
 			fmt.Println(serr.Error())
 			res.Content = fmt.Sprintf("Subscription Scanning Failed: %s", serr.Error())
@@ -820,13 +821,14 @@ func GetSubscribedTo(w http.ResponseWriter, r *http.Request) {
 				fmt.Printf("%d\n", udata[i])
 			}
 		}
-		udata = append(udata, *temp)
+		udata = append(udata, temp)
 	}
 	res.Content = "Subscriptions Retrieved Successfully"
+	fmt.Print(res.Content)
 	Respond(w, udata, http.StatusOK)
 }
 
-// Subscribe implements POST /api/users/subscribedto to follow another users activity
+// Subscribe implements POST /api/subscriptions to follow another users activity
 func Subscribe(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	var exec string
@@ -844,13 +846,12 @@ func Subscribe(w http.ResponseWriter, r *http.Request) {
 	Respond(w, res, http.StatusOK)
 }
 
-// DeleteSubscription implements DELETE /api/users/subscribedto to remove a single user from the list of those being followed by a particular user
-func DeleteSubscription(w http.ResponseWriter, r *http.Request) {
+// Unsubscribe implements DELETE /api/subscriptions/{subid}_{followid} to remove a single user from the list of those being followed by a particular user
+func Unsubscribe(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	var exec string
 	params := mux.Vars(r)
-
-	exec = fmt.Sprintf("DELETE FROM follower_meta WHERE sub_id = \"%s\" AND follow_id = \"%s\")", params["subid"], params["followid"])
+	exec = fmt.Sprintf("DELETE FROM follower_meta WHERE sub_id = \"%s\" AND follow_id = \"%s\"", params["subid"], params["followid"])
 	result, eerr := db.Connection.Exec(exec)
 	if eerr != nil {
 		fmt.Println(eerr.Error())
@@ -858,6 +859,6 @@ func DeleteSubscription(w http.ResponseWriter, r *http.Request) {
 		Respond(w, result, http.StatusInternalServerError)
 		return
 	}
-	res.Content = "Subscribed Successfully"
+	res.Content = "Unsubscribed Successfully"
 	Respond(w, res, http.StatusOK)
 }

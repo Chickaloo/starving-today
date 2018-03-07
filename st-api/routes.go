@@ -193,26 +193,26 @@ var routes = Routes{
 	Route{
 		"GetSubscribers",
 		"GET",
-		"/users/subscribers/{followid}",
+		"/subscribers/{followid}",
 		GetSubscribers,
 	},
 	Route{
-		"GetSubscribedTo",
+		"GetSubscriptions",
 		"GET",
-		"/users/subscribedto/{subid}",
-		GetSubscribedTo,
+		"/subscriptions/{subid}",
+		GetSubscriptions,
 	},
 	Route{
 		"Subscribe",
 		"POST",
-		"/users/subscribedto",
+		"/subscriptions",
 		Subscribe,
 	},
 	Route{
-		"DeleteSubscription",
+		"Unsubscribe",
 		"DELETE",
-		"/users/subscribedto",
-		DeleteSubscription,
+		"/subscriptions/{subid}_{followid}",
+		Unsubscribe,
 	},
 
 	// Comments
