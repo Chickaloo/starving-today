@@ -24,8 +24,8 @@
                 </div>
               </div>
               <div class="col-sm-2">
-                <a style="color: grey;" data-toggle="modal" data-target="#recipe-editor" ><i class="fa fa-pencil fa-xs pr-1"></i></a>
-                <a style="color: red;" ng-click="DeleteRecipe()"><i class="fa fa-trash fa-xs pr-1"></i></a>
+                <a style="color: grey; font-size: 18px;" data-toggle="modal" data-target="#recipe-editor" ><i class="far fa-edit pr-1"></i></a>
+                <a style="color: red; font-size: 18px;" ng-click="DeleteRecipe()"><i class="fas fa-trash-alt pr-1"></i></a>
               </div>
             </div>
             <hr>
@@ -46,9 +46,9 @@
           <div class=" card-body tea lighten-3 text-center">
 
             <ul class="list-unstyled list-inline mt-3">
-              <li class="list-inline-item pr-2 black-text"><i class="fa fa-cutlery pr-1"></i>{{ recipe.preptime + recipe.cooktime}} mins</li>
-              <li class="list-inline-item pr-2 black-text"><i class="fa fa-thumbs-o-up pr-1"></i>{{ recipe.calories }}</li>
-              <li class="list-inline-item pr-2 black-text"><i class="fa fa-group pr-1"></i>{{ recipe.servings }}</li>
+              <li class="list-inline-item pr-2 black-text"><i class="far fa-clock pr-1"></i>{{ recipe.preptime + recipe.cooktime}} mins</li>
+              <li class="list-inline-item pr-2 black-text"><i class="far fa-thumbs-up pr-1"></i>{{ recipe.calories }}</li>
+              <li class="list-inline-item pr-2 black-text"><i class="fas fa-users pr-1"></i>{{ recipe.servings }}</li>
             </ul>
 
           </div>
@@ -79,7 +79,7 @@
                 <div style="float:left;"><b>{{ value.authorname }}</b> <small> {{value.date}}</small></div>
                 <div style="float:right;" ng-if="value.posterid === user.userid" ng-controller="commentEditModalController">
                   <!--<a class="grey-text" data-toggle="modal" data-target="#comment-editor" ng-click="PopulateComment(value.commentid)"><i class="fa fa-pencil fa-xs pr-1"></i></a>-->
-                  <a class="red-text" ng-click="DeleteComment(value.commentid)"><i class="fa fa-trash fa-xs pr-1"></i></a>
+                  <a class="red-text" ng-click="DeleteComment(value.commentid)"><i class="fas fa-trash-alt pr-1"></i></a>
                 </div>
               </div>
             </div>
@@ -105,7 +105,7 @@
             <span>&times;</span>
           </button>
         </div>
-        <div class="modal-body" style="width: 50%;">
+        <div class="modal-body">
           <form>
             <!--image link upload-->
             <div class="md-form">

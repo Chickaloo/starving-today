@@ -15,7 +15,7 @@
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ user.firstname }} {{ user.lastname }}</h3>
             <h5><i>{{ user.username}}</i>
-            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="fa fa-pencil fa-xs pr-1"></i></a>
+            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="far fa-edit pr-1"></i></a>
             </h5>
             <hr>
             <!--Text-->
@@ -27,9 +27,9 @@
           <div class=" card-body tea lighten-3 text-center">
 
               <ul class="list-unstyled list-inline mt-3">
-                <li class="list-inline-item pr-2 black-text"><i class="fa fa-cutlery pr-1"></i>{{recipecount}}</li>
-                <li class="list-inline-item pr-2 black-text"><i class="fa fa-thumbs-o-up pr-1"></i>{{reciperating}}</li>
-                <li class="list-inline-item pr-2 black-text"><a data-toggle="modal" data-target="#friends-viewer"><i class="fa fa-group pr-1"></i></a>-99.9</li>
+                <li class="list-inline-item pr-2 black-text"><i class="fas fa-utensils pr-1"></i>{{recipecount}}</li>
+                <li class="list-inline-item pr-2 black-text"><i class="far fa-thumbs-up pr-1"></i>{{reciperating}}</li>
+                <li class="list-inline-item pr-2 black-text"><a data-toggle="modal" data-target="#friends-viewer"><i class="fas fa-users pr-1"></i></a>0</li>
               </ul>
 
           </div>
@@ -103,7 +103,7 @@
             </div>
             <div ng-if="user.userid === value.posterid" style="float:right;">
               <a>Edit | </a>
-              <a style="color: #e50000;" ng-click="DeletePost(value.postid)">Delete <i class="fa fa-trash"></i></a>
+              <a style="color: #e50000;" ng-click="DeletePost(value.postid)">Delete <i class="far fa-trash-alt"></i></a>
             </div>
           </div>
 
@@ -141,28 +141,28 @@
         <form>
           <!--full name-->
           <div class="md-form">
-              <i class="fa fa-user prefix grey-text"></i>
+              <i class="far fa-user prefix grey-text"></i>
               <input type="text" id="userFullName" class="form-control" ng-model="fullname">
               <p class="font-small grey-text d-flex justify-content-end">Name</p>
           </div>
 
           <!-- image url -->
           <div class="md-form">
-              <i class="fa fa-images prefix grey-text"></i>
+              <i class="far fa-images prefix grey-text"></i>
               <input type="text" id="userImageUrl" class="form-control" value="{{newprofileimage}}" ng-model="newprofileimage">
               <p class="font-small grey-text d-flex justify-content-end">Image URL</p>
           </div>
 
           <!-- email -->
           <div class="md-form">
-              <i class="fa fa-envelope prefix grey-text"></i>
+              <i class="far fa-envelope prefix grey-text"></i>
               <input type="email" id="useremail" class="form-control" value="{{newemail}}" ng-model="newemail">
               <p class="font-small grey-text d-flex justify-content-end">Email</p>
           </div>
 
           <!-- bio -->
           <div class="md-form">
-              <i class="fa fa-pencil prefix grey-text"></i>
+              <i class="far fa-comment-alt prefix grey-text"></i>
               <textarea type="text" id="userbio" class="form-control md-textarea" rows="3" ng-model="newbio"></textarea>
               <p class="font-small grey-text d-flex justify-content-end">Bio</p>
           </div>
