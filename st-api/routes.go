@@ -62,6 +62,12 @@ var routes = Routes{
 		"/recipes/ingredient",
 		EditIngredientInRecipe,
 	},
+	Route{
+		"IngredientDelete",
+		"DELETE",
+		"/ingredients/{recipeid}",
+		IngredientDelete,
+	},
 
 	// Recipes
 	Route{
@@ -252,12 +258,7 @@ var routes = Routes{
 		"/comments/user/{userid}",
 		CommentsGetByUserID,
 	},
-	Route{
-		"TagCreate",
-		"POST",
-		"/tags/{recipeid}",
-		TagCreate,
-	},
+	// Tags
 	Route{
 		"TagDelete",
 		"DELETE",

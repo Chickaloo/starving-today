@@ -257,6 +257,7 @@ func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusBadRequest)
 		return
 	}
+	// Updates the recipe's information except for tags and ingredients
 	number, err := strconv.Atoi(params["recipeid"])
 	rdata.RecipeID = number
 	query := fmt.Sprintf("UPDATE recipe\nSET recipe_name=\"%s\", recipe_description=\"%s\", recipe_instructions=\"%s\", image_url=\"%s\", calories=\"%d\", prep_time=\"%d\", cook_time=\"%d\", total_time=\"%d\", servings=\"%d\" \nWHERE recipe_id=\"%s\"", rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.ImageURL, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, params["recipeid"])
@@ -269,6 +270,48 @@ func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 		Respond(w, result, http.StatusInternalServerError)
 		return
 	}
+	// Adds the recipe's tags
+	if rdata.TagsIn != "" {
+		list := strings.Split(rdata.TagsIn, "\n")
+		tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
+		for i := 0; i < len(list); i++ {
+			tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+			if i != len(list)-1 {
+				tquery += ","
+			}
+		}
+		tresult, terr := db.Connection.Exec(tquery)
+		if terr != nil {
+			if *Debug {
+				fmt.Println("Tags Insertion Failed: ", terr.Error())
+			}
+			res.Content = fmt.Sprintf("Tags Insertion Failed: %s", terr.Error())
+			Respond(w, tresult, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	// Adds the recipe's ingredients
+	if rdata.IngredientsIn != "" {
+	    list := strings.Split(rdata.IngredientsIn, "\n")
+	    iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, ingredient)\nVALUES ")
+	    for i := 0; i < len(list); i++ {
+	        iquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+	        if i != len(list)-1 {
+	            iquery += ","
+	        }
+	    }
+	    iresult, ierr := db.Connection.Exec(iquery)
+	    if ierr != nil {
+	        if *Debug {
+	            fmt.Println("Ingredients Insertion Failed: ", ierr.Error())
+	        }
+	        res.Content = fmt.Sprintf("Ingredients Insertion Failed: %s", ierr.Error())
+	        Respond(w, iresult, http.StatusInternalServerError)
+	        return
+	    }
+	}
+
 	Respond(w, rdata, http.StatusOK)
 }
 
@@ -305,28 +348,30 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
-		rdata.Tags = append(rdata.Tags, tag)
+		rdata.TagsIn += tag + "\n"
+		//rdata.Tags = append(rdata.Tags, tag)
 		if *Debug {
-			fmt.Printf("%s\n", rdata.Tags)
+			fmt.Printf("%s\n", rdata.TagsIn)
 		}
 	}
 
-	irows, err := db.Connection.Query(fmt.Sprintf("SELECT count, unit, ingredient FROM ingredient WHERE recipe_id=%s", params["recipeid"]))
+	irows, err := db.Connection.Query(fmt.Sprintf("SELECT ingredient FROM ingredient WHERE recipe_id=%s", params["recipeid"]))
 	if err != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
 	defer irows.Close()
 	for irows.Next() {
-		var ingredient Ingredient
-		if err := irows.Scan(&ingredient.Amount, &ingredient.Unit, &ingredient.Ingredient); err != nil {
+		var ingredient string
+		if err := irows.Scan(&ingredient); err != nil {
 			res.Content = "Ingredient population failed!"
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
-		rdata.Ingredients = append(rdata.Ingredients, ingredient)
+		//rdata.Ingredients = append(rdata.Ingredients, ingredient)
+		rdata.IngredientsIn += ingredient + "\n"
 		if *Debug {
-			fmt.Printf("%s\n", rdata.Ingredients)
+			fmt.Printf("%s\n", rdata.IngredientsIn)
 		}
 	}
 
@@ -407,59 +452,19 @@ func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
-// TagCreate implements the POST /tags/{recipeid} endpoint to add a tag to a recipe
-func TagCreate(w http.ResponseWriter, r *http.Request) {
-	var rdata Recipe
-	var res Response
-	params := mux.Vars(r)
-
-	if err := Decode(w, r, &rdata); err != nil {
-		if *Debug {
-			fmt.Println("Erreeeer")
-		}
-		res.Content = "Invalid JSON format recieved!"
-		Respond(w, res, http.StatusBadRequest)
-		return
-	}
-	number, terr := strconv.Atoi(params["recipeid"])
-	rdata.RecipeID = number
-	//Adds a tag to the tag table
-	tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES (\"%s\", \"%s\")", params["recipeid"], rdata.Tags[0])
-
-	tresult, terr := db.Connection.Exec(tquery)
-	if terr != nil {
-		if *Debug {
-			fmt.Println("Tag Creation Failed: ", terr.Error())
-		}
-		res.Content = fmt.Sprintf("Tag Creation Failed: %s", terr.Error())
-		Respond(w, tresult, http.StatusInternalServerError)
-		return
-	}
-	Respond(w, rdata, http.StatusOK)
-}
-
-// TagDelete implements the DELETE /tags/{recipeid} endpoint to delete a tag
+// TagDelete implements the DELETE /tags/{recipeid} endpoint to delete all the tags for a recipe
 func TagDelete(w http.ResponseWriter, r *http.Request) {
-	var rdata Recipe
 	var res Response
 	params := mux.Vars(r)
 
-	if err := Decode(w, r, &rdata); err != nil {
-		if *Debug {
-			fmt.Println("Erreeeer")
-		}
-		res.Content = "Invalid JSON format recieved!"
-		Respond(w, res, http.StatusBadRequest)
-		return
-	}
 	//Delete tags according to recipe id
-	tquery := fmt.Sprintf("DELETE FROM tag WHERE recipe_id=%s AND tag=\"%s\"", params["recipeid"], rdata.Tags[0])
+	tquery := fmt.Sprintf("DELETE FROM tag WHERE recipe_id=%s", params["recipeid"])
 	tresult, terr := db.Connection.Exec(tquery)
 	if terr != nil {
 		if *Debug {
-			fmt.Println("Tag Not Found: ", terr.Error())
+			fmt.Println("Tags Not Found: ", terr.Error())
 		}
-		res.Content = fmt.Sprintf("Tag Not Found: %s", terr.Error())
+		res.Content = fmt.Sprintf("Tags Not Found: %s", terr.Error())
 		Respond(w, res, http.StatusNotFound)
 		return
 	}
@@ -467,9 +472,38 @@ func TagDelete(w http.ResponseWriter, r *http.Request) {
 	_, tcerr := tresult.RowsAffected()
 	if tcerr != nil {
 		if *Debug {
-			fmt.Println("Tag Deletion failed: ", tcerr.Error())
+			fmt.Println("Tags Deletion failed: ", tcerr.Error())
 		}
-		res.Content = fmt.Sprintf("Tag Deletion failed: %s", tcerr.Error())
+		res.Content = fmt.Sprintf("Tags Deletion failed: %s", tcerr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+	Respond(w, res, http.StatusOK)
+}
+
+// IngredientDelete implements the DELETE /ingredients/{recipeid} endpoint to delete all the ingredients for a recipe
+func IngredientDelete(w http.ResponseWriter, r *http.Request) {
+	var res Response
+	params := mux.Vars(r)
+
+	//Delete ingredients according to recipe id
+	iquery := fmt.Sprintf("DELETE FROM ingredient WHERE recipe_id=%s", params["recipeid"])
+	iresult, ierr := db.Connection.Exec(iquery)
+	if ierr != nil {
+		if *Debug {
+			fmt.Println("Ingredients Not Found: ", ierr.Error())
+		}
+		res.Content = fmt.Sprintf("Ingredients Not Found: %s", ierr.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	}
+
+	_, icerr := iresult.RowsAffected()
+	if icerr != nil {
+		if *Debug {
+			fmt.Println("Ingredients Deletion failed: ", icerr.Error())
+		}
+		res.Content = fmt.Sprintf("Ingredients Deletion failed: %s", icerr.Error())
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
