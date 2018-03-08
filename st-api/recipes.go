@@ -76,11 +76,12 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	rdata.RecipeID = int(rid)
 
 	//Adds the tags to the tag table
-	if rdata.Tags != nil {
+	if rdata.TagsIn != "" {
+		list := strings.Split(rdata.TagsIn, "\n")
 		tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
-		for i := 0; i < len(rdata.Tags); i++ {
-			tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, rdata.Tags[i])
-			if i != len(rdata.Tags)-1 {
+		for i := 0; i < len(list); i++ {
+			tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+			if i != len(list)-1 {
 				tquery += ","
 			}
 		}
@@ -96,23 +97,24 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Adds the ingredients to the ingredient table
-	if rdata.Ingredients != nil {
-		iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, count, unit, ingredient)\nVALUES ")
-		for i := 0; i < len(rdata.Ingredients); i++ {
-			iquery += fmt.Sprintf("(\"%d\", \"%s\", \"%s\", \"%s\")", rdata.RecipeID, rdata.Ingredients[i].Amount, rdata.Ingredients[i].Unit, rdata.Ingredients[i].Ingredient)
-			if i != len(rdata.Ingredients)-1 {
-				iquery += ","
-			}
-		}
-		iresult, ierr := db.Connection.Exec(iquery)
-		if ierr != nil {
-			if *Debug {
-				fmt.Println("Ingredients Insertion Failed: ", ierr.Error())
-			}
-			res.Content = fmt.Sprintf("Ingredients Insertion Failed: %s", ierr.Error())
-			Respond(w, iresult, http.StatusInternalServerError)
-			return
-		}
+	if rdata.IngredientsIn != "" {
+	    list := strings.Split(rdata.IngredientsIn, "\n")
+	    iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, ingredient)\nVALUES ")
+	    for i := 0; i < len(list); i++ {
+	        iquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+	        if i != len(list)-1 {
+	            iquery += ","
+	        }
+	    }
+	    iresult, ierr := db.Connection.Exec(iquery)
+	    if ierr != nil {
+	        if *Debug {
+	            fmt.Println("Ingredients Insertion Failed: ", ierr.Error())
+	        }
+	        res.Content = fmt.Sprintf("Ingredients Insertion Failed: %s", ierr.Error())
+	        Respond(w, iresult, http.StatusInternalServerError)
+	        return
+	    }
 	}
 
 	// Increment recipe count in stats
