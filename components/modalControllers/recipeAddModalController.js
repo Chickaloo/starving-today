@@ -17,7 +17,9 @@ angular.module('starvingToday').controller('recipeAddModalController' , ['$scope
       calories: parseInt($scope.calories),
       preptime: parseInt($scope.preptime),
       cooktime: parseInt($scope.cooktime),
-      servings: parseInt($scope.servings)
+      servings: parseInt($scope.servings),
+      ingredientsin: $scope.ingredients,
+      tagsin: $scope.tags
     };
 
     var data = JSON.stringify(recipe_data);

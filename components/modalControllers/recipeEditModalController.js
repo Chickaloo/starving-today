@@ -34,8 +34,8 @@ angular.module('starvingToday').controller('recipeEditModalController' , ['$scop
       preptime: parseInt($scope.curRec.preptime),
       cooktime: parseInt($scope.curRec.cooktime),
       servings: parseInt($scope.curRec.servings),
-      tags: $scope.curRec.tags,
-      ingredients: $scope.curRec.ingredients
+      tagsin: $scope.curRec.tags,
+      ingredientsin: $scope.curRec.ingredients
     };
 
     var data = JSON.stringify(recipe_data);

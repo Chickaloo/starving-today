@@ -15,16 +15,19 @@
           <div class="card-body">
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ recipe.recipename }}</h3>
-            <div class="row" style="margin-top: 5px;" ng-repeat="tag in recipe.tags">
-              <div class="card hh" style="padding: 5px;">
-                <h5 style="margin: 0px;">{{ tag }}</h5>
+            <div class="row">
+              <div class="col-md-10 d-flex" style="margin-top: 5px;">
+                <div ng-repeat="tag in recipe.tags">
+                  <div class="btn" style="padding: 5px; background-color: #87c967 !important; color: #FAFEF8 !important; font-weight: 500;">
+                    <smallest>{{ tag }}</smallest>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <a style="color: grey;" data-toggle="modal" data-target="#recipe-editor" ><i class="fa fa-pencil fa-xs pr-1"></i></a>
+                <a style="color: red;" ng-click="DeleteRecipe()"><i class="fa fa-trash fa-xs pr-1"></i></a>
               </div>
             </div>
-            <div style="float: right; ">
-              <a style="color: grey;" data-toggle="modal" data-target="#recipe-editor" ><i class="fa fa-pencil fa-xs pr-1"></i></a>
-              <a style="color: red;" ng-click="DeleteRecipe()"><i class="fa fa-trash fa-xs pr-1"></i></a>
-            </div>
-            </h5>
             <hr>
             <!--Text-->
             <div>{{ recipe.recipedescription }}</div>
@@ -102,7 +105,7 @@
             <span>&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="width: 50%;">
           <form>
             <!--image link upload-->
             <div class="md-form">
@@ -125,6 +128,13 @@
                 <p class="font-small grey-text d-flex justify-content-end">Description</p>
             </div>
 
+            <!-- instructions -->
+            <div class="md-form">
+                <i class="fa fa-map prefix fa-xs grey-text"></i>
+                <textarea type="text" id="instructions" class="form-control md-textarea" rows="3" ng-model="curRec.recipeinstructions"></textarea>
+                <p class="font-small grey-text d-flex justify-content-end">Instructions</p>
+            </div>
+
             <!--servings-->
             <!-- CHANGE TO DROP DOWN -->
             <div class="md-form">
@@ -140,12 +150,12 @@
                 <p class="font-small grey-text d-flex justify-content-end">Calories</p>
             </div>
 
-            <!--preptime-->
+            <!--preptime
             <div class="md-form">
                 <i class="fa fa-hourglass-half fa-xs prefix grey-text"></i>
                 <input type="text" id="preptime" class="form-control" ng-model="curRec.preptime">
                 <p class="font-small grey-text d-flex justify-content-end">Preparation Time</p>
-            </div>
+            </div>-->
 
             <!--cooktime-->
             <div class="md-form">
@@ -160,13 +170,6 @@
                 <i class="fa fa-cart-plus fa-xs prefix grey-text"></i>
                 <textarea type="text" id="ingredients" class="form-control md-textarea" rows="3" ng-model="curRec.ingredients"></textarea>
                 <p class="font-small grey-text d-flex justify-content-end">Ingredients</p>
-            </div>
-
-            <!-- instructions -->
-            <div class="md-form">
-                <i class="fa fa-map prefix fa-xs grey-text"></i>
-                <textarea type="text" id="instructions" class="form-control md-textarea" rows="3" ng-model="curRec.recipeinstructions"></textarea>
-                <p class="font-small grey-text d-flex justify-content-end">Instructions</p>
             </div>
 
             <!-- tags -->
