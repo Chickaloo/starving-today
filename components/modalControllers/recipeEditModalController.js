@@ -1,7 +1,6 @@
 angular.module('starvingToday').controller('recipeEditModalController' , ['$scope' , '$http' , '$state' , 'dataUser' , 'dataRecipe', function($scope , $http , $state, dataUser , dataRecipe)
 {
-  $scope.user = dataUser.myUser;
-  $scope.curRec;
+  $scope.user = dataUser.getMyUser();
   //console.log("recipeModalController: dataUser: " + $scope.user.username);
   // $scope.OpenModal = function(){
     $scope.rec = dataRecipe.getCurrRecipe();

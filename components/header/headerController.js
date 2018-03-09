@@ -1,10 +1,9 @@
 angular.module('starvingToday').controller('headerController', ['$scope', '$http', '$state', 'dataUser', 'dataRecipe', function($scope, $http, $state, dataUser, dataRecipe)
 {
-    $scope.user = dataUser.myUser;
+    $scope.user = dataUser.getMyUser();
     $scope.recipelength = -1;
 
     $scope.LoadMyHub = function() {
-      dataUser.user = dataUser.myUser;
       $state.go('myHub', {}, {reload:true});
     };
 
@@ -37,22 +36,22 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
 
     $scope.runSearch = function() {
 
-        var query = {
-          keywords: $scope.searchquery,
-          bytag: true,
-          byname: true,
-          byingredient: true,
-          byuser: false
-        };
+      var query = {
+        keywords: $scope.searchquery,
+        bytag: true,
+        byname: true,
+        byingredient: true,
+        byuserid: true
+      };
 
-        var data = JSON.stringify(query);
+      var data = JSON.stringify(query);
 
-  		var config = {
-          withCredentials: 'true',
-    			headers : {
-    				'Content-Type': 'application/json;charset=UTF-8'
-    			}
-    		}
+		var config = {
+        withCredentials: 'true',
+  			headers : {
+  				'Content-Type': 'application/json;charset=UTF-8'
+  			}
+  		}
 
   		$http.post('http://138.68.22.10:84/search', query, config)
   		.then(
@@ -68,6 +67,8 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
                 });
               });
             }
+            dataUser.setUsers(response.data.users);
+            $scope.usercount = dataUser.getUserLength();
             dataRecipe.setRecipes(response.data.recipes);
             $scope.recipecount = dataRecipe.getRecipeLength();
             $scope.search = $scope.searchquery;

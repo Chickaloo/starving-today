@@ -1,5 +1,49 @@
 <div class="album py-5" >
   <div class="container">
+
+    <div>
+      <a data-toggle="collapse" data-target="#collapse-users">
+        <div class="white-text card-title" style="border-bottom: 1px solid #fff;">
+          <h3>Users ({{ usercount }} results)</h3>
+        </div>
+      </a>
+          <div class="collapse show" id="collapse-users">
+      <div class="row">
+        <div class="col-md-4" ng-repeat="user in users">
+          <a ng-click="selectUser(user.userid)">
+          <div class="card mb-4 box-shadow">
+            <div style="overflow:hidden; position:relative; height:100px; max-height:100px;" >
+              <img class="card-img-top" src="{{ user.profileimage }}" alt="{{ user.username }} Image" style="position: absolute; object-fit: cover; overflow-y: hidden; height: 100px; background-color: #f0f0f0;">
+              <div class="row white-text" style="padding: 0px; margin: 0px; background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.53) 79%, rgba(0,0,0,0.53) 100%); background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.53) 79%,rgba(0,0,0,0.53) 100%); background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.53) 79%,rgba(0,0,0,0.53) 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#ba000000',GradientType=0 ); width: 100%; height: 100px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <div class="col-sm-12" style="height: 50%; margin: 0; padding: 0px; padding-top: 5px;">
+
+                </div>
+                <div class="col-sm-12" style="height: 50%; margin: 0; padding: 0px;">
+                  <span style="position: absolute; bottom: 0; left: 10; text-align: left; width:100%;">
+                    <h3 class="truncate white-text" style="padding-left:10px; text-shadow: 1px 2px 4px rgba(0,0,0,0.7); font-weight: 400;"></h3>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 5px;">
+              <!--<p class="card-title">{{ value.recipename }}</p>-->
+              <p style="margin:5px;" class="card-text">{{user.firstname}} {{user.lastname}}</p>
+
+            </div>
+          </div>
+        </a>
+        </div>
+      </div>
+    </div>
+    </div>
+
+        <div>
+          <a data-toggle="collapse" data-target="#collapse-recs">
+            <div class="white-text card-title" style="border-bottom: 1px solid #fff;">
+              <h3>Recipes ({{ recipecount }} results)</h3>
+            </div>
+          </a>
+              <div class="collapse show" id="collapse-recs">
     <div class="row" >
       <div class="col-md-4" ng-repeat="(key, value) in recipes">
         <a ng-click="selectRecipe(key)">
@@ -44,5 +88,8 @@
       </a>
       </div>
     </div>
+  </div>
+  </div>
+
   </div>
 </div>

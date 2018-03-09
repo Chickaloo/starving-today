@@ -1,6 +1,7 @@
 angular.module('starvingToday').controller('myHubController', ['$scope', '$http', '$state', 'dataUser', 'dataRecipe', function($scope, $http, $state, dataUser, dataRecipe)
 {
-    $scope.user = dataUser.myUser;
+    $scope.user = dataUser.getMyUser();
+    $scope.user = dataUser.getMyUser();
     $scope.reciperating = 0;
 
     console.log("myHubController: dataUser: " + $scope.user.username);
@@ -32,7 +33,7 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
 			}
 		}
 
-		$http.get('http://138.68.22.10:84/recipes/user/'+dataUser.myUser.userid, config)
+		$http.get('http://138.68.22.10:84/recipes/user/'+$scope.user.userid, config)
 		.then(
 			function (response) {
         if(typeof response.data.recipes !== "undefined"){

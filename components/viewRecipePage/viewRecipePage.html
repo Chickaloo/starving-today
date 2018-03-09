@@ -46,9 +46,10 @@
           <div class=" card-body tea lighten-3 text-center">
 
             <ul class="list-unstyled list-inline mt-3">
-              <li class="list-inline-item pr-2 black-text"><i class="far fa-clock pr-1"></i>{{ recipe.preptime + recipe.cooktime}} mins</li>
-              <li class="list-inline-item pr-2 black-text"><i class="far fa-thumbs-up pr-1"></i>{{ recipe.calories }}</li>
-              <li class="list-inline-item pr-2 black-text"><i class="fas fa-users pr-1"></i>{{ recipe.servings }}</li>
+              <li class="list-inline-item pr-2 black-text"><i class="far fa-clock pr-1"></i> {{ recipe.preptime + recipe.cooktime}} mins</li>
+              <li class="list-inline-item pr-2 black-text"><i class="fas fa-fire"></i> {{ recipe.calories }}</li>
+              <li class="list-inline-item pr-2 black-text"><i class="fas fa-users pr-1"></i> {{ recipe.servings }}</li>
+              <li class="list-inline-item pr-2 black-text"><a ng-click="upvoteRecipe()"><i class="fas fa-heart pr-1"></i> {{ recipe.upvotes + recipe.downvotes }}</a></li>
             </ul>
 
           </div>

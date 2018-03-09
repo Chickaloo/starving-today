@@ -158,4 +158,23 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
   				}
   		});
   	}
+
+    $scope.upvoteRecipe = function() {
+
+  		var config = {
+              withCredentials: 'true',
+    			headers : {
+    				'Content-Type': 'application/json;charset=UTF-8'
+    			}
+    		}
+
+        $http.get('http://138.68.22.10:84/recipes/upvote/' + $scope.recipe.recipeid, config)
+        .then(function (response) {
+              $scope.recipe.upvotes = $scope.recipe.upvotes + 1;
+          },
+          function (response) {
+              console.log(response);
+        });
+    }
+
 }]);

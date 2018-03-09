@@ -101,6 +101,12 @@ var routes = Routes{
 		RecipeEdit,
 	},
 	Route{
+		"RecipeUpvote",
+		"GET",
+		"/recipes/upvote/{recipeid}",
+		RecipeUpvote,
+	},
+	Route{
 		"RecipeGetByID",
 		"GET",
 		"/recipes/id/{recipeid}",

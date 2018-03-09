@@ -1,7 +1,17 @@
 angular.module('starvingToday').controller('recipeAddModalController' , ['$scope' , '$http' , '$state' , 'dataUser' , 'dataRecipe', function($scope , $http , $state, dataUser , dataRecipe)
 {
-  $scope.user = dataUser.user;
-
+  $scope.user = dataUser.getMyUser();
+  $scope.recipename = "";
+  $scope.recipedescription = "";
+  $scope.recipeinstructions = "";
+  $scope.imageurl = "";
+  $scope.calories = 0;
+  $scope.preptime = 0;
+  $scope.cooktime = 0;
+  $scope.servings = 0;
+  $scope.ingredients = "";
+  $scope.tags = "";
+  
   $scope.UpdateRecipe = function() {
     if ($scope.user.userid === 0) {
       $scope.responseDetails = "not logged in!";

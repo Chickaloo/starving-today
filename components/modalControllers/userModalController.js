@@ -2,16 +2,17 @@ angular.module('starvingToday').controller('userModalController' , ['$scope' , '
 {
   console.log("IN THIS MODAL");
   //user fields
-  $scope.newuser = dataUser.myUser;
-  $scope.fullname = dataUser.myUser.firstname + " " + dataUser.myUser.lastname;
-  $scope.newbio = dataUser.myUser.bio;
-  $scope.newprofileimage = dataUser.myUser.profileimage;
-  $scope.newemail = dataUser.myUser.email;
+  $scope.newuser = dataUser.getMyUser();
+  $scope.fullname = $scope.newuser.firstname + " " + $scope.newuser.lastname;
+  $scope.newbio = $scope.newuser.bio;
+  $scope.newprofileimage = $scope.newuser.profileimage;
+  $scope.newemail = $scope.newuser.email;
 
   //update User
   $scope.UpdateUser = function(){
     var user_data = $scope.newuser;
     user_data.firstname = $scope.fullname;
+    user_data.lastname = "";
     user_data.bio = $scope.newbio;
     user_data.profileimage = $scope.newprofileimage;
     user_data.email = $scope.newemail;

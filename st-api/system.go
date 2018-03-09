@@ -168,20 +168,13 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.ByUserID == true {
+		fmt.Printf("Searching: %s", req.Keywords)
 		temp, serr := RecipeSearchByUser(req.Keywords)
 		if serr != nil {
 			fmt.Println(serr.Error())
 			return
 		}
-		for i := 0; i < len(temp); i++ {
-			key := strconv.Itoa(temp[i])
-			value, cerr := RecipeIDHelper(temp[i])
-			res.Recipes[key] = value
-			if cerr != nil {
-				fmt.Println(serr.Error())
-				return
-			}
-		}
+		res.Users = temp
 	}
 
 	if req.ByName == true {

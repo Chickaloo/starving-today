@@ -207,12 +207,12 @@ func UserAuth(w http.ResponseWriter, r *http.Request) {
 	uerr := db.Connection.QueryRow(fmt.Sprintf("SELECT user_id, user_name, first_name, last_name, email, bio, profile_image FROM user WHERE user_id=\"%s\"", id)).Scan(&rdata.UserID, &rdata.Username, &rdata.Firstname, &rdata.Lastname, &rdata.Email, &rdata.Bio, &rdata.ProfileImage)
 	switch {
 	case uerr == sql.ErrNoRows:
-		res.Content = fmt.Sprintf("Login Combination not found. Error: %s", err.Error())
+		res.Content = fmt.Sprintf("Login Combination not found. Error: %s", uerr.Error())
 		Respond(w, res, http.StatusNotFound)
 		return
 
 	case uerr != nil:
-		res.Content = fmt.Sprintf("Login DB Failed: %s", err.Error())
+		res.Content = fmt.Sprintf("Login DB Failed: %s", uerr.Error())
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	default:

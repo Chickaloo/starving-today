@@ -42,10 +42,10 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 					.then(
 						function (response) {
 							if(response.data.user.userid > 0){
+								dataUser.setMyUser(response.data.user);
 								$scope.changeAuth(true);
 							}
 
-							dataUser.setUser(response.data.user)
 
 						},
 						function (response) {
@@ -96,11 +96,9 @@ angular.module('starvingToday').controller('landingController', ['$scope', '$htt
 		.then(
 			function (response) {
 				if(response.data.user.userid > 0){
+					dataUser.setMyUser(response.data.user);
 					$scope.changeAuth(true);
 				}
-
-				dataUser.setUser(response.data.user)
-
 			},
 			function (response) {
 				if (response.status === 500) {

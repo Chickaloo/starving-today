@@ -28,6 +28,7 @@ type Response struct {
 	Recipes     map[string]Recipe `json:"recipes,omitempty"`
 	Recipe      *Recipe           `json:"recipe,omitempty"`
 	RecipeCount int               `json:"recipecount,omitempty"`
+	Users       []User            `json:"users,omitempty"`
 	User        *User             `json:"user,omitempty"`
 	UserCount   int               `json:"usercount,omitempty"`
 	Posts       map[string]Post   `json:"posts,omitempty"`
@@ -43,9 +44,9 @@ type Recipe struct {
 	RecipeInstructions string       `json:"recipeinstructions,omitempty"`
 	ImageURL           string       `json:"imageurl,omitempty"`
 	Ingredients        []Ingredient `json:"ingredients,omitempty"`
-	IngredientsIn			string `json:"ingredientsin,omitempty"`
+	IngredientsIn      string       `json:"ingredientsin,omitempty"`
 	Tags               []string     `json:"tags,omitempty"`
-	TagsIn string	`json:"tagsin,omitempty"`
+	TagsIn             string       `json:"tagsin,omitempty"`
 	Calories           uint16       `json:"calories,omitempty"`
 	PrepTime           uint16       `json:"preptime,omitempty"`
 	CookTime           uint16       `json:"cooktime,omitempty"`
@@ -88,22 +89,22 @@ type Recipes struct {
 }
 
 type Post struct {
-	PostID   int     `json:"postid,omitempty"`
-	UserID   int     `json:"userid,omitempty"`
-	PosterID int     `json:"posterid,omitempty"`
-	Title    string  `json:"title,omitempty"`
-	Content  string  `json:"content,omitempty"`
+	PostID   int    `json:"postid,omitempty"`
+	UserID   int    `json:"userid,omitempty"`
+	PosterID int    `json:"posterid,omitempty"`
+	Title    string `json:"title,omitempty"`
+	Content  string `json:"content,omitempty"`
 	Date     string `json:"date,omitempty"`
 }
 
 // Comment structure
 type Comment struct {
-	CommentID int     `json:"commentid,omitempty"`
+	CommentID int    `json:"commentid,omitempty"`
 	Date      string `json:"date,omitempty"`
-	Comment   string  `json:"comment,omitempty"`
-	RecipeID  int     `json:"recipeid,omitempty"`
-	UserID    int     `json:"userid,omitempty"`
-	PosterID  int     `json:"posterid,omitempty"`
+	Comment   string `json:"comment,omitempty"`
+	RecipeID  int    `json:"recipeid,omitempty"`
+	UserID    int    `json:"userid,omitempty"`
+	PosterID  int    `json:"posterid,omitempty"`
 }
 
 // Comments list of a recipe

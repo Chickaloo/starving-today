@@ -17,6 +17,34 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// RecipeUpvote implements GET /recipes/upvote/{recipeid}
+func RecipeUpvote(w http.ResponseWriter, r *http.Request) {
+	var res Response
+	var rec Recipe
+	params := mux.Vars(r)
+	rows, serr := db.Connection.Query(fmt.Sprintf("SELECT upvotes FROM recipe WHERE recipe_id=\"%s\"", params["recipeid"]))
+	if serr != nil {
+		Respond(w, serr.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		if rerr := rows.Scan(&rec.Upvotes); rerr != nil {
+			Respond(w, rerr.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	_, uerr := db.Connection.Exec(fmt.Sprintf("UPDATE recipe SET upvotes=\"%d\" WHERE recipe_id=\"%s\"", rec.Upvotes+1, params["recipeid"]))
+	if uerr != nil {
+		Respond(w, uerr.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	Respond(w, res, http.StatusOK)
+}
+
 // RecipeCount implements the GET /recipes/count endpoint to get the total number of recipes
 func RecipeCount(w http.ResponseWriter, r *http.Request) {
 	var rdata int
@@ -677,38 +705,29 @@ func RecipeSearchByName(s string) (rdata []int, serr error) {
 }
 
 // RecipeSearchByUser implements the GET /api/recipes/user/{userid} to retrieve all recipes by a particular user
-func RecipeSearchByUser(s string) (rdata []int, serr error) {
-	var temp int
-	var query string
+func RecipeSearchByUser(s string) ([]User, error) {
+	var rdata []User
 
-	username := s
+	fmt.Printf(s)
+	query := "SELECT user_id, user_name, first_name, last_name, profile_image FROM user WHERE first_name LIKE '%" + s + "%' OR last_name LIKE '%" + s + "%' OR user_name LIKE '%" + s + "%'"
 
-	userid, cerr := strconv.Atoi(username)
-	if cerr != nil {
-		fmt.Println(cerr.Error())
-		return
-	}
-
-	query = fmt.Sprintf("SELECT recipe_id FROM recipe WHERE user_id = \"%d\"", userid)
-
+	fmt.Printf(query)
 	rows, qerr := db.Connection.Query(query)
 	if qerr != nil {
 		fmt.Println(qerr.Error())
-		return
+		return nil, qerr
 	}
 	defer rows.Close()
 	for rows.Next() {
-		if qerr := rows.Scan(&temp); qerr != nil {
+		var temp User
+		if qerr := rows.Scan(&temp.UserID, &temp.Username, &temp.Firstname, &temp.Lastname, &temp.ProfileImage); qerr != nil {
 			fmt.Println(qerr.Error())
-			return
-		}
-		if *Debug {
-			fmt.Printf("%d\n", temp)
+			return nil, qerr
 		}
 		rdata = append(rdata, temp)
 	}
 
-	return
+	return rdata, nil
 }
 
 // AddIngredientToRecipe implements POST /api/recipes/ingredient to add a single ingredient to a recipe

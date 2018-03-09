@@ -11,10 +11,8 @@ app.controller('mainController' , ['$scope', '$http', 'dataUser', 'dataRecipe', 
 		$http.get('http://138.68.22.10:84/users/auth', config)
 		.then(
 			function(response){
+				dataUser.setMyUser(response.data.user);
 				$scope.auth = true;
-
-				dataUser.setUser(response.data.user);
-				// dataRecipe.getCurrRecipe();
 			},
 			function(response){
 				$scope.auth = false;
@@ -92,20 +90,45 @@ app.config(function($stateProvider, $httpProvider) {
 });
 
 angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
-    var dataUser = {};
+		var dataUser = {};
 		var myUser;
-    var user;
+		var user;
+		var users;
 		var userPosts;
 
-    dataUser.getUser = function (userid) {
-        $http.get('http://138.68.22.10:84/users/id/' + userid).then(
-					function(response){
-						user = response.data;
-					},
-					function(response){
-						user = {};
-					});
-    };
+		dataUser.setUsers = function (userlist) {
+			users = userlist;
+		}
+
+		dataUser.getUsers = function (userlist) {
+			return users;
+		}
+
+		dataUser.getMyUser = function () {
+			return myUser;
+		}
+		dataUser.setMyUser = function (user) {
+			myUser = user;
+		}
+		dataUser.getUserLength = function () {
+			if (typeof users !== "undefined"){
+				return users.length;
+			} else {
+				return 0;
+			}
+		}
+
+		dataUser.setUser = function(userdata){
+			user = userdata;
+		}
+
+		dataUser.getUser = function (userid) {
+			return user;
+		}
+
+		dataUser.setOtherUser = function (userdata) {
+			user = userdata;
+		}
 
 		dataUser.getPosts = function (userid) {
 	      $http.get('http://138.68.22.10:84/posts/' + userid).then(
@@ -134,12 +157,7 @@ angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
         dataUser.pop();
     };
 
-    return {
-      setUser: function(user){
-          this.myUser = user;
-      }
-    }
-
+		return dataUser
 }]);
 
 angular.module('starvingToday').factory('dataRecipe', ['$http', function ($http) {
