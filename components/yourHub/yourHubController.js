@@ -1,6 +1,7 @@
-angular.module('starvingToday').controller('myHubController', ['$scope', '$http', '$state', 'dataUser', 'dataRecipe', function($scope, $http, $state, dataUser, dataRecipe)
+angular.module('starvingToday').controller('yourHubController', ['$scope', '$http', '$state', 'dataUser', 'dataRecipe', function($scope, $http, $state, dataUser, dataRecipe)
 {
-    $scope.user = dataUser.myUser;
+    $scope.user = dataUser.user;
+    $scope.myUser = dataUser.myUser;
     $scope.reciperating = 0;
 
     $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(
@@ -9,7 +10,7 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
           Object.keys(response.data).forEach(function(key) {
             $http.get('http://138.68.22.10:84/users/id/' + response.data[key].posterid).then(
               function (res) {
-                //console.log(res.data.user.firstname + " " + res.data.user.lastname);
+                // console.log(res.data.user.firstname + " " + res.data.user.lastname);
                 response.data[key].authorname = res.data.user.firstname + " " + res.data.user.lastname;
               },
               function (res) {
@@ -24,22 +25,22 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
     });
 
 		var config = {
-      withCredentials: 'true',
-			headers : {
-				'Content-Type': 'application/json;charset=UTF-8'
-			}
-		}
+        withCredentials: 'true',
+  			headers : {
+  				'Content-Type': 'application/json;charset=UTF-8'
+  			}
+  		}
 
-		$http.get('http://138.68.22.10:84/recipes/user/'+dataUser.myUser.userid, config)
+		$http.get('http://138.68.22.10:84/recipes/user/'+dataUser.user.userid, config)
 		.then(
 			function (response) {
-        if(typeof response.data.recipes !== "undefined"){
-          $scope.userrecipes = response.data.recipes;
-          $scope.recipecount = Object.keys($scope.userrecipes).length;
-          angular.forEach($scope.userrecipes, function(value, key){
-            $scope.reciperating = $scope.reciperating + value.upvotes - value.downvotes;
-          });
-        }
+          if(typeof response.data.recipes !== "undefined"){
+            $scope.userrecipes = response.data.recipes;
+            $scope.recipecount = Object.keys($scope.userrecipes).length;
+            angular.forEach($scope.userrecipes, function(value, key){
+              $scope.reciperating = $scope.reciperating + value.upvotes - value.downvotes;
+            });
+          }
 			},
 			function (response) {
 				if (response.status === 500) {
@@ -57,6 +58,8 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
       $http.get('http://138.68.22.10:84/recipes/id/' + value).then(
         function (response) {
           currRecipe = response.data;
+          console.log("retrieved this recipe:");
+          console.log(currRecipe);
           dataRecipe.setCurrRecipe(currRecipe);
           dataRecipe.recipelen = 1;
             $state.go('viewRecipesState', {}, {reload: true});
@@ -69,7 +72,7 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
     $scope.MakePost = function(){
 
       var post_data = {
-        posterid: $scope.user.userid,
+        posterid: $scope.myUser.userid,
         userid: $scope.user.userid,
         title: $scope.posttitle,
         content: $scope.postcontent

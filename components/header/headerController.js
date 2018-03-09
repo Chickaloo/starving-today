@@ -1,10 +1,11 @@
 angular.module('starvingToday').controller('headerController', ['$scope', '$http', '$state', 'dataUser', 'dataRecipe', function($scope, $http, $state, dataUser, dataRecipe)
 {
-    $scope.user = dataUser.user;
+    $scope.user = dataUser.myUser;
     $scope.recipelength = -1;
     $scope.searchByUser = false;
 
     $scope.LoadMyHub = function() {
+      dataUser.user = dataUser.myUser;
       $state.go('myHub', {}, {reload:true});
     };
 

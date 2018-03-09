@@ -792,7 +792,7 @@ func EditIngredientInRecipe(w http.ResponseWriter, r *http.Request) {
 	Respond(w, res, http.StatusOK)
 }
 
-// GetSubscribers implements GET /api/subscribers/{followid} to fetch the list of all users who subscribed to a particular user
+// GetSubscribers implements GET /subscribers/{followid} to fetch the list of all users who subscribed to a particular user
 func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	var udata []int
@@ -835,6 +835,7 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	var query string
 	params := mux.Vars(r)
 
+	fmt.Println(fmt.Sprintf("SELECT follow_id FROM follower_meta WHERE sub_id = \"%s\"", params["subid"]))
 	query = fmt.Sprintf("SELECT follow_id FROM follower_meta WHERE sub_id = \"%s\"", params["subid"])
 	rows, qerr := db.Connection.Query(query)
 	if qerr != nil {
@@ -847,11 +848,11 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var temp int
 		if serr := rows.Scan(&temp); serr != nil {
-			fmt.Println(serr.Error())
 			res.Content = fmt.Sprintf("Subscription Scanning Failed: %s", serr.Error())
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
+		fmt.Println(temp)
 		if *Debug {
 			for i := 0; i < len(udata); i++ {
 				fmt.Printf("%d\n", udata[i])
@@ -859,18 +860,46 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 		}
 		udata = append(udata, temp)
 	}
-	res.Content = "Subscriptions Retrieved Successfully"
-	fmt.Print(res.Content)
-	Respond(w, udata, http.StatusOK)
+
+	fmt.Println(udata)
+
+	var userlist []User
+	for _, u := range udata {
+		fmt.Println(u)
+		var user User
+		fmt.Println(fmt.Sprintf("SELECT user_id, user_name, first_name, last_name, email, bio, profile_image FROM user WHERE user_id=%d", u))
+		err := db.Connection.QueryRow(fmt.Sprintf("SELECT user_id, user_name, first_name, last_name, email, bio, profile_image FROM user WHERE user_id=%d", u)).Scan(&user.UserID, &user.Username, &user.Firstname, &user.Lastname, &user.Email, &user.Bio, &user.ProfileImage)
+		switch {
+		case err == sql.ErrNoRows:
+			fmt.Printf("User not found. Error: %s", err.Error())
+		case err != nil:
+			fmt.Printf("Database Error. Error: %s", err.Error())
+		default:
+			res.Content = "User Found!"
+		}
+		userlist = append(userlist, user)
+	}
+
+	Respond(w, userlist, http.StatusOK)
 }
 
 // Subscribe implements POST /api/subscriptions to follow another users activity
 func Subscribe(w http.ResponseWriter, r *http.Request) {
 	var res Response
+	var fdata FollowerPair
 	var exec string
-	params := mux.Vars(r)
 
-	exec = fmt.Sprintf("INSERT INTO follower_meta (sub_id, follow_id) VALUES (\"%s\", \"%s\")", params["subid"], params["followid"])
+	derr := Decode(w, r, &fdata)
+	if derr != nil {
+		if *Debug {
+			fmt.Println("Decode Error.")
+		}
+		res.Content = "Invalid JSON format recieved!"
+		Respond(w, res, http.StatusBadRequest)
+		return
+	}
+
+	exec = fmt.Sprintf("INSERT INTO follower_meta (sub_id, follow_id, follower_hash) VALUES (\"%d\", \"%d\", \"%d-%d\")", fdata.SubID, fdata.FollowID, fdata.SubID, fdata.FollowID)
 	result, eerr := db.Connection.Exec(exec)
 	if eerr != nil {
 		fmt.Println(eerr.Error())

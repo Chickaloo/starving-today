@@ -1,6 +1,6 @@
 angular.module('starvingToday').controller('recipeEditModalController' , ['$scope' , '$http' , '$state' , 'dataUser' , 'dataRecipe', function($scope , $http , $state, dataUser , dataRecipe)
 {
-  $scope.user = dataUser.user;
+  $scope.user = dataUser.myUser;
   $scope.curRec;
   //console.log("recipeModalController: dataUser: " + $scope.user.username);
   // $scope.OpenModal = function(){
@@ -19,11 +19,6 @@ angular.module('starvingToday').controller('recipeEditModalController' , ['$scop
     });
 
   $scope.UpdateRecipe = function() {
-    if ($scope.user.userid === 0) {
-      $scope.responseDetails = "not logged in!";
-      console.log($scope.responseDetails);
-      return 1;
-    }
 
     $http.delete('http://138.68.22.10:84/tags/'+$scope.curRec.recipeid)
     .then(

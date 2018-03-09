@@ -14,13 +14,11 @@ app.controller('mainController' , ['$scope', '$http', 'dataUser', 'dataRecipe', 
 				$scope.auth = true;
 
 				dataUser.setUser(response.data.user);
-				dataRecipe.getCurrRecipe();
+				// dataRecipe.getCurrRecipe();
 			},
 			function(response){
 				$scope.auth = false;
-			}
-		);
-
+			});
 
 	$scope.changeAuth = function(newAuthVal){
 		$scope.auth = newAuthVal;
@@ -44,6 +42,13 @@ app.config(function($stateProvider, $httpProvider) {
     controller: 'myHubController'
   }
 
+  var yourHubState = {
+    name: 'yourHub',
+    url: '/yourHub',
+    templateUrl: 'components/yourHub/yourHub.html',
+    controller: 'yourHubController'
+  }
+
   var recipeState = {
     name: 'recipes',
     url: '/recipes',
@@ -55,8 +60,8 @@ app.config(function($stateProvider, $httpProvider) {
     name: 'default',
     url: '',
 
-    templateUrl: 'components/myHub/myHub.html',
-    controller: 'myHubController'
+    templateUrl: 'components/homePage/home.html',
+    controller: 'homeController'
     // templateUrl: 'components/homePage/home.html',
     // controller: 'landingController'
   }
@@ -78,6 +83,7 @@ app.config(function($stateProvider, $httpProvider) {
   }
 
   $stateProvider.state(myHubState);
+  $stateProvider.state(yourHubState);
   $stateProvider.state(addRecipeState);
   $stateProvider.state(defaultState);
   $stateProvider.state(homeState);
@@ -85,15 +91,20 @@ app.config(function($stateProvider, $httpProvider) {
   $stateProvider.state(viewRecipesState);
 });
 
-
 angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
     var dataUser = {};
-		var otherUser;
+		var myUser;
     var user;
 		var userPosts;
 
     dataUser.getUser = function (userid) {
-        return $http.get('http://138.68.22.10:84/users/id/' + userid);
+        $http.get('http://138.68.22.10:84/users/id/' + userid).then(
+					function(response){
+						user = response.data;
+					},
+					function(response){
+						user = {};
+					});
     };
 
 		dataUser.getPosts = function (userid) {
@@ -111,7 +122,6 @@ angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
 				return userPosts;
 	    };
 
-
     dataUser.searchUser = function (userid) {
         return $http.get('http://138.68.22.10:84/users/id/' + userid);
     };
@@ -126,7 +136,7 @@ angular.module('starvingToday').factory('dataUser', ['$http', function ($http) {
 
     return {
       setUser: function(user){
-          this.user = user;
+          this.myUser = user;
       }
     }
 
