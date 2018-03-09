@@ -2,6 +2,7 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
 {
     $scope.user = dataUser.getMyUser();
     $scope.recipelength = -1;
+    $scope.searchByUser = false;
 
     $scope.LoadMyHub = function() {
       $state.go('myHub', {}, {reload:true});
@@ -33,6 +34,16 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
   				}
   		});
   	}
+
+    scope.toggleSearchToUser = function() {
+      $scope.searchByUser = true;
+      console.log("search by user boolean: " + $scope.searchByUser);
+    }
+
+    scope.toggleSearchToKeyword = function() {
+      $scope.searchByUser = false;
+      console.log("search by user boolean: " + $scope.searchByUser);
+    }
 
     $scope.runSearch = function() {
 
