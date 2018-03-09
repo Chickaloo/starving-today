@@ -76,11 +76,12 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	rdata.RecipeID = int(rid)
 
 	//Adds the tags to the tag table
-	if rdata.Tags != nil {
+	if rdata.TagsIn != "" {
+		list := strings.Split(rdata.TagsIn, "\n")
 		tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
-		for i := 0; i < len(rdata.Tags); i++ {
-			tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, rdata.Tags[i])
-			if i != len(rdata.Tags)-1 {
+		for i := 0; i < len(list); i++ {
+			tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+			if i != len(list)-1 {
 				tquery += ","
 			}
 		}
@@ -96,11 +97,12 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Adds the ingredients to the ingredient table
-	if rdata.Ingredients != nil {
-		iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, count, unit, ingredient)\nVALUES ")
-		for i := 0; i < len(rdata.Ingredients); i++ {
-			iquery += fmt.Sprintf("(\"%d\", \"%s\", \"%s\", \"%s\")", rdata.RecipeID, rdata.Ingredients[i].Amount, rdata.Ingredients[i].Unit, rdata.Ingredients[i].Ingredient)
-			if i != len(rdata.Ingredients)-1 {
+	if rdata.IngredientsIn != "" {
+		list := strings.Split(rdata.IngredientsIn, "\n")
+		iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, ingredient)\nVALUES ")
+		for i := 0; i < len(list); i++ {
+			iquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+			if i != len(list)-1 {
 				iquery += ","
 			}
 		}
@@ -238,7 +240,7 @@ func RecipeDump(w http.ResponseWriter, r *http.Request) {
 }
 
 func addTags(s string, id int) {
-	
+
 }
 
 // RecipeEdit implements the PUT /recipes/{recipeid} endpoint to edit a recipe
@@ -255,6 +257,7 @@ func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 		Respond(w, res, http.StatusBadRequest)
 		return
 	}
+	// Updates the recipe's information except for tags and ingredients
 	number, err := strconv.Atoi(params["recipeid"])
 	rdata.RecipeID = number
 	query := fmt.Sprintf("UPDATE recipe\nSET recipe_name=\"%s\", recipe_description=\"%s\", recipe_instructions=\"%s\", image_url=\"%s\", calories=\"%d\", prep_time=\"%d\", cook_time=\"%d\", total_time=\"%d\", servings=\"%d\" \nWHERE recipe_id=\"%s\"", rdata.RecipeName, rdata.RecipeDescription, rdata.RecipeInstructions, rdata.ImageURL, rdata.Calories, rdata.PrepTime, rdata.CookTime, rdata.TotalTime, rdata.Servings, params["recipeid"])
@@ -267,6 +270,48 @@ func RecipeEdit(w http.ResponseWriter, r *http.Request) {
 		Respond(w, result, http.StatusInternalServerError)
 		return
 	}
+	// Adds the recipe's tags
+	if rdata.TagsIn != "" {
+		list := strings.Split(rdata.TagsIn, "\n")
+		tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES ")
+		for i := 0; i < len(list); i++ {
+			tquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+			if i != len(list)-1 {
+				tquery += ","
+			}
+		}
+		tresult, terr := db.Connection.Exec(tquery)
+		if terr != nil {
+			if *Debug {
+				fmt.Println("Tags Insertion Failed: ", terr.Error())
+			}
+			res.Content = fmt.Sprintf("Tags Insertion Failed: %s", terr.Error())
+			Respond(w, tresult, http.StatusInternalServerError)
+			return
+		}
+	}
+
+	// Adds the recipe's ingredients
+	if rdata.IngredientsIn != "" {
+		list := strings.Split(rdata.IngredientsIn, "\n")
+		iquery := fmt.Sprintf("INSERT INTO ingredient (recipe_id, ingredient)\nVALUES ")
+		for i := 0; i < len(list); i++ {
+			iquery += fmt.Sprintf("(\"%d\", \"%s\")", rdata.RecipeID, list[i])
+			if i != len(list)-1 {
+				iquery += ","
+			}
+		}
+		iresult, ierr := db.Connection.Exec(iquery)
+		if ierr != nil {
+			if *Debug {
+				fmt.Println("Ingredients Insertion Failed: ", ierr.Error())
+			}
+			res.Content = fmt.Sprintf("Ingredients Insertion Failed: %s", ierr.Error())
+			Respond(w, iresult, http.StatusInternalServerError)
+			return
+		}
+	}
+
 	Respond(w, rdata, http.StatusOK)
 }
 
@@ -303,28 +348,30 @@ func RecipeGetByID(w http.ResponseWriter, r *http.Request) {
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
+		rdata.TagsIn += tag + "\n"
 		rdata.Tags = append(rdata.Tags, tag)
 		if *Debug {
-			fmt.Printf("%s\n", rdata.Tags)
+			fmt.Printf("%s\n", rdata.TagsIn)
 		}
 	}
 
-	irows, err := db.Connection.Query(fmt.Sprintf("SELECT count, unit, ingredient FROM ingredient WHERE recipe_id=%s", params["recipeid"]))
+	irows, err := db.Connection.Query(fmt.Sprintf("SELECT ingredient FROM ingredient WHERE recipe_id=%s", params["recipeid"]))
 	if err != nil {
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
 	defer irows.Close()
 	for irows.Next() {
-		var ingredient Ingredient
-		if err := irows.Scan(&ingredient.Amount, &ingredient.Unit, &ingredient.Ingredient); err != nil {
+		var ingredient string
+		if err := irows.Scan(&ingredient); err != nil {
 			res.Content = "Ingredient population failed!"
 			Respond(w, res, http.StatusInternalServerError)
 			return
 		}
-		rdata.Ingredients = append(rdata.Ingredients, ingredient)
+		rdata.IngredientsIn += ingredient + "\n"
+		rdata.Ingredients = append(rdata.Ingredients, Ingredient{Ingredient: ingredient})
 		if *Debug {
-			fmt.Printf("%s\n", rdata.Ingredients)
+			fmt.Printf("%s\n", rdata.IngredientsIn)
 		}
 	}
 
@@ -405,59 +452,19 @@ func RecipesGetByUserID(w http.ResponseWriter, r *http.Request) {
 	Respond(w, rdata, http.StatusOK)
 }
 
-// TagCreate implements the POST /tags/{recipeid} endpoint to add a tag to a recipe
-func TagCreate(w http.ResponseWriter, r *http.Request) {
-	var rdata Recipe
-	var res Response
-	params := mux.Vars(r)
-
-	if err := Decode(w, r, &rdata); err != nil {
-		if *Debug {
-			fmt.Println("Erreeeer")
-		}
-		res.Content = "Invalid JSON format recieved!"
-		Respond(w, res, http.StatusBadRequest)
-		return
-	}
-	number, terr := strconv.Atoi(params["recipeid"])
-	rdata.RecipeID = number
-	//Adds a tag to the tag table
-	tquery := fmt.Sprintf("INSERT INTO tag (recipe_id, tag)\nVALUES (\"%s\", \"%s\")", params["recipeid"], rdata.Tags[0])
-
-	tresult, terr := db.Connection.Exec(tquery)
-	if terr != nil {
-		if *Debug {
-			fmt.Println("Tag Creation Failed: ", terr.Error())
-		}
-		res.Content = fmt.Sprintf("Tag Creation Failed: %s", terr.Error())
-		Respond(w, tresult, http.StatusInternalServerError)
-		return
-	}
-	Respond(w, rdata, http.StatusOK)
-}
-
-// TagDelete implements the DELETE /tags/{recipeid} endpoint to delete a tag
+// TagDelete implements the DELETE /tags/{recipeid} endpoint to delete all the tags for a recipe
 func TagDelete(w http.ResponseWriter, r *http.Request) {
-	var rdata Recipe
 	var res Response
 	params := mux.Vars(r)
 
-	if err := Decode(w, r, &rdata); err != nil {
-		if *Debug {
-			fmt.Println("Erreeeer")
-		}
-		res.Content = "Invalid JSON format recieved!"
-		Respond(w, res, http.StatusBadRequest)
-		return
-	}
 	//Delete tags according to recipe id
-	tquery := fmt.Sprintf("DELETE FROM tag WHERE recipe_id=%s AND tag=\"%s\"", params["recipeid"], rdata.Tags[0])
+	tquery := fmt.Sprintf("DELETE FROM tag WHERE recipe_id=%s", params["recipeid"])
 	tresult, terr := db.Connection.Exec(tquery)
 	if terr != nil {
 		if *Debug {
-			fmt.Println("Tag Not Found: ", terr.Error())
+			fmt.Println("Tags Not Found: ", terr.Error())
 		}
-		res.Content = fmt.Sprintf("Tag Not Found: %s", terr.Error())
+		res.Content = fmt.Sprintf("Tags Not Found: %s", terr.Error())
 		Respond(w, res, http.StatusNotFound)
 		return
 	}
@@ -465,9 +472,38 @@ func TagDelete(w http.ResponseWriter, r *http.Request) {
 	_, tcerr := tresult.RowsAffected()
 	if tcerr != nil {
 		if *Debug {
-			fmt.Println("Tag Deletion failed: ", tcerr.Error())
+			fmt.Println("Tags Deletion failed: ", tcerr.Error())
 		}
-		res.Content = fmt.Sprintf("Tag Deletion failed: %s", tcerr.Error())
+		res.Content = fmt.Sprintf("Tags Deletion failed: %s", tcerr.Error())
+		Respond(w, res, http.StatusInternalServerError)
+		return
+	}
+	Respond(w, res, http.StatusOK)
+}
+
+// IngredientDelete implements the DELETE /ingredients/{recipeid} endpoint to delete all the ingredients for a recipe
+func IngredientDelete(w http.ResponseWriter, r *http.Request) {
+	var res Response
+	params := mux.Vars(r)
+
+	//Delete ingredients according to recipe id
+	iquery := fmt.Sprintf("DELETE FROM ingredient WHERE recipe_id=%s", params["recipeid"])
+	iresult, ierr := db.Connection.Exec(iquery)
+	if ierr != nil {
+		if *Debug {
+			fmt.Println("Ingredients Not Found: ", ierr.Error())
+		}
+		res.Content = fmt.Sprintf("Ingredients Not Found: %s", ierr.Error())
+		Respond(w, res, http.StatusNotFound)
+		return
+	}
+
+	_, icerr := iresult.RowsAffected()
+	if icerr != nil {
+		if *Debug {
+			fmt.Println("Ingredients Deletion failed: ", icerr.Error())
+		}
+		res.Content = fmt.Sprintf("Ingredients Deletion failed: %s", icerr.Error())
 		Respond(w, res, http.StatusInternalServerError)
 		return
 	}
@@ -756,10 +792,10 @@ func EditIngredientInRecipe(w http.ResponseWriter, r *http.Request) {
 	Respond(w, res, http.StatusOK)
 }
 
-// GetSubscribers implements GET /api/users/subscribers/{followid} to fetch the list of all users who subscribed to a particular user
+// GetSubscribers implements GET /api/subscribers/{followid} to fetch the list of all users who subscribed to a particular user
 func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 	var res Response
-	var udata []uint8
+	var udata []int
 	var query string
 	params := mux.Vars(r)
 
@@ -773,7 +809,7 @@ func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var temp *uint8
+		var temp int
 		if serr := rows.Scan(&temp); serr != nil {
 			fmt.Println(serr.Error())
 			res.Content = fmt.Sprintf("Subscriber Scanning Failed: %s", serr.Error())
@@ -785,16 +821,17 @@ func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 				fmt.Printf("%d\n", udata[i])
 			}
 		}
-		udata = append(udata, *temp)
+		udata = append(udata, temp)
 	}
 	res.Content = "Subscribers Retrieved Successfully"
+	fmt.Print(res.Content)
 	Respond(w, udata, http.StatusOK)
 }
 
-// GetSubscribedTo implements GET /api/users/subscribedto/{subid} to fetch the list of all users a particular user has subscribed to
-func GetSubscribedTo(w http.ResponseWriter, r *http.Request) {
+// GetSubscriptions implements GET /api/subscriptions/{subid} to fetch the list of all users a particular user has subscribed to
+func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	var res Response
-	var udata []uint8
+	var udata []int
 	var query string
 	params := mux.Vars(r)
 
@@ -808,7 +845,7 @@ func GetSubscribedTo(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var temp *uint8
+		var temp int
 		if serr := rows.Scan(&temp); serr != nil {
 			fmt.Println(serr.Error())
 			res.Content = fmt.Sprintf("Subscription Scanning Failed: %s", serr.Error())
@@ -820,13 +857,14 @@ func GetSubscribedTo(w http.ResponseWriter, r *http.Request) {
 				fmt.Printf("%d\n", udata[i])
 			}
 		}
-		udata = append(udata, *temp)
+		udata = append(udata, temp)
 	}
 	res.Content = "Subscriptions Retrieved Successfully"
+	fmt.Print(res.Content)
 	Respond(w, udata, http.StatusOK)
 }
 
-// Subscribe implements POST /api/users/subscribedto to follow another users activity
+// Subscribe implements POST /api/subscriptions to follow another users activity
 func Subscribe(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	var exec string
@@ -844,13 +882,12 @@ func Subscribe(w http.ResponseWriter, r *http.Request) {
 	Respond(w, res, http.StatusOK)
 }
 
-// DeleteSubscription implements DELETE /api/users/subscribedto to remove a single user from the list of those being followed by a particular user
-func DeleteSubscription(w http.ResponseWriter, r *http.Request) {
+// Unsubscribe implements DELETE /api/subscriptions/{subid}_{followid} to remove a single user from the list of those being followed by a particular user
+func Unsubscribe(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	var exec string
 	params := mux.Vars(r)
-
-	exec = fmt.Sprintf("DELETE FROM follower_meta WHERE sub_id = \"%s\" AND follow_id = \"%s\")", params["subid"], params["followid"])
+	exec = fmt.Sprintf("DELETE FROM follower_meta WHERE sub_id = \"%s\" AND follow_id = \"%s\"", params["subid"], params["followid"])
 	result, eerr := db.Connection.Exec(exec)
 	if eerr != nil {
 		fmt.Println(eerr.Error())
@@ -858,6 +895,6 @@ func DeleteSubscription(w http.ResponseWriter, r *http.Request) {
 		Respond(w, result, http.StatusInternalServerError)
 		return
 	}
-	res.Content = "Subscribed Successfully"
+	res.Content = "Unsubscribed Successfully"
 	Respond(w, res, http.StatusOK)
 }

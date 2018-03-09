@@ -1,25 +1,48 @@
 <div class="album py-5" >
-        <div class="container">
-          <div class="row" >
-            <div class="col-md-4" ng-repeat="(key, value) in recipes | limitTo:Math.ceil(recipes.length/3)">
-              <div class="card mb-4 box-shadow">
-                <div style="padding-bottom:100%; overflow:hidden; position:relative; max-height:50px;" >
-                  <img class="card-img-top" src="{{ value.imageurl }}" alt="{{ value.recipename }} Image" style="object-fit: cover; overflow-y: hidden; background-color: #f0f0f0;">
-                </div>
-                <div class="card-body">
-                  <p class="card-title">{{ value.recipename }}</p>
-                  <p class="card-text" style="height:120px; overflow-y: auto;">{{ value.recipedescription }}</p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-secondary" ng-click="selectRecipe(key)">View</button>
-                    </div>
-                    <small class="text-success">+{{value.upvotes}}</small>
-                    <small class="text-danger">-{{value.downvotes}}</small>
-                    <small class="text-muted">Total Time: {{value.preptime + value.cooktime}} mins</small>
-                  </div>
-                </div>
+  <div class="container">
+    <div class="row" >
+      <div class="col-md-4" ng-repeat="(key, value) in recipes">
+        <a ng-click="selectRecipe(key)">
+        <div class="card mb-4 box-shadow">
+          <div style="overflow:hidden; position:relative; height:100px; max-height:100px;" >
+            <img class="card-img-top" src="{{ value.imageurl }}" alt="{{ value.recipename }} Image" style="position: absolute; object-fit: cover; overflow-y: hidden; height: 100px; background-color: #f0f0f0;">
+            <div class="row white-text" style="padding: 0px; margin: 0px; background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.53) 79%, rgba(0,0,0,0.53) 100%); background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.53) 79%,rgba(0,0,0,0.53) 100%); background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.53) 79%,rgba(0,0,0,0.53) 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#ba000000',GradientType=0 ); width: 100%; height: 100px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+              <div class="col-sm-12" style="height: 50%; margin: 0; padding: 0px; padding-top: 5px;">
+                <h5 style="font-size: 16px; text-align: right; font-weight: 600;">
+                  <div class="col-sm-12" style="text-shadow: 1px 2px 4px rgba(0,0,0,0.9) !important;"> {{value.upvotes + value.downvotes}} <i class="far fa-heart" style="text-shadow: 1px 2px 4px rgba(0,0,0,0.9) !important;"></i></div>
+                  <div class="col-sm-12" style="text-shadow: 1px 2px 4px rgba(0,0,0,0.9) !important;"> {{value.preptime + value.cooktime}} <i class="far fa-clock" style="text-shadow: 1px 2px 4px rgba(0,0,0,0.9) !important;"></i></div>
+                </h5>
+              </div>
+              <div class="col-sm-12" style="height: 50%; margin: 0; padding: 0px;">
+                <span style="position: absolute; bottom: 0; left: 10; text-align: left; width:100%;">
+                  <h3 class="truncate white-text" style="padding-left:10px; text-shadow: 1px 2px 4px rgba(0,0,0,0.7); font-weight: 400;">{{value.recipename}}</h3>
+                </span>
               </div>
             </div>
           </div>
+          <div class="card-body" style="padding: 5px; min-height:80px;">
+            <!--<p class="card-title">{{ value.recipename }}</p>-->
+            <p style="margin:5px;" class="card-text">Posted by {{ value.authorname }}</p>
+            <div class="row" style="margin:0;">
+              <div class="col-md-12 d-flex" style="margin:0; padding: 0px;">
+                <div ng-repeat="tag in value.tags | limitTo:4">
+                  <div class="btn" style="background-color: #87c967 !important; color: #FAFEF8 !important; font-weight: 500; font-size: 10px; min-height: 0px; min-width: 0px; padding: 5px;">
+                    <smallest>{{ tag }}</smallest>
+                  </div>
+                </div>
+              </div>
+            </div>            <!--<div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+              </div>
+              <small class="text-success">+{{value.upvotes}}</small>
+              <small class="text-danger">-{{value.downvotes}}</small>
+              <small class="text-muted">Total Time: {{value.preptime + value.cooktime}} mins</small>
+            </div>-->
+          </div>
         </div>
+      </a>
+      </div>
     </div>
+  </div>
+</div>

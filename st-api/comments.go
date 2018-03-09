@@ -11,10 +11,10 @@ import (
 
 // CommentCreate implements the POST /comments endpoint to create a comment
 func CommentCreate(w http.ResponseWriter, r *http.Request) {
-    var rdata Comment
-    var res Response
+	var rdata Comment
+	var res Response
 
-    if err := Decode(w, r, &rdata); err != nil {
+	if err := Decode(w, r, &rdata); err != nil {
 		if *Debug {
 			fmt.Println("Error")
 		}
@@ -23,16 +23,16 @@ func CommentCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    query := fmt.Sprintf("INSERT INTO comment (comment, recipe_id, user_id, poster_id)\nValues (\"%s\", \"%d\", \"%d\", \"%d\")", rdata.Comment, rdata.RecipeID, rdata.UserID, rdata.PosterID)
-    result, err := db.Connection.Exec(query)
-    if err != nil {
-        if *Debug {
-            fmt.Println("Comment Creation Failed: ", err.Error())
-        }
-        res.Content = fmt.Sprintf("Comment Creation Failed: %s", err.Error())
+	query := fmt.Sprintf("INSERT INTO comment (comment, recipe_id, user_id, poster_id)\nValues (\"%s\", \"%d\", \"%d\", \"%d\")", rdata.Comment, rdata.RecipeID, rdata.UserID, rdata.PosterID)
+	result, err := db.Connection.Exec(query)
+	if err != nil {
+		if *Debug {
+			fmt.Println("Comment Creation Failed: ", err.Error())
+		}
+		res.Content = fmt.Sprintf("Comment Creation Failed: %s", err.Error())
 		Respond(w, result, http.StatusInternalServerError)
 		return
-    }
+	}
 
 	Respond(w, rdata, http.StatusOK)
 }
@@ -140,7 +140,7 @@ func CommentsGetByRecipeID(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if *Debug {
-			fmt.Printf("%d: %d %s %d %d %d\n", re.CommentID, re.Date, re.Comment, re.RecipeID, re.UserID, re.PosterID)
+			fmt.Printf("%d: %s %s %d %d %d\n", re.CommentID, re.Date, re.Comment, re.RecipeID, re.UserID, re.PosterID)
 		}
 		rdata.CommentsList[re.CommentID] = re
 	}
@@ -175,7 +175,7 @@ func CommentsGetByUserID(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if *Debug {
-			fmt.Printf("%d: %d %s %d %d %d\n", re.CommentID, re.Date, re.Comment, re.RecipeID, re.UserID, re.PosterID)
+			fmt.Printf("%d: %s %s %d %d %d\n", re.CommentID, re.Date, re.Comment, re.RecipeID, re.UserID, re.PosterID)
 		}
 		rdata.CommentsList[re.CommentID] = re
 	}

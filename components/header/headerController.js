@@ -56,7 +56,18 @@ angular.module('starvingToday').controller('headerController', ['$scope', '$http
   		$http.post('http://138.68.22.10:84/search', query, config)
   		.then(
   			function (response) {
-					  dataRecipe.setRecipes(response.data.recipes);
+            if (typeof response.data.recipes !== "undefined") {
+              Object.keys(response.data.recipes).forEach(function(key) {
+                $http.get('http://138.68.22.10:84/users/id/' + response.data.recipes[key].userid).then(
+                  function (res) {
+                    response.data.recipes[key].authorname = res.data.user.firstname + " " + res.data.user.lastname;
+                  },
+                  function (res) {
+                    response.data.recipes[key].authorname = "Unknown";
+                });
+              });
+            }
+            dataRecipe.setRecipes(response.data.recipes);
             $scope.recipecount = dataRecipe.getRecipeLength();
             $scope.search = $scope.searchquery;
             $state.go('recipes', {}, {reload:true});

@@ -62,6 +62,12 @@ var routes = Routes{
 		"/recipes/ingredient",
 		EditIngredientInRecipe,
 	},
+	Route{
+		"IngredientDelete",
+		"DELETE",
+		"/ingredients/{recipeid}",
+		IngredientDelete,
+	},
 
 	// Recipes
 	Route{
@@ -193,26 +199,26 @@ var routes = Routes{
 	Route{
 		"GetSubscribers",
 		"GET",
-		"/users/subscribers/{followid}",
+		"/subscribers/{followid}",
 		GetSubscribers,
 	},
 	Route{
-		"GetSubscribedTo",
+		"GetSubscriptions",
 		"GET",
-		"/users/subscribedto/{subid}",
-		GetSubscribedTo,
+		"/subscriptions/{subid}",
+		GetSubscriptions,
 	},
 	Route{
 		"Subscribe",
 		"POST",
-		"/users/subscribedto",
+		"/subscriptions",
 		Subscribe,
 	},
 	Route{
-		"DeleteSubscription",
+		"Unsubscribe",
 		"DELETE",
-		"/users/subscribedto",
-		DeleteSubscription,
+		"/subscriptions/{subid}_{followid}",
+		Unsubscribe,
 	},
 
 	// Comments
@@ -252,12 +258,7 @@ var routes = Routes{
 		"/comments/user/{userid}",
 		CommentsGetByUserID,
 	},
-	Route{
-		"TagCreate",
-		"POST",
-		"/tags/{recipeid}",
-		TagCreate,
-	},
+	// Tags
 	Route{
 		"TagDelete",
 		"DELETE",

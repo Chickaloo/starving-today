@@ -27,11 +27,13 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
 		$http.get('http://138.68.22.10:84/recipes/user/'+dataUser.user.userid, config)
 		.then(
 			function (response) {
-				$scope.userrecipes = response.data.recipes;
-        $scope.recipecount = Object.keys($scope.userrecipes).length;
-        angular.forEach($scope.userrecipes, function(value, key){
-          $scope.reciperating = $scope.reciperating + value.upvotes - value.downvotes;
-        });
+          if(typeof response.data.recipes !== "undefined"){
+            $scope.userrecipes = response.data.recipes;
+            $scope.recipecount = Object.keys($scope.userrecipes).length;
+            angular.forEach($scope.userrecipes, function(value, key){
+              $scope.reciperating = $scope.reciperating + value.upvotes - value.downvotes;
+            });
+          }
 			},
 			function (response) {
 				if (response.status === 500) {

@@ -2,16 +2,16 @@ angular.module('starvingToday').controller('recipeEditModalController' , ['$scop
 {
   $scope.user = dataUser.user;
   $scope.curRec;
-  console.log("recipeModalController: dataUser: " + $scope.user.username);
+  //console.log("recipeModalController: dataUser: " + $scope.user.username);
   // $scope.OpenModal = function(){
     $scope.rec = dataRecipe.getCurrRecipe();
-    console.log("print");
-    console.log($scope.rec.recipeid);
+    //console.log("print");
+    //console.log($scope.rec.recipeid);
     $http.get('http://138.68.22.10:84/recipes/id/' + $scope.rec.recipeid).then(
       function (response) {
         $scope.curRec = response.data;
-        console.log("print");
-        console.log($scope.curRec);
+        //console.log("print");
+        //console.log($scope.curRec);
         dataRecipe.recipelen = 1;
       },
       function (response) {
@@ -25,6 +25,23 @@ angular.module('starvingToday').controller('recipeEditModalController' , ['$scop
       return 1;
     }
 
+    $http.delete('http://138.68.22.10:84/tags/'+$scope.curRec.recipeid)
+    .then(
+      function(response){
+        console.log(response);
+      },
+      function(response){
+        console.log(response);
+      });
+    $http.delete('http://138.68.22.10:84/ingredients/'+$scope.curRec.recipeid)
+    .then(
+      function(response){
+        console.log(response);
+      },
+      function(response){
+        console.log(response);
+      });
+
     var recipe_data = {
       recipename: $scope.curRec.recipename,
       recipedescription: $scope.curRec.recipedescription,
@@ -34,8 +51,8 @@ angular.module('starvingToday').controller('recipeEditModalController' , ['$scop
       preptime: parseInt($scope.curRec.preptime),
       cooktime: parseInt($scope.curRec.cooktime),
       servings: parseInt($scope.curRec.servings),
-      tags: $scope.curRec.tags,
-      ingredients: $scope.curRec.ingredients
+      tagsin: $scope.curRec.tagsin,
+      ingredientsin: $scope.curRec.ingredientsin
     };
 
     var data = JSON.stringify(recipe_data);
@@ -50,8 +67,8 @@ angular.module('starvingToday').controller('recipeEditModalController' , ['$scop
     .then(
       function (response) {
         $scope.responseDetails = "You entered a recipe! Eww!";
-        dataRecipe.setCurrRecipe(recipe_data);
-        $state.reload()
+        dataRecipe.setCurrRecipe(response.data);
+        $state.reload();
       },
       function (response) {
         $scope.responseDetails = "You couldn't even enter a recipe correctly.. for SHAME!" + response.status;
