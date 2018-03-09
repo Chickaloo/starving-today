@@ -54,15 +54,20 @@ app.config(function($stateProvider, $httpProvider) {
   var defaultState = {
     name: 'default',
     url: '',
-    templateUrl: 'components/homePage/home.html',
-    controller: 'landingController'
+
+    templateUrl: 'components/myHub/myHub.html',
+    controller: 'myHubController'
+    // templateUrl: 'components/homePage/home.html',
+    // controller: 'landingController'
   }
 
   var homeState = {
     name: 'home',
     url: '/home',
-    templateUrl: 'components/homePage/home.html',
-    controller: 'landingController'
+    templateUrl: 'components/myHub/myHub.html',
+    controller: 'myHubController'
+    // templateUrl: 'components/homePage/home.html',
+    // controller: 'landingController'
   }
 
     var viewRecipesState = {

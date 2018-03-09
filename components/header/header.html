@@ -3,12 +3,12 @@
 	<nav class="navbar navbar-expand-lg navbar-dark">
 		<div class="container-fluid">
 	    <!-- Navbar brand -->
-		<div class="col-lg-3">
+		<div class="col-sm-2">
 	    <a class="navbar-brand" ui-sref="home">
-				<img class="navbar-brand" style="padding: 15px;" src="http://138.68.22.10/ckong/starving-today/images/hungerHubLogo.png" height="70"/></a>
+				<img class="navbar-brand" style="padding-top: 10px;" src="http://138.68.22.10/images/hungersmall.png" height="90"/></a>
 		</div>
 
-	    <div class="col-lg-6" style="height:100px; width: 100%;">
+	    <div class="col-sm-4" style="height:100px;">
 
 	    	<form class="form-inline" ng-submit="runSearch(searchquery)">
 	        <div class="md-form mt-0" style="width: 100%; padding: 20px;" >
@@ -17,7 +17,7 @@
 
 	    </form>
 				</div>
-	    <div class="col-lg-3" style="height:100px; width: 100%;">
+	    <div class="col-sm-3" style="height:100px; width: 100%;">
 				<div class="white-text" style="padding: 20px; float: right; text-align:right;">
 					<h4 class="white-text" style="margin-bottom: 0px;">Hi, {{ user.firstname }}</h4>
 					<a class="white-text" ng-click="LoadMyHub()">View Profile </a> | <a class="red-text" ng-click="Logout()">Sign Out <i class="fa fa-sign-out prefix red-text"></i> </a>
