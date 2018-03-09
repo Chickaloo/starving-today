@@ -1,5 +1,4 @@
-angular.modal('starvingToday').controller('friendViewerModalController',['$scope' , '$http' , 'dataUser' , function($scope , $http , dataUser){
-  $scope.user = dataUser.user;
+angular.module('starvingToday').controller('friendViewerModalController',['$scope' , '$http' , 'dataUser' , function($scope , $http , dataUser){
 
   var config = {
       withCredentials: 'true',
@@ -8,14 +7,11 @@ angular.modal('starvingToday').controller('friendViewerModalController',['$scope
       }
     }
 
-  $http.get('http://138.68.22.10:84/subscriptions'+$scope.user.userid , config)
+  $http.get('http://138.68.22.10:84/subscriptions/' + dataUser.user.userid , config)
   .then(
     function(response){
-      console.log("friendViewerModalController : 200" );
-      if(typeof response.data !== "undefined"){
-        $scope.userfriends = response.data;
-        console.log("user recipies: " + $scope.userfriends);
-      }
+      $scope.userfriends = response.data;
+      console.log($scope.userfriends);
     },
     function(response){
       if (response.status === 500) {
@@ -31,7 +27,7 @@ angular.modal('starvingToday').controller('friendViewerModalController',['$scope
   );
 
   $scope.searchForUser = function(value){
-    $http.get('http://138.68.22.10/users/username'+value)
+    $http.get('http://138.68.22.10:84/users/username/'+value)
     .then(
       function(response){
 
