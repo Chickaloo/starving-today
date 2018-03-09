@@ -4,8 +4,14 @@
 		<div class="container-fluid">
 	    <!-- Navbar brand -->
 		<div class="col-sm-2">
-	    <a class="navbar-brand" ui-sref="home">
-				<img class="navbar-brand" style="padding-top: 10px;" src="http://138.68.22.10/images/hungersmall.png" height="90"/></a>
+	    <a class="navbar-brand" >
+				<img class="navbar-brand" ui-sref="home" style="padding-top: 10px;" src="http://138.68.22.10/images/hungersmall.png" height="90"/></a>
+				<a class="dropdown white-text" data-toggle="dropdown"><i class="fas fa-align-justify"></i></a>
+				<div class="dropdown-menu dropdown-primary">
+					<a class="dropdown-item" ui-sref="home">Home</a>
+					<a class="dropdown-item" ng-click="goToExplore()">Explore</a>
+					<a class="dropdown-item" ui-sref="myHub">MyHub</a>
+				</div>
 		</div>
 
 	    <div class="col-sm-4" style="height:100px;">
@@ -13,12 +19,6 @@
 	    	<form class="form-inline" ng-submit="runSearch(searchquery)">
 	        <div class="md-form mt-0" style="width: 100%; padding: 20px;" >
 	            <input class="form-control" type="text" style="width: 100%;" placeholder="Search" aria-label="Search" ng-model="searchquery">
-							<a class="dropdown" data-toggle="dropdown"><i class="fa fa-sort-down"></i></a>
-								<div class="dropdown-menu dropdown-primary">
-                	<a class="dropdown-item" ng-click="toggleSearchToUser()">User</a>
-									<a class="dropdown-item" ng-click="toggleSearchToKeyword()">Keyword</a>
-            		</div>
-
         	</div>
 	    	</form>
 			</div>

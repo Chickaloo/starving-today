@@ -57,7 +57,6 @@ app.config(function($stateProvider, $httpProvider) {
   var defaultState = {
     name: 'default',
     url: '',
-
     templateUrl: 'components/homePage/home.html',
     controller: 'homeController'
     // templateUrl: 'components/homePage/home.html',
@@ -67,8 +66,8 @@ app.config(function($stateProvider, $httpProvider) {
   var homeState = {
     name: 'home',
     url: '/home',
-    templateUrl: 'components/myHub/myHub.html',
-    controller: 'myHubController'
+    templateUrl: 'components/homePage/home.html',
+    controller: 'homeController'
     // templateUrl: 'components/homePage/home.html',
     // controller: 'landingController'
   }
