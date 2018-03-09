@@ -1,7 +1,9 @@
 angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$http', '$state', '$sce', 'dataRecipe', 'dataUser', function($scope, $http, $state, $sce, dataRecipe, dataUser)
 {
     $scope.recipe = dataRecipe.getCurrRecipe();
-    //console.log($scope.recipe);
+    $scope.user = dataUser.getMyUser();
+    console.log($scope.recipe.userid);
+    console.log($scope.user.userid);
     //console.log($scope.recipe.tags);
     $scope.recipe.recipeinstructions = $sce.trustAsHtml($scope.recipe.recipeinstructions);
     $scope.recipelen = dataRecipe.getRecipeLength();

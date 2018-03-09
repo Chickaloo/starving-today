@@ -29,7 +29,7 @@
               <ul class="list-unstyled list-inline mt-3">
                 <li class="list-inline-item pr-2 black-text"><i class="fas fa-utensils pr-1"></i>{{recipecount}}</li>
                 <li class="list-inline-item pr-2 black-text"><i class="far fa-thumbs-up pr-1"></i>{{reciperating}}</li>
-                <li class="list-inline-item pr-2 black-text"><a data-toggle="modal" data-target="#friends-viewer"><i class="fas fa-users pr-1"></i></a>0</li>
+                <li class="list-inline-item pr-2 black-text"><a data-toggle="modal" data-target="#friends-viewer"><i class="fas fa-users pr-1"></i></a>{{followcount}}</li>
               </ul>
 
           </div>
@@ -176,21 +176,30 @@
 </div>
 
 <!-- Friend Viewer Modal -->
-<div class="modal fade" id="friends-viewer" tabindex="-1" role="dialog" data-backdrop="true" ng-controller="friendViewerModalController">
+<div class="modal fade" id="friends-viewer" tabindex="-1" role="dialog" data-backdrop="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="md-form mt-0">
-          <input class="form-control" style="width: 100%;" type="text" placeholder="Search" aria-label="Search">
-        </div>
+        <form ng-submit="searchForUser(searchquery)">
+          <div class="md-form mt-0">
+            <input class="form-control" style="width: 100%;" type="text" placeholder="Search Users" ng-model="searchquery" aria-label="Search">
+          </div>
+        </form>
         <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
       </div>
       <div class="modal-body">
 
-        <ul class="list-group" ng-repeat="(key,value) in userfriends">
-          <li class="list-group-item">{{ value.username }} | {{ value.firstname }} {{ value.lastname }}</li>
-        </ul>
-
+        <div >
+          <ul class="list-group" ng-repeat="(key,value) in searchres">
+            <a data-dismiss="modal" ng-click="selectUser(value.userid)"><li class="list-group-item">{{ value.username }} | {{ value.firstname }} {{ value.lastname }}</li></a>
+          </ul>
+        <div>
+        <div>
+          <h3 style="margin-top:10px;">Current Friends</h3>
+          <ul class="list-group" ng-repeat="(key,value) in currfriends">
+            <a data-dismiss="modal" ng-click="selectUser(value.userid)"><li class="list-group-item">{{ value.username }} | {{ value.firstname }} {{ value.lastname }}</li></a>
+          </ul>
+        <div>
       </div>
     </div>
   </div>

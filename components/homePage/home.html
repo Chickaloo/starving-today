@@ -4,11 +4,12 @@
 
 /* Carousel base class */
 .carousel {
+  width: 100%;
   margin-bottom: 4rem;
+  padding: 0;
 }
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
-  bottom: 3rem;
   z-index: 10;
 }
 
@@ -20,23 +21,30 @@
 .carousel-item > img {
   position: absolute;
   height: 32rem;
-  object-fit: : cover;
+  width: 100%;
+  object-fit: cover;
+  overflow-y: hidden;
 }
 
 /* MARKETING CONTENT
 -------------------------------------------------- */
 
 /* Center align the text within the three columns below the carousel */
-.marketing .col-lg-4 {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-.marketing h2 {
-  font-weight: 400;
-}
-.marketing .col-lg-4 p {
-  margin-right: .75rem;
-  margin-left: .75rem;
+
+.fade-bg{
+  max-width: 100%;
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.53) 79%, rgba(0,0,0,0.73) 100%);
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.53) 79%,rgba(0,0,0,0.73) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.53) 79%,rgba(0,0,0,0.73) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#ba000000',GradientType=0 );
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0px;
+  margin: 0px;
 }
 
 </style>
@@ -46,31 +54,34 @@
       <li data-target="#myCarousel" data-slide-to="1"></li>
       <li data-target="#myCarousel" data-slide-to="2"></li>
     </ol>
-    <div class="carousel-inner">
+    <div class="carousel-inner" style="padding: 0;">
       <div class="carousel-item active">
-        <img class="first-slide" src="images/recipedefault.png" alt="First slide">
-        <div class="container">
+        <img class="first-slide" src="{{caro1.imageurl}}" alt="First slide">
+        <div class="container fade-bg">
           <div class="carousel-caption d-none d-md-block">
-            <h1>Example headline.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            <h1>{{caro1.recipename}}</h1>
+            <p>{{caro1.recipedescription}}</p>
+            <button class="btn hh" ng-click="viewRecipe(caro1.recipeid)">Try Me</button>
           </div>
         </div>
       </div>
       <div class="carousel-item">
-        <img class="second-slide" src="images/recipedefault.png" alt="Second slide">
-        <div class="container">
+        <img class="second-slide" src="{{caro2.imageurl}}" alt="Second slide">
+        <div class="container fade-bg">
           <div class="carousel-caption d-none d-md-block">
-            <h1>Another example headline.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            <h1>{{caro2.recipename}}</h1>
+            <p>{{caro2.recipedescription}}</p>
+            <button class="btn hh" ng-click="viewRecipe(caro2.recipeid)">Try Me</button>
           </div>
         </div>
       </div>
       <div class="carousel-item">
-        <img class="third-slide" src="images/recipedefault.png" alt="Third slide">
-        <div class="container">
+        <img class="third-slide" src="{{caro3.imageurl}}" alt="Third slide">
+        <div class="container fade-bg">
           <div class="carousel-caption d-none d-md-block">
-            <h1>One more for good measure.</h1>
-            <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            <h1>{{caro3.recipename}}</h1>
+            <p>{{caro3.recipedescription}}</p>
+            <button class="btn hh" ng-click="viewRecipe(caro3.recipeid)">Try Me</button>
           </div>
         </div>
       </div>
@@ -84,32 +95,35 @@
       <span class="sr-only">Next</span>
     </span>
   </div>
-  <div class="container Picks">
 
-    <div class ="card">
-      <div class ="card-body">
-    <div class="row">
-      <div class="col-lg-4">
-        <h2>Highest Rated</h2>
-        <img class="rounded-circle" src="{{Highest.imageurl}}" alt="Highest Rated" width="200" height="200">
+  <div class="container-fluid">
+    <div class="row row-eq-height" style="margin-bottom:4rem;">
+      <div class="col-sm-4" style="padding:2%; text-align:center;">
+        <div class="card" style="padding:10px;">
+        <h2>All-Time Favorite</h2>
+        <img class="rounded-circle" style="display: block; margin: 0 auto;" src="{{Highest.imageurl}}" alt="Highest Rated" width="200" height="200">
         <h3>{{Highest.recipename}}</h3>
-        <p>Our site's highest rated recipe! A MUST TRY!</p>
-        <p><a class="btn btn-secondary" href="#" role="button">View Recipe &raquo;</a></p>
+        <p>Our site's highest rated recipe!</p>
+        <p><a class="btn btn-secondary" ng-click="viewRecipe(Highest.recipeid)" role="button">View Recipe &raquo;</a></p>
+      </div>
       </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <h2>Most Favorited</h2>
-        <img class="rounded-circle" src="{{Favorite.imageurl}}" alt="Most Favs" width="200" height="200">
+      <div class="col-sm-4" style="padding:2%; text-align:center;">
+        <div class="card" style="padding:10px;">
+        <h2>This Week's Best</h2>
+        <img class="rounded-circle" style="display: block; margin: 0 auto;" src="{{Favorite.imageurl}}" alt="Most Favs" width="200" height="200">
         <h3>{{Favorite.recipename}}</h3>
-        <p>People just love this recipe!</p>
-        <p><a class="btn btn-secondary" href="#" role="button">View Recipe &raquo;</a></p>
+        <p>A wonderful recipe for those on the go!</p>
+        <p><a class="btn btn-secondary" ng-click="viewRecipe(Favorite.recipeid)" role="button">View Recipe &raquo;</a></p>
+      </div>
       </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
+      <div class="col-sm-4" style="padding:2%; text-align:center;">
+        <div class="card" style="padding:10px;">
         <h2>Our Team's Choice</h2>
-        <img class="rounded-circle" src="{{TeamFav.imageurl}}" alt="Our Pick" width="200" height="200">
+        <img class="rounded-circle" style="display: block; margin: 0 auto;" src="{{TeamFav.imageurl}}" alt="Our Pick" width="200" height="200">
         <h3>{{TeamFav.recipename}}</h3>
         <p>Our pick may not be conventional but it sure is delicious!</p>
-        <p><a class="btn btn-secondary" href="#" role="button">View Recipe &raquo;</a></p>
+        <p><a class="btn btn-secondary" ng-click="viewRecipe(TeamFav.recipeid)" role="button">View Recipe &raquo;</a></p>
+      </div>
       </div><!-- /.col-lg-4 -->
-    </div>
-  </div>
     </div><!-- /.row -->
+</div>

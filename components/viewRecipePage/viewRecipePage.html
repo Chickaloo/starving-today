@@ -23,7 +23,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-2">
+              <div class="col-sm-2" ng-if="user.userid === recipe.userid">
                 <a style="color: grey; font-size: 18px;" data-toggle="modal" data-target="#recipe-editor" ><i class="far fa-edit pr-1"></i></a>
                 <a style="color: red; font-size: 18px;" ng-click="DeleteRecipe()"><i class="fas fa-trash-alt pr-1"></i></a>
               </div>

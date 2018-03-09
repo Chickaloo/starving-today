@@ -851,6 +851,7 @@ func GetSubscribers(w http.ResponseWriter, r *http.Request) {
 func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	var res Response
 	var udata []int
+	userlist := []User{}
 	var query string
 	params := mux.Vars(r)
 
@@ -882,7 +883,6 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(udata)
 
-	var userlist []User
 	for _, u := range udata {
 		fmt.Println(u)
 		var user User

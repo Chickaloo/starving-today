@@ -1,28 +1,27 @@
 <!--Navbar-->
 <div ng-controller="headerController" style="height:100px; width: 100%;">
-	<nav class="navbar navbar-expand-lg navbar-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark" style="margin: 0; padding: 0;">
 		<div class="container-fluid">
 	    <!-- Navbar brand -->
-		<div class="col-sm-2">
-	    <a class="navbar-brand" >
-				<img class="navbar-brand" ui-sref="home" style="padding-top: 10px;" src="http://138.68.22.10/images/hungersmall.png" height="90"/></a>
-				<a class="dropdown white-text" data-toggle="dropdown"><i class="fas fa-align-justify"></i></a>
-				<div class="dropdown-menu dropdown-primary">
-					<a class="dropdown-item" ui-sref="home">Home</a>
-					<a class="dropdown-item" ng-click="goToExplore()">Explore</a>
-					<a class="dropdown-item" ui-sref="myHub">MyHub</a>
-				</div>
+		<div class="col-sm-4" style="height: 100px; line-height: 100px; text-align: center;" >
+	    <a class="navbar-brand"ui-sref="home" >
+				<img style="" src="http://138.68.22.10/images/hungerHubLogo.png" height="60px"/></a>
+
+			<a style="float:left;" class="dropdown white-text" data-toggle="dropdown" data-target="#drop"><i class="fas fa-align-justify fa-2x"></i></a>
 		</div>
-
-	    <div class="col-sm-4" style="height:100px;">
-
+		<div class="dropdown-menu dropdown-primary" id="drop">
+			<a class="dropdown-item" style="max-height:35px;" ui-sref="home">Home</a>
+			<a class="dropdown-item" style="max-height:35px;" ng-click="goToExplore()">Explore</a>
+			<a class="dropdown-item" style="max-height:35px;" ui-sref="myHub">MyHub</a>
+		</div>
+	    <div class="col-sm-4" style="height:100px; line-height: 100px; text-align: center;">
 	    	<form class="form-inline" ng-submit="runSearch(searchquery)">
-	        <div class="md-form mt-0" style="width: 100%; padding: 20px;" >
+	        <div class="md-form mt-0" style="width: 100%;" >
 	            <input class="form-control" type="text" style="width: 100%;" placeholder="Search" aria-label="Search" ng-model="searchquery">
         	</div>
 	    	</form>
 			</div>
-	    <div class="col-sm-3" style="height:100px; width: 100%;">
+	    <div class="col-sm-4" style="height:100px; width: 100%;">
 				<div class="white-text" style="padding: 20px; float: right; text-align:right;">
 					<h4 class="white-text" style="margin-bottom: 0px;">Hi, {{ user.firstname }}</h4>
 					<a class="white-text" ng-click="LoadMyHub()">View Profile </a> | <a class="red-text" ng-click="Logout()">Sign Out <i class="fas fa-sign-out-alt prefix red-text"></i> </a>
