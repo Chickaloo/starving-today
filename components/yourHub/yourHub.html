@@ -15,7 +15,7 @@
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ user.firstname }} {{ user.lastname }}</h3>
             <h5><i>{{ user.username}}</i>
-            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="far fa-edit pr-1"></i></a>
+            <!--<a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="far fa-edit pr-1"></i></a>-->
             </h5>
             <hr>
             <!--Text-->
@@ -39,7 +39,7 @@
         <div class="card" style="margin-top:10px; background-color: #f1f1f1;">
           <!--links to add and view all recipies-->
           <div class="card-header white-text" style="background-color: grey;">
-            <h3 style="margin-bottom:0px;">Recipes<a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
+            <h3 style="margin-bottom:0px;">Recipes<a style="float: right; color: white;" ng-if="myUser.userid === user.userid" data-toggle="modal" data-target="#recipe-adder" ><h5><i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
           </div>
 
           <!--some recipies-->
@@ -71,7 +71,7 @@
       <!--links to add and view all recipies-->
       <div class="card-header white-text" style="background-color: grey;">
         <h3 style="margin-bottom:0px;">Make a Post
-        <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5 style="margin-bottom:0px;">Add Recipe <i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
+        <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5 ng-if="myUser.userid === user.userid" style="margin-bottom:0px;">Add Recipe <i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
       </div>
 
       <!--some recipies-->
@@ -101,7 +101,7 @@
             <div style="float:left;">
               <h6 style="margin-bottom:0px;">{{ value.authorname }} {{ value.date }}</h6>
             </div>
-            <div style="float:right;">
+            <div ng-if="myUser.userid === value.posterid || myUser.userid === value.userid" style="float:right;">
               <a>Edit | </a>
               <a style="color: #e50000;" ng-click="DeletePost(value.postid)">Delete <i class="far fa-trash-alt"></i></a>
             </div>
