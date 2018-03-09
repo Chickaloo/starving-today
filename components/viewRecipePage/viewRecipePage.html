@@ -18,7 +18,7 @@
             <div class="row">
               <div class="col-md-10 d-flex" style="margin-top: 5px;">
                 <div ng-repeat="tag in recipe.tags">
-                  <div class="btn" style="padding: 5px; background-color: #87c967 !important; color: #FAFEF8 !important; font-weight: 500;">
+                  <div class="btn" ng-click="Search(tag)" style="padding: 5px; background-color: #87c967 !important; color: #FAFEF8 !important; font-weight: 500;">
                     <smallest>{{ tag }}</smallest>
                   </div>
                 </div>
@@ -168,7 +168,7 @@
             <!-- CHECK IF CAN ADD ONE AT A TIME -->
             <div class="md-form">
                 <i class="fa fa-cart-plus fa-xs prefix grey-text"></i>
-                <textarea type="text" id="ingredients" class="form-control md-textarea" rows="3" ng-model="curRec.ingredients"></textarea>
+                <textarea type="text" id="ingredients" class="form-control md-textarea" rows="3" ng-model="curRec.ingredientsin"></textarea>
                 <p class="font-small grey-text d-flex justify-content-end">Ingredients</p>
             </div>
 
@@ -176,7 +176,7 @@
             <!-- CHANGE TO DROP DOWN -->
             <div class="md-form">
                 <i class="fa fa-tag prefix grey-text"></i>
-                <textarea type="text" id="tags" class="form-control md-textarea" rows="3" ng-model="tags"></textarea>
+                <textarea type="text" id="tags" class="form-control md-textarea" rows="3" ng-model="curRec.tagsin"></textarea>
                 <p class="font-small grey-text d-flex justify-content-end">Tags</p>
             </div>
 
