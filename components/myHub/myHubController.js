@@ -3,8 +3,6 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
     $scope.user = dataUser.user;
     $scope.reciperating = 0;
 
-    console.log("myHubController: dataUser: " + $scope.user.username);
-
     $http.get('http://138.68.22.10:84/posts/' + $scope.user.userid).then(
       function (response) {
           var temp = [];
@@ -51,8 +49,6 @@ angular.module('starvingToday').controller('myHubController', ['$scope', '$http'
       $http.get('http://138.68.22.10:84/recipes/id/' + value).then(
         function (response) {
           currRecipe = response.data;
-          console.log("retrieved this recipe:");
-          console.log(currRecipe);
           dataRecipe.setCurrRecipe(currRecipe);
           dataRecipe.recipelen = 1;
             $state.go('viewRecipesState', {}, {reload: true});
