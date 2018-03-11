@@ -2,13 +2,16 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
 {
     $scope.recipe = dataRecipe.getCurrRecipe();
     $scope.user = dataUser.getMyUser();
-    console.log($scope.recipe.userid);
-    console.log($scope.user.userid);
-    //console.log($scope.recipe.tags);
     $scope.recipe.recipeinstructions = $sce.trustAsHtml($scope.recipe.recipeinstructions);
     $scope.recipelen = dataRecipe.getRecipeLength();
-    $scope.user = dataUser.user;
-    //console.log($scope.recipe);
+
+    $http.get('http://138.68.22.10:84/users/id/'+$scope.recipe.userid).then(
+      function(response){
+        $scope.author = response.data.user;
+      },function(response){
+        console.log(response.data);
+      }
+    );
 
     $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
       function (response) {
@@ -53,12 +56,10 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
         .then(function(response) {
           $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
             function (response) {
-              console.log(response.data);
                 var temp = [];
                 Object.keys(response.data.comments).forEach(function(key) {
                   $http.get('http://138.68.22.10:84/users/id/' + response.data.comments[key].userid).then(
                     function (res) {
-                      console.log(res.data.user.firstname + " " + res.data.user.lastname);
                       response.data.comments[key].authorname = res.data.user.firstname + " " + res.data.user.lastname;
                     },
                     function (res) {
@@ -75,30 +76,39 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
     }
 
     $scope.DeleteComment = function(value) {
+      var config = {
+          withCredentials: 'true',
+          headers : {
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        }
 
-
-      $http.delete('http://138.68.22.10:84/comments/' + value)
+      $http.delete('http://138.68.22.10:84/comments/' + value , config)
       .then(function(response) {
         $http.get('http://138.68.22.10:84/comments/recipe/' + $scope.recipe.recipeid).then(
           function (response) {
-            console.log(response.data);
               var temp = [];
-              Object.keys(response.data.comments).forEach(function(key) {
-                $http.get('http://138.68.22.10:84/users/id/' + response.data.comments[key].userid).then(
-                  function (res) {
-                    console.log(res.data.user.firstname + " " + res.data.user.lastname);
-                    response.data.comments[key].authorname = res.data.user.firstname + " " + res.data.user.lastname;
-                  },
-                  function (res) {
-                      $scope.comments = 0;
+              if(typeof response.data.comments !== "undefined"){
+                Object.keys(response.data.comments).forEach(function(key) {
+                    temp.push(response.data.comments[key]);
                 });
-                  temp.push(response.data.comments[key]);
-              });
+              }
               $scope.comments = temp.reverse();
           },
           function (response) {
               $scope.comments = 0;
         });
+      },
+      function (response) {
+        if (response.status === 500) {
+            $scope.responseDetails = "Something went wrong with our servers!";
+        } else if(response.status === 400){
+            $scope.responseDetails = "How did you even get this error?";
+        } else if(response.status === 404){
+            $scope.responseDetails = "How did you even get this error?";
+        } else {
+            $scope.responseDetails = "Oops! Something went wrong! Please try signing in again.";
+        }
       });
     }
 
@@ -178,5 +188,4 @@ angular.module('starvingToday').controller('viewRecipeController', ['$scope', '$
               console.log(response);
         });
     }
-
 }]);

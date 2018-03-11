@@ -15,6 +15,7 @@
           <div class="card-body">
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ recipe.recipename }}</h3>
+            <h5>by {{author.firstname}} {{author.lastname}}</h5>
             <div class="row">
               <div class="col-md-10 d-flex" style="margin-top: 5px;">
                 <div ng-repeat="tag in recipe.tags">
@@ -49,7 +50,7 @@
               <li class="list-inline-item pr-2 black-text"><i class="far fa-clock pr-1"></i> {{ recipe.preptime + recipe.cooktime}} mins</li>
               <li class="list-inline-item pr-2 black-text"><i class="fas fa-fire"></i> {{ recipe.calories }}</li>
               <li class="list-inline-item pr-2 black-text"><i class="fas fa-users pr-1"></i> {{ recipe.servings }}</li>
-              <li class="list-inline-item pr-2 black-text"><a ng-click="upvoteRecipe()"><i class="fas fa-heart pr-1"></i> {{ recipe.upvotes + recipe.downvotes }}</a></li>
+              <li class="list-inline-item pr-2 black-text"><a ng-click="upvoteRecipe()"><i class="active-icon fas fa-heart pr-1"></i> {{ recipe.upvotes + recipe.downvotes }}</a></li>
             </ul>
 
           </div>
@@ -66,10 +67,21 @@
         <div style="width:100%; background-color: #f1f1f1; padding:10px; margin-top: 10px;">
 
         <!--  COMMENTS Form -->
+        <!--
         <form name="reviewForm" ng-submit="Comment()">
            <fieldset class="form-group">
-               <input ng-model="comment.body" class="form-control" placeholder="Submit a comment" title="Review"></input>
+               <textarea ng-model="comment.body" class="form-control" placeholder="Submit a comment" title="Review"></textarea>
+               <button ng-click="Comment()" class="btn hh">POST</button>
           </fieldset>
+-->
+        <div class="row" style="padding: 20px;">
+          <div class="col-md-9 form-group" style="margin: 0px;">
+              <textarea class="form-control" ng-model="comment.body" placeholder="Post a comment" rows="3" required="required" style="width: 100%;"></textarea>
+          </div>
+          <div class="col-md-3 form-group content-ctr" style="padding: 10px;">
+              <button class="btn hh" ng-click="Comment()">Post</button>
+          </div>
+        </div>
 
         </form>
         <h3>Comments:</h3>

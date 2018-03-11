@@ -216,3 +216,11 @@ html, body {
 .recipie-thumbnail:hover{
   opacity: 1;
 }
+
+.active-icon:hover {
+  color: #4eb71a;
+}
+
+.login-widths {
+  max-width: 700px;
+}
