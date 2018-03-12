@@ -15,7 +15,7 @@
             <!--Title-->
             <h3 style="margin-bottom:0px;" class="card-title black-text">{{ user.firstname }} {{ user.lastname }}</h3>
             <h5><i>{{ user.username}}</i>
-            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="active-icon far fa-edit pr-1"></i></a>
+            <a style="float: right; color: grey;" data-toggle="modal" data-target="#user-editor"><i class="active-green far fa-edit pr-1"></i></a>
             </h5>
             <hr>
             <!--Text-->
@@ -29,7 +29,7 @@
               <ul class="list-unstyled list-inline mt-3">
                 <li class="list-inline-item pr-2 black-text"><i class="fas fa-utensils pr-1"></i>{{recipecount}}</li>
                 <li class="list-inline-item pr-2 black-text"><i class="far fa-thumbs-up pr-1"></i>{{reciperating}}</li>
-                <li class="list-inline-item pr-2 black-text"><a data-toggle="modal" data-target="#friends-viewer"><i class="active-icon fas fa-users pr-1"></i></a>{{followcount}}</li>
+                <li class="list-inline-item pr-2 black-text"><a data-toggle="modal" data-target="#friends-viewer"><i class="active-green fas fa-users pr-1"></i></a>{{followcount}}</li>
               </ul>
 
           </div>
@@ -39,7 +39,7 @@
         <div class="card" style="margin-top:10px; background-color: #f1f1f1;">
           <!--links to add and view all recipies-->
           <div class="card-header white-text" style="background-color: grey;">
-            <h3 style="margin-bottom:0px;">Recipes<a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5><i class="active-icon fa fa-plus fa-xs pr-1"></i></h5></a></h3>
+            <h3 style="margin-bottom:0px;">Recipes<a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5><i class="active-green fa fa-plus fa-xs pr-1"></i></h5></a></h3>
           </div>
 
           <!--some recipies-->
@@ -71,7 +71,7 @@
       <!--links to add and view all recipies-->
       <div class="card-header white-text" style="background-color: grey;">
         <h3 style="margin-bottom:0px;">Make a Post
-        <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5 class="active-icon" style="margin-bottom:0px;">Add Recipe <i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
+        <a style="float: right; color: white;" data-toggle="modal" data-target="#recipe-adder" ><h5 class="active-green" style="margin-bottom:0px;">Add Recipe <i class="fa fa-plus fa-xs pr-1"></i></h5></a></h3>
       </div>
 
       <!--some recipies-->
@@ -102,7 +102,7 @@
               <h6 style="margin-bottom:0px;">{{ value.authorname }} {{ value.date }}</h6>
             </div>
             <div style="float:right;">
-              <a style="color: #e50000;" ng-click="DeletePost(value.postid)">Delete <i class="far fa-trash-alt"></i></a>
+              <a class="active-red" ng-click="DeletePost(value.postid)">Delete <i class="far fa-trash-alt"></i></a>
             </div>
           </div>
 

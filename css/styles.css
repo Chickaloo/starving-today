@@ -217,8 +217,12 @@ html, body {
   opacity: 1;
 }
 
-.active-icon:hover {
-  color: #4eb71a;
+.active-green:hover {
+  color: #4eb71a !important;
+}
+
+.active-red:hover {
+  color: red !important;
 }
 
 .login-widths {
